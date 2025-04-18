@@ -43,9 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // ADDED Abilities rendering logic
                 let abilitiesHTML = '';
                 if (w.abilities && w.abilities.length > 0) {
-                    abilitiesHTML = w.abilities.map(ab =>
-                        `<span class="ability-name" data-tooltip="${escapeHtml(ab.description)}">${escapeHtml(ab.name)}</span>`
-                    ).join(', ');
+                    abilitiesHTML = w.abilities.map(ab => {
+                        // *** Store data in attributes, remove data-tooltip ***
+                        const description = escapeHtml(ab.description || '');
+                        const timing = escapeHtml(ab.timing || '');
+                        const frequency = escapeHtml(ab.frequency || '');
+                        return `<span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(ab.name)}</span>`;
+                    }).join(', ');
                 }
                 // ADDED abilities cell
                 cardHTML += `<tr><td>${w.name}</td><td>${w.range}</td><td>${w.attacks}</td><td>${w.hit}</td><td>${w.wound}</td><td>${w.rend}</td><td>${w.damage}</td><td>${abilitiesHTML || '-'}</td></tr>`;
@@ -63,10 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
             unit.meleeWeapons.forEach(w => {
                 let abilitiesHTML = '';
                 if (w.abilities && w.abilities.length > 0) {
-                    abilitiesHTML = w.abilities.map(ab =>
-                        // Ensure escapeHtml is used for name *and* description
-                        `<span class="ability-name" data-tooltip="${escapeHtml(ab.description)}">${escapeHtml(ab.name)}</span>`
-                    ).join(', ');
+                    abilitiesHTML = w.abilities.map(ab => {
+                         // *** Store data in attributes, remove data-tooltip ***
+                        const description = escapeHtml(ab.description || '');
+                        const timing = escapeHtml(ab.timing || '');
+                        const frequency = escapeHtml(ab.frequency || '');
+                        // Ensure escapeHtml is used for name
+                        return `<span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(ab.name)}</span>`;
+                    }).join(', ');
                 }
                 // Corrected TR: Removed range cell
                 cardHTML += `<tr><td>${w.name}</td><td>${w.attacks}</td><td>${w.hit}</td><td>${w.wound}</td><td>${w.rend}</td><td>${w.damage}</td><td>${abilitiesHTML || '-'}</td></tr>`;
@@ -80,10 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
             cardHTML += '<h4 class="card-section-header">Abilities</h4>';
             cardHTML += '<ul class="abilities-list">';
             unit.abilities.forEach(ability => {
-                // Wrap name in span with tooltip data
-                cardHTML += `<li><span class="ability-name" data-tooltip="${escapeHtml(ability.description)}">${ability.name}</span></li>`; 
-                // Optionally, add timing/frequency info if needed:
-                // cardHTML += `<li><span class="ability-name" data-tooltip="${escapeHtml(ability.description)}">${ability.name}</span> ${ability.timing ? `(${ability.timing})` : ''}</li>`;
+                // *** Store data in attributes, remove data-tooltip ***
+                const description = escapeHtml(ability.description || '');
+                const timing = escapeHtml(ability.timing || '');
+                const frequency = escapeHtml(ability.frequency || '');
+
+                // Wrap name in span with data attributes
+                cardHTML += `<li><span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(ability.name)}</span></li>`; 
             });
             cardHTML += '</ul>';
         }
@@ -95,11 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const keywordTooltip = "This unit can be replaced when destroyed, see Call for Reinforcements in the movement phase for details";
             const keywordsHTML = unit.keywords.map(keyword => {
                 if (keyword.toUpperCase() === 'REINFORCEMENTS') {
-                    // Escape the keyword itself in case it has special chars (unlikely but safe)
                     const escapedKeyword = escapeHtml(keyword);
-                    // Escape the tooltip content
                     const escapedTooltip = escapeHtml(keywordTooltip);
-                    return `<span class="ability-name" data-tooltip="${escapedTooltip}">${escapedKeyword}</span>`;
+                    // *** Use new data attributes for JS tooltip ***
+                    return `<span class="ability-name" data-description="${escapedTooltip}" data-timing="" data-frequency="">${escapedKeyword}</span>`;
                 } else {
                     return escapeHtml(keyword); // Escape other keywords too for safety
                 }
@@ -139,43 +149,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 // *** NEW: Apply Enhancement Effects to Units ***
                 const selectedEnhancementNameForUnitMod = decodeURIComponent(getQueryParam('enhancement') || '');
                 if (selectedEnhancementNameForUnitMod && factionData.units) {
-                    const targetUnit = factionData.units.find(u => u.name === "Lord-Vigilant on Gryph-stalker");
-                    if (targetUnit) {
-                         // Define ability objects to add
-                         const critMortalAbility = { 
-                            name: "Crit (Mortal)", 
-                            description: "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage." 
-                        }; 
-                        const ward5Ability = { 
-                            name: "Ward (5+)", 
-                            description: "For every point damage inflicted on this unit, roll a D6 and on a 5+ that damage is ignored",
-                            timing: "Passive", 
-                            type: "Enhancement Granted" 
-                        }; 
+                     // Stormcast Specific Enhancements (Example)
+                     if (factionData.factionId === 'stormcast-eternals') {
+                        const targetUnitSCE = factionData.units.find(u => u.name === "Lord-Vigilant on Gryph-stalker");
+                        if (targetUnitSCE) {
+                             // Define ability objects to add
+                             const critMortalAbility = { 
+                                name: "Crit (Mortal)", 
+                                description: "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage." 
+                            }; 
+                            const ward5Ability = { 
+                                name: "Ward (5+)", 
+                                description: "For every point damage inflicted on this unit, roll a D6 and on a 5+ that damage is ignored",
+                                timing: "Passive", 
+                                type: "Enhancement Granted" 
+                            }; 
 
-                        if (selectedEnhancementNameForUnitMod === "Morrda's Talon") {
-                            const targetWeapon = targetUnit.meleeWeapons?.find(w => w.name === "Hallowed Greataxe");
-                            if (targetWeapon) {
-                                if (!targetWeapon.abilities) {
-                                    targetWeapon.abilities = []; // Ensure abilities array exists
+                            if (selectedEnhancementNameForUnitMod === "Morrda's Talon") {
+                                const targetWeapon = targetUnitSCE.meleeWeapons?.find(w => w.name === "Hallowed Greataxe");
+                                if (targetWeapon) {
+                                    if (!targetWeapon.abilities) {
+                                        targetWeapon.abilities = []; // Ensure abilities array exists
+                                    }
+                                    // Avoid adding duplicates if somehow already present
+                                    if (!targetWeapon.abilities.some(ab => ab.name === critMortalAbility.name)) {
+                                         targetWeapon.abilities.push(critMortalAbility);
+                                         console.log(`Applied Crit (Mortal) to ${targetUnitSCE.name}'s ${targetWeapon.name}`);
+                                    }
                                 }
-                                // Avoid adding duplicates if somehow already present
-                                if (!targetWeapon.abilities.some(ab => ab.name === critMortalAbility.name)) {
-                                     targetWeapon.abilities.push(critMortalAbility);
-                                     console.log(`Applied Crit (Mortal) to ${targetUnit.name}'s ${targetWeapon.name}`);
-                                }
+                            } else if (selectedEnhancementNameForUnitMod === "Hallowed Scrolls") {
+                                 if (!targetUnitSCE.abilities) {
+                                    targetUnitSCE.abilities = []; // Ensure abilities array exists
+                                 }
+                                 // Avoid adding duplicates
+                                 if (!targetUnitSCE.abilities.some(ab => ab.name === ward5Ability.name)) {
+                                     targetUnitSCE.abilities.push(ward5Ability);
+                                     console.log(`Applied Ward (5+) to ${targetUnitSCE.name}`);
+                                 }
                             }
-                        } else if (selectedEnhancementNameForUnitMod === "Hallowed Scrolls") {
-                             if (!targetUnit.abilities) {
-                                targetUnit.abilities = []; // Ensure abilities array exists
-                             }
-                             // Avoid adding duplicates
-                             if (!targetUnit.abilities.some(ab => ab.name === ward5Ability.name)) {
-                                 targetUnit.abilities.push(ward5Ability);
-                                 console.log(`Applied Ward (5+) to ${targetUnit.name}`);
-                             }
                         }
-                    }
+                     } 
+                     // --- Skaven Specific Enhancements ---
+                     else if (factionData.factionId === 'skaven') {
+                         const targetUnitSkaven = factionData.units.find(u => u.name === "Clawlord on Gnaw-beast");
+                         if (targetUnitSkaven) {
+                             if (selectedEnhancementNameForUnitMod === "Skryre Connections") {
+                                 const targetWeapon = targetUnitSkaven.rangedWeapons?.find(w => w.name === "Ratling Pistol");
+                                 if (targetWeapon) {
+                                     targetWeapon.attacks = "2D6";
+                                     console.log(`Applied Skryre Connections: ${targetUnitSkaven.name}'s ${targetWeapon.name} attacks changed to ${targetWeapon.attacks}`);
+                                 }
+                             } else if (selectedEnhancementNameForUnitMod === "Cloak of Stitched Victories") {
+                                 // Modify existing Ward ability
+                                 const targetAbility = targetUnitSkaven.abilities?.find(ab => ab.name === "Ward (6+)");
+                                 if (targetAbility) {
+                                     targetAbility.name = "Ward (5+)";
+                                     targetAbility.description = "Roll a dice each time a wound or mortal wound is allocated to this unit. On a 5+, that wound or mortal wound is negated.";
+                                     console.log(`Applied Cloak of Stitched Victories: ${targetUnitSkaven.name}'s ability changed to ${targetAbility.name}`);
+                                 }
+                                 // Modify keyword
+                                 const keywordIndex = targetUnitSkaven.keywords?.indexOf("WARD (6+)");
+                                 if (keywordIndex !== -1 && targetUnitSkaven.keywords) {
+                                     targetUnitSkaven.keywords[keywordIndex] = "WARD (5+)";
+                                     console.log(`Applied Cloak of Stitched Victories: ${targetUnitSkaven.name}'s keyword changed to WARD (5+)`);
+                                 }
+                             }
+                         }
+                     }
+                     // --- End Skaven Specific Enhancements ---
                 }
                 // ********************************************
 
@@ -287,7 +328,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     phaseAbilities[phaseKey].push({
                         name: selectedEnhancement.name,
                         description: selectedEnhancement.description,
-                        source: 'Enhancement'
+                        source: 'Enhancement',
+                        timing: selectedEnhancement.timing,
+                        frequency: selectedEnhancement.frequency
                     });
                     enhancementAddedToPhase = true; // Mark that it was handled
                 } else {
@@ -315,7 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     phaseAbilities[phaseKey].push({ 
                         name: rule.name, 
                         description: rule.description, 
-                        source: 'Army Rule' 
+                        source: 'Army Rule', 
+                        timing: rule.timing,
+                        frequency: rule.frequency
                     });
                 }
             });
@@ -330,7 +375,9 @@ document.addEventListener('DOMContentLoaded', () => {
                          phaseAbilities[phaseKey].push({ 
                              name: ability.name, 
                              description: ability.description, 
-                             source: 'Regiment Ability' 
+                             source: 'Regiment Ability', 
+                             timing: ability.timing,
+                             frequency: ability.frequency
                          });
                      }
                  }
@@ -348,7 +395,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             phaseAbilities[phaseKey].push({ 
                                 name: ability.name, 
                                 description: ability.description, 
-                                source: unit.name // Source is the unit name
+                                source: unit.name, // Source is the unit name
+                                timing: ability.timing,
+                                frequency: ability.frequency
                             });
                         }
                     });
@@ -363,7 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                       phaseAbilities[phaseKey].push({ 
                                           name: ability.name, 
                                           description: ability.description, 
-                                          source: `${unit.name} (${weapon.name})` 
+                                          source: `${unit.name} (${weapon.name})`, 
+                                          timing: ability.timing,
+                                          frequency: ability.frequency
                                       });
                                  }
                              });
@@ -380,7 +431,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                       phaseAbilities[phaseKey].push({ 
                                           name: ability.name, 
                                           description: ability.description, 
-                                          source: `${unit.name} (${weapon.name})`
+                                          source: `${unit.name} (${weapon.name})`,
+                                          timing: ability.timing,
+                                          frequency: ability.frequency
                                       });
                                  }
                              });
@@ -420,6 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: ability.name, 
                         description: ability.description, 
                         source: ability.source, 
+                        timing: ability.timing,
+                        frequency: ability.frequency,
                         isCore: false 
                     });
                 });
@@ -435,9 +490,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         listItem.innerHTML = `<strong>${escapeHtml(item.name)}:</strong> ${escapeHtml(item.description)}`;
                     } else {
                         // Tooltip display for dynamic abilities
+                        // *** Use data-* attributes for JS tooltip ***
+                        const description = escapeHtml(item.description || '');
+                        const timing = escapeHtml(item.timing || '');
+                        const frequency = escapeHtml(item.frequency || '');
+                        const source = escapeHtml(item.source || '');
+                        
                         listItem.innerHTML = `
-                            <span class="ability-name" data-tooltip="${escapeHtml(item.description)}">${escapeHtml(item.name)}</span>
-                            <span class="ability-source">(${escapeHtml(item.source)})</span>
+                            <span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(item.name)}</span>
+                            <span class="ability-source">(${source})</span>
                         `;
                     }
                     list.appendChild(listItem);
@@ -456,6 +517,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 detailsEl.appendChild(noContentMsg);
             }
         });
+
+        setupTooltips(); // *** ADD Call setup after populating phases ***
     }
 
     // --- Helper function to escape HTML for attributes ---
@@ -485,5 +548,91 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // --- NEW: JavaScript Tooltip Logic --- 
+    let tooltipElement = null; // To hold the tooltip div
+
+    function showTooltip(event) {
+        const span = event.target;
+        const description = span.dataset.description;
+        const timing = span.dataset.timing;
+        const frequency = span.dataset.frequency; // Get frequency
+
+        if (!description) {
+            console.log('Tooltip: No description found for', span);
+            return; // Don't show empty tooltip
+        }
+        console.log('Tooltip Data:', { description, timing, frequency }); // Log retrieved data
+
+        // Create tooltip element if it doesn't exist
+        if (!tooltipElement) {
+            tooltipElement = document.createElement('div');
+            tooltipElement.className = 'js-tooltip';
+            document.body.appendChild(tooltipElement);
+        }
+
+        // Construct content with potential line break
+        let tooltipHTML = '';
+        if (timing && timing.toLowerCase() !== 'passive' && timing !== 'N/A') {
+            tooltipHTML += `<strong>Timing:</strong> ${timing}<br>`; // Use <br>
+        }
+        // Add Frequency if available and not N/A
+        if (frequency && frequency !== 'N/A') {
+            tooltipHTML += `<strong>Frequency:</strong> ${frequency}<br>`; // Use <br>
+        }
+        tooltipHTML += description; // Already escaped when setting data attribute
+
+        tooltipElement.innerHTML = tooltipHTML;
+        tooltipElement.style.display = 'block';
+        console.log('Tooltip HTML:', tooltipHTML); // Log the generated HTML
+        console.log('Tooltip Element:', tooltipElement); // Log the element itself
+
+        // Position the tooltip (simple example: above the cursor)
+        // More sophisticated positioning might be needed depending on context
+        const scrollX = window.scrollX || window.pageXOffset;
+        const scrollY = window.scrollY || window.pageYOffset;
+        let top = event.clientY + scrollY - tooltipElement.offsetHeight - 10; // 10px offset above cursor
+        let left = event.clientX + scrollX - (tooltipElement.offsetWidth / 2); // Center above cursor
+
+        // Basic boundary check (prevent going off left/top)
+        if (top < scrollY) top = scrollY + 5;
+        if (left < scrollX) left = scrollX + 5;
+        // Add check for right edge if needed
+
+        tooltipElement.style.top = `${top}px`;
+        tooltipElement.style.left = `${left}px`;
+    }
+
+    function hideTooltip() {
+        // Add a small delay to prevent immediate hiding if tooltip overlaps span
+        setTimeout(() => {
+             if (tooltipElement) {
+                tooltipElement.style.display = 'none';
+            }
+        }, 50); // 50ms delay, adjust if needed
+    }
+
+    // Use event delegation on a parent container for efficiency
+    // We need to wait until cards are potentially rendered, so maybe delegate on body or #units-content
+    // Or re-run this setup after fetching/rendering data. Let's re-run after.
+
+    function setupTooltips() {
+         // Remove previous listeners if any (to avoid duplicates on re-fetch)
+        document.querySelectorAll('.ability-name').forEach(span => {
+            span.removeEventListener('mouseover', showTooltip);
+            span.removeEventListener('mouseout', hideTooltip);
+            span.removeEventListener('mousemove', (e) => {
+                 // Optional: Update position on mouse move if tooltip stays open long 
+                 // For simplicity, we position on mouseover only for now
+            });
+        });
+
+        // Add new listeners
+        document.querySelectorAll('.ability-name').forEach(span => {
+            span.addEventListener('mouseover', showTooltip);
+            span.addEventListener('mouseout', hideTooltip);
+            // span.addEventListener('mousemove', moveTooltip); // If needed
+        });
+    }
 
 }); 

@@ -198,18 +198,19 @@ table.weapons-table td {
 }
 
 /* Tooltip Styles */
+/* REMOVE Old ::after styles */
+/*
 .ability-name::after {
-    content: attr(data-tooltip); /* Get text from data attribute */
+    content: attr(data-tooltip); 
     position: absolute;
-    bottom: 100%; /* Position above the text */
+    bottom: 100%; 
     left: 50%;
-    /* Shift further right from center */
-    transform: translateX(-30%); /* Changed from -40% */
-    min-width: 200px; /* Minimum width */
-    max-width: 350px; /* Maximum width */
-    max-height: 200px; /* Added: Limit max height */
-    overflow-y: auto;   /* Added: Allow vertical scrolling if needed */
-    background-color: var(--background-color); /* Dark background */
+    transform: translateX(-30%); 
+    min-width: 200px; 
+    max-width: 350px; 
+    max-height: 200px; 
+    overflow-y: auto;   
+    background-color: var(--background-color); 
     color: var(--text-color);
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -217,17 +218,38 @@ table.weapons-table td {
     font-size: 0.9em;
     line-height: 1.4;
     text-align: left;
-    white-space: normal; /* Allow text wrapping */
-    visibility: hidden; /* Hidden by default */
+    white-space: normal; 
+    visibility: hidden; 
     opacity: 0;
     transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-    z-index: 10; /* Ensure tooltip is above other content */
+    z-index: 10; 
 }
-
-/* Show tooltip on hover */
 .ability-name:hover::after {
     visibility: visible;
     opacity: 1;
+}
+*/
+
+/* ADD New JS Tooltip Styles */
+.js-tooltip {
+    position: absolute; /* Positioned by JavaScript */
+    display: none; /* Hidden by default */
+    background-color: var(--background-color); 
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.6em 0.8em;
+    font-size: 0.9em;
+    line-height: 1.4;
+    text-align: left;
+    min-width: 150px; /* Adjust as needed */
+    max-width: 350px;
+    z-index: 1000; /* Ensure it's on top */
+    pointer-events: none; /* Prevent tooltip from blocking mouse events on elements below */
+}
+
+.js-tooltip strong {
+    color: var(--primary-color); /* Style the Timing label */
 }
 
 .keywords-list {

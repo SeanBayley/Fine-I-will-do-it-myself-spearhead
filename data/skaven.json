@@ -1,0 +1,300 @@
+{
+  "factionName": "Skaven",
+  "factionId": "skaven",
+  "factionImageUrl": "images/skaven/faction_banner.png",
+  "armyRules": [
+    {
+      "name": "Gnawhole Ambush",
+      "type": "Battle Trait",
+      "timing": "Movement Phase",
+      "frequency": "N/A",
+      "description": "Declare: Pick a friendly unit that is **in the tunnels below** to use this ability. Effect: Set up that unit wholly within 6\" of a corner of the battlefield and more than 9\" from all enemy units.",
+      "keywords": ["CORE"]
+    },
+    {
+      "name": "The Lurking Vermintide",
+      "type": "Battle Trait",
+      "timing": "Once Per Battle, Deployment Phase",
+      "frequency": "Once per battle",
+      "description": "Declare: Pick a friendly unit that has not been deployed to be the target. Effect: The target unit is set up in reserve **in the tunnels below**. Units **in the tunnels below** that have not used the 'Gnawhole Ambush' ability by the end of the third battle round are destroyed.",
+      "keywords": ["DEPLOY"]
+    }
+  ],
+  "regimentAbilities": [
+     {
+       "name": "Too Quick To Hit-hit",
+       "type": "Regiment Ability",
+       "timing": "Movement Phase",
+       "frequency": "N/A",
+       "description": "No mortal damage is inflicted on friendly units when they use RETREAT abilities."
+     },
+     {
+       "name": "Warpstone-laced Bullets",
+       "type": "Regiment Ability",
+       "timing": "Shooting Phase",
+       "frequency": "Once per battle",
+       "description": "Declare: Pick a ranged weapon a friendly unit is armed with. Effect: That weapon has Crit (Mortal) this phase."
+     }
+  ],
+  "enhancements": [
+    {
+      "name": "Skryre Connections",
+      "type": "Artefact of Power", 
+      "timing": "Passive", 
+      "frequency": "N/A",
+      "description": "Your general's Ratling Pistol has an Attacks characteristic of 2D6 instead of D6."
+    },
+    {
+      "name": "Warpstone Charm",
+      "type": "Artefact of Power",
+      "timing": "Combat phase",
+      "frequency": "N/A",
+      "description": "Subtract 1 from save rolls for enemy units in combat with your general."
+    },
+    {
+      "name": "Cloak of Stitched Victories",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Your general has WARD (5+)."
+    },
+    {
+      "name": "Lead the Seething Horde",
+      "type": "Artefact of Power",
+      "timing": "Movement Phase",
+      "frequency": "N/A", 
+      "description": "Instead of using the set-up instructions in the 'Call for Reinforcements' ability, the replacement unit can be set up wholly within 13\" of this unit and not in combat."
+    }
+  ],
+  "spearheadComposition": [
+    "General: 1 Clawlord on Gnaw-beast",
+    "Units:",
+    "1 Grey Seer",
+    "1 Warlock Engineer",
+    "10 Clanrats",
+    "10 Clanrats",
+    "3 Rat Ogors"
+  ],
+  "units": [
+    { 
+      "name": "Clawlord on Gnaw-beast", 
+      "imageUrl": "images/skaven/clawlord_on_gnaw_beast.png",
+      "stats": { 
+        "move": "9\"", 
+        "health": 7, 
+        "control": 2, 
+        "save": "4+" 
+      }, 
+      "rangedWeapons": [
+        {
+          "name": "Ratling Pistol",
+          "range": "10\"",
+          "attacks": "D6",
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 1,
+          "abilities": [
+            { "name": "Crit (Auto-wound)", "description": "If the roll to hit is a critical hit, the target is automatically wounded." },
+            { "name": "Shoot in Combat", "description": "This weapon can be used even if the bearer is within 3 inches of an enemy unit." }
+          ]
+        }
+      ], 
+      "meleeWeapons": [
+        {
+          "name": "Warforged Halberd",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        },
+        {
+          "name": "Gnaw-beast's Chisel Fangs",
+          "attacks": 4,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3",
+          "abilities": [
+            { "name": "Companion", "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics." }
+          ]
+        }
+      ], 
+      "abilities": [
+        {
+          "name": "Cornered Rat",
+          "type": "Ability",
+          "timing": "Combat phase",
+          "frequency": "N/A",
+          "description": "While this unit is damaged, add 3 to the Attacks characteristic of its Warforged Halberd."
+        },
+        {
+          "name": "Ward (6+)",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Roll a dice each time a wound or mortal wound is allocated to this unit. On a 6+, that wound or mortal wound is negated."
+        }
+      ], 
+      "keywords": ["CHAOS", "SKAVEN", "HERO", "CAVALRY", "WARD (6+)"]
+    },
+     { 
+      "name": "Grey Seer", 
+      "imageUrl": "images/skaven/grey_seer.png",
+      "stats": { 
+        "move": "6\"", 
+        "health": 5, 
+        "control": 2, 
+        "save": "6+" 
+      }, 
+      "rangedWeapons": [], 
+      "meleeWeapons": [
+        {
+          "name": "Warpstone Staff",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": "D3"
+        }
+      ], 
+      "abilities": [
+        {
+          "name": "Will of the Horned Rat",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "Declare: Pick a friendly unit wholly within 13\" of this unit to be the target, then roll a dice. Effect: On a 3+, add the roll to the target's control score until the start of your next turn."
+        },
+        {
+          "name": "Wither",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "Declare: Pick a visible enemy unit within 13\" of this unit to be the target, then make a casting roll of 2D6. Effect: On a 6+, inflict D3 mortal damage on the target."
+        }
+      ], 
+      "keywords": ["CHAOS", "SKAVEN", "HERO", "WIZARD", "INFANTRY"]
+    },
+    {
+      "name": "Warlock Engineer", 
+      "imageUrl": "images/skaven/warlock_engineer.png",
+      "stats": { 
+        "move": "6\"", 
+        "health": 5, 
+        "control": 2, 
+        "save": "5+" 
+      }, 
+      "rangedWeapons": [
+        {
+          "name": "Warp-Lock Musket",
+          "range": "24\"",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 2,
+          "damage": "D3",
+           "abilities": [
+             { "name": "Crit (Auto-wound)", "description": "If the roll to hit is a critical hit, the target is automatically wounded." }
+           ]
+        }
+      ], 
+      "meleeWeapons": [
+        {
+          "name": "Warpforged Dagger",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 2
+        }
+      ], 
+      "abilities": [
+        {
+          "name": "MORE-MORE WARP ENERGY!",
+          "type": "Ability",
+          "timing": "Shooting Phase",
+          "frequency": "N/A",
+          "description": "Reaction: You declared a SHOOT ability for this unit and it has not used a MOVE ability this turn. Effect: Roll a dice. On a 2+, set the Damage characteristic of its Warplock Musket to 3 this phase. On a 1, inflict D3 mortal damage on this unit."
+        }
+      ], 
+      "keywords": ["CHAOS", "SKAVEN", "HERO", "INFANTRY", "WARLOCK ENGINEER"]
+    },
+    {
+      "name": "Rat Ogors", 
+      "imageUrl": "images/skaven/rat_ogors.png",
+      "stats": { 
+        "move": "6\"", 
+        "health": 4, 
+        "control": 1, 
+        "save": "5+" 
+      }, 
+      "rangedWeapons": [
+        {
+          "name": "Warpfire Gun (1 in 3 models)",
+          "range": "10\"",
+          "attacks": "2D6",
+          "hit": "2+",
+          "wound": "4+",
+          "rend": 2,
+          "damage": 1,
+          "abilities": [
+             { "name": "Shoot in Combat", "description": "This weapon can be used even if the bearer is within 3 inches of an enemy unit." } 
+          ]
+        }
+      ], 
+      "meleeWeapons": [
+        {
+          "name": "Claws, Blades and Fangs",
+          "attacks": 5,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2
+        }
+      ], 
+      "abilities": [
+        {
+          "name": "Unleashed Warp-fury",
+          "type": "Ability",
+          "timing": "Combat phase",
+          "frequency": "Once per battle",
+          "description": "Effect: Inflict D3 mortal damage on this unit. Then, add 1 to the Attacks characteristic of its melee weapons this phase."
+        }
+      ], 
+      "keywords": ["CHAOS", "SKAVEN", "INFANTRY"]
+    },
+    {
+      "name": "Clanrats", 
+      "imageUrl": "images/skaven/clanrats.png",
+      "stats": { 
+        "move": "6\"", 
+        "health": 1, 
+        "control": 1, 
+        "save": "5+" 
+      }, 
+      "rangedWeapons": [], 
+      "meleeWeapons": [
+        {
+          "name": "Rusty Blade",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "5+",
+          "rend": "-",
+          "damage": 1
+        }
+      ], 
+      "abilities": [
+        {
+          "name": "Seething Swarm",
+          "type": "Ability",
+          "timing": "End of Turn",
+          "frequency": "N/A",
+          "description": "Effect: You can return D3 slain models to this unit at the end of any turn."
+        }
+      ], 
+      "keywords": ["CHAOS", "SKAVEN", "INFANTRY", "REINFORCEMENTS"]
+    }
+  ]
+} 
