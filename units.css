@@ -1,0 +1,430 @@
+/* Unit Page Specific Styles */
+
+header {
+    /* Style the header if needed */
+    margin-bottom: 1em;
+    padding-bottom: 0.8em;
+    border-bottom: 1px solid var(--border-color);
+}
+
+header h1 {
+    margin-bottom: 0.2em;
+}
+
+header h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 1.5em;
+}
+
+header p a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+header p a:hover {
+    color: var(--primary-color);
+}
+
+/* --- New Layout for Units Page --- */
+.units-page-layout {
+    display: grid;
+    /* grid-template-columns: 1fr 250px; */ /* Original width */
+    grid-template-columns: 1fr 300px; /* Increased width for phase column */
+    gap: 1.5em; /* Gap between columns */
+}
+
+#phase-rules-column {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 0.8em 1.2em;
+    height: fit-content; /* Make column height adjust to content */
+    /* Optional: Add a border-left if you want a visual separator */
+    /* border-left: 1px solid var(--border-color); */
+}
+
+#phase-rules-column h2 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.3em;
+    border-bottom: 1px solid var(--primary-color);
+    padding-bottom: 0.4em;
+}
+
+/* --- Unit Cards Container (Left Column Now) --- */
+#unit-cards-container {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); */ /* Original auto-fit */
+    grid-template-columns: repeat(2, 1fr); /* Explicitly set 2 columns */
+    gap: 1em; 
+    /* No background/border needed here, it's just a container */
+}
+
+.unit-card {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px; /* Slightly smaller radius */
+    padding: 0.8em 1.2em; /* Reduced padding */
+    /* Remove flex styles if they were on the section before */
+    /* REMOVED border-left as it's no longer the rightmost element in this layout */
+}
+
+.unit-card h3 { /* Unit Name */
+    text-align: center;
+    border-bottom: 1px solid var(--primary-color);
+    padding-bottom: 0.4em; /* Reduced padding */
+    margin-bottom: 0.8em; /* Reduced margin */
+    margin-top: 0;
+    font-size: 1.3em; /* Slightly smaller */
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center; /* Center stats horizontally */
+    align-items: center; /* Vertically align items in the middle */
+    flex-wrap: wrap;
+    gap: 0.8em; /* Reduced gap */
+    margin-bottom: 1em; /* Reduced margin */
+    padding-bottom: 0.8em; /* Reduced padding */
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stat-box {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 0.3em 0.6em; /* Reduced padding */
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.75em; /* Slightly smaller */
+    color: #aaa;
+    text-transform: uppercase;
+    margin-bottom: 0.1em;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1em; /* Slightly smaller */
+    font-weight: bold;
+    color: var(--heading-color);
+}
+
+.unit-card h4.card-section-header {
+    color: var(--primary-color);
+    margin-top: 1em;    /* Reduced margin */
+    margin-bottom: 0.5em; /* Reduced margin */
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.2em;
+    font-size: 1.0em; /* Slightly smaller */
+}
+
+/* Reuse existing table and list styles within cards */
+table.stats-table,
+table.weapons-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em; 
+}
+
+table.stats-table th,
+table.stats-table td,
+table.weapons-table th,
+table.weapons-table td {
+    border: 1px solid var(--border-color);
+    padding: 0.4em;
+    text-align: center;
+    font-size: 0.9em; 
+    vertical-align: middle; /* Align content vertically */
+}
+
+table.stats-table th,
+table.weapons-table th {
+    background-color: var(--border-color);
+    color: var(--heading-color);
+    font-size: 0.8em; 
+    text-transform: uppercase;
+}
+
+/* Adjust specific columns */
+table.weapons-table td:first-child { /* Name */
+    text-align: left;
+    width: 30%; /* Adjusted width */
+}
+
+table.weapons-table td:last-child { /* Abilities */
+    text-align: left; 
+    font-size: 0.85em; 
+    width: 35%; /* Adjusted width - give abilities more space */
+    white-space: normal; /* Ensure ability text can wrap if needed */
+}
+
+/* Ensure tooltips work within table cells */
+table.weapons-table td {
+    position: relative; 
+    vertical-align: top; /* Align to top might look better with abilities */
+}
+
+.abilities-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 0.9em; /* Slightly smaller */
+}
+
+.abilities-list li {
+    border-bottom: 1px dashed var(--border-color);
+    padding: 0.4em 0; /* Reduced padding */
+    margin-bottom: 0;
+    position: relative; /* Needed for tooltip positioning */
+}
+
+.abilities-list li:last-child {
+    border-bottom: none;
+}
+
+/* Removed strong styling as name is now a span */
+/* .abilities-list strong { ... } */
+
+.ability-name { /* Applied to both unit and weapon abilities */
+    border-bottom: 1px dotted var(--primary-color); 
+    cursor: help; 
+    position: relative; 
+    /* Allow the span itself to break if needed, though tooltip handles long desc */
+    /* white-space: normal; */ 
+    display: inline-block; /* Helps with wrapping and layout */
+}
+
+/* Tooltip Styles */
+.ability-name::after {
+    content: attr(data-tooltip); /* Get text from data attribute */
+    position: absolute;
+    bottom: 100%; /* Position above the text */
+    left: 50%;
+    /* Shift further right from center */
+    transform: translateX(-30%); /* Changed from -40% */
+    min-width: 200px; /* Minimum width */
+    max-width: 350px; /* Maximum width */
+    max-height: 200px; /* Added: Limit max height */
+    overflow-y: auto;   /* Added: Allow vertical scrolling if needed */
+    background-color: var(--background-color); /* Dark background */
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.6em 0.8em;
+    font-size: 0.9em;
+    line-height: 1.4;
+    text-align: left;
+    white-space: normal; /* Allow text wrapping */
+    visibility: hidden; /* Hidden by default */
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    z-index: 10; /* Ensure tooltip is above other content */
+}
+
+/* Show tooltip on hover */
+.ability-name:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.keywords-list {
+    font-style: italic;
+    color: #aaa;
+    margin-top: 0.3em; /* Reduced margin */
+    font-size: 0.85em; /* Slightly smaller */
+}
+
+/* Styles for Collapsible Weapon Sections (Box Style) */
+details.weapon-section {
+    border: 1px solid var(--primary-color); /* Use theme color for border */
+    border-radius: 4px;
+    margin-bottom: 1em; /* Space between weapon boxes */
+    background-color: var(--background-color);
+    /* overflow: hidden; */ /* REMOVED: Allows tooltips to display outside */
+}
+
+details.weapon-section > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0.5em 0.8em;
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid var(--primary-color); /* Use theme color for separator */
+    /* transition: background-color 0.2s ease-in-out; */
+}
+
+/* Remove bottom border when open */
+details.weapon-section[open] > summary {
+    border-bottom: none;
+}
+
+/* Custom marker for collapsible section */
+details.weapon-section > summary::before {
+    content: '\25B6';
+    display: inline-block;
+    margin-right: 0.8em;
+    font-size: 0.8em;
+    transition: transform 0.2s ease-in-out;
+    flex-shrink: 0;
+    color: var(--primary-color); /* Use theme color for marker */
+}
+
+details.weapon-section[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+/* Style the H4 inside the summary */
+details.weapon-section > summary h4.card-section-header {
+    margin: 0;
+    border: none;
+    padding: 0;
+    display: inline-block;
+    font-size: 1.1em;
+    color: var(--primary-color); /* Use theme color for header text */
+    flex-grow: 1;
+}
+
+/* Style the table container inside the details */
+details.weapon-section > table.weapons-table {
+    margin-bottom: 0;
+    border: none;
+    border-top: 1px solid var(--primary-color); /* Use theme color for separator */
+}
+
+/* Adjust table cell padding slightly if needed */
+details.weapon-section > table.weapons-table th,
+details.weapon-section > table.weapons-table td {
+     /* padding: 0.5em; */ /* Example adjustment */
+}
+
+/* Remove the old margin-bottom rule */
+/* details.weapon-section[open] > summary {
+    margin-bottom: 0.5em;
+} */ 
+
+/* Styles for Collapsible Phase Sections (Similar to Weapon Sections) */
+details.phase-section {
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    margin-bottom: 0.8em; /* Space between phase boxes */
+    background-color: var(--background-color);
+}
+
+details.phase-section > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0.5em 0.8em;
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid var(--primary-color);
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Remove bottom border when open */
+details.phase-section[open] > summary {
+    border-bottom: none;
+}
+
+/* Custom marker for collapsible section */
+details.phase-section > summary::before {
+    content: '\25B6'; /* Right-pointing triangle */
+    display: inline-block;
+    margin-right: 0.8em;
+    font-size: 0.8em;
+    transition: transform 0.2s ease-in-out;
+    flex-shrink: 0;
+    color: var(--primary-color);
+}
+
+details.phase-section[open] > summary::before {
+    transform: rotate(90deg); /* Down-pointing triangle when open */
+}
+
+/* Content inside the phase section */
+details.phase-section > p, /* Old rule for paragraph */
+details.phase-section > ul { /* New rule for unordered list */
+    padding: 0.5em 0.8em;
+    margin: 0;
+    border-top: 1px solid var(--primary-color);
+    font-size: 0.9em;
+    list-style: none; /* Remove list bullets */
+}
+
+/* Style list items within phase sections */
+details.phase-section > ul > li {
+    border-bottom: 1px dashed var(--border-color);
+    padding: 0.4em 0;
+    margin-bottom: 0;
+    position: relative; /* Needed for tooltip positioning */
+}
+
+details.phase-section > ul > li:last-child {
+    border-bottom: none;
+}
+
+/* Style for the source indicator (Unit/Rule Name) */
+details.phase-section > ul > li .ability-source {
+    display: block; /* Put source on a new line */
+    font-size: 0.8em;
+    color: #aaa;
+    margin-top: 0.2em;
+}
+
+/* Remove the old margin-bottom rule */
+/* details.weapon-section[open] > summary {
+    margin-bottom: 0.5em;
+} */ 
+
+/* Style for the dynamically added Selected Enhancement */
+.selected-enhancement-display {
+    border: 1px dashed var(--primary-color); /* Dashed border to differentiate */
+    border-radius: 4px;
+    padding: 0.5em 0.8em;
+    margin-top: 1em; /* Space below H2 */
+    margin-bottom: 1em; /* Space above phase sections */
+    background-color: rgba(var(--primary-color-rgb), 0.05); /* Subtle theme background tint */
+}
+
+.selected-enhancement-display h4 {
+    margin: 0 0 0.3em 0;
+    font-size: 1em;
+    color: var(--heading-color);
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3em;
+}
+
+.selected-enhancement-display p {
+    margin: 0;
+    text-align: center; /* Center the ability name */
+}
+
+/* NEW Thumbnail Styles */
+.stats-container .unit-thumbnail-link {
+    display: inline-block;
+    margin-left: 0.8em; /* Space it from stats */
+    /* vertical-align: middle; */ /* Rely on flexbox alignment now */
+    line-height: 0; /* Prevent extra space below image */
+}
+
+.unit-thumbnail-image {
+    /* height: 35px; */ /* Remove fixed height */
+    max-height: 45px; /* Limit max height (adjust as needed) */
+    width: auto;  /* Maintain aspect ratio */
+    max-width: 50px; /* Prevent excessive width */
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+}
+
+.unit-thumbnail-link:hover .unit-thumbnail-image {
+    transform: scale(1.1);
+    box-shadow: 0 0 5px var(--primary-color);
+} 

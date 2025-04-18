@@ -1,0 +1,266 @@
+{
+  "factionName": "Stormcast Eternals",
+  "factionId": "stormcast-eternals",
+  "armyRules": [
+    {
+      "name": "Shield of Azyr",
+      "type": "Battle Trait",
+      "timing": "Hero phase",
+      "frequency": "Once per turn",
+      "description": "Pick 1 friendly STORMCAST ETERNALS unit. Until the start of your next hero phase, that unit has a ward of 5+."
+    },
+    {
+      "name": "Storm Charge",
+      "type": "Battle Trait",
+      "timing": "Charge phase",
+      "frequency": "Once per battle",
+      "description": "Pick 1 friendly STORMCAST ETERNALS unit that is not within 3\" of any enemy units. That unit can attempt a charge even if it ran in the same turn."
+    }
+  ],
+  "regimentAbilities": [
+    {
+        "name": "Blaze of Glory",
+        "type": "Regiment Ability",
+        "timing": "Combat phase",
+        "frequency": "Once per battle",
+        "description": "Pick a friendly unit in combat and until the end of the phase each time a model from that unit is slain roll a D6. On a 4+ an enemy unit in combat with that unit takes 1 mortal wound."
+    },
+    {
+        "name": "Strike Where Needed",
+        "type": "Regiment Ability",
+        "timing": "Movement phase",
+        "frequency": "Once per battle",
+        "description": "Select a unit. For this unit no mortal damage is inflicted when retreating and then can still charge this turn."
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "Hallowed Scrolls",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "The bearer has a ward of 5+."
+    },
+    {
+      "name": "Morrda's Talon",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Your general's greataxe has Crit(Mortal)"
+    },
+    {
+      "name": "Null Pendant",
+      "type": "Artefact of Power",
+      "timing": "End of Turn",
+      "frequency": "Once per battle",
+      "description": "Roll a dice for each enemy unit contesting the same objective as your general . On a 2+ subtract the roll from the control score of that unit this turn."
+    },
+    {
+      "name": "Quicksilver Draught",
+      "type": "Artefact of Power",
+      "timing": "Combat phase",
+      "frequency": "Once per battle",
+      "description": "Your general has Strike-First this phase"
+    }
+  ],
+  "spearheadComposition": [
+    "1 Lord-Vigilant on Gryph-stalker",
+    "1 Lord-Veritant",
+    "5 Liberators",
+    "3 Prosecutors"
+  ],
+  "units": [
+    {
+      "name": "Lord-Vigilant on Gryph-stalker",
+      "imageUrl": "images/stormcast_eternals/Lord Vigilant.png",
+      "stats": {
+        "move": "12\"",
+        "health": 8,
+        "control": 2,
+        "save": "3+"
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Hallowed Greataxe",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 2,
+          "damage": 2
+        },
+        {
+          "name": "Gryph-stalker's Beak and Talons",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2,
+          "abilities": [
+            { "name": "Companion", "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics." }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Deliver Judgement",
+          "type": "Ability",
+          "timing": "Once Per Battle, Any Combat Phase",
+          "frequency": "N/A",
+          "description": "Declare: Pick a friendly non-HERO unit wholly within 12\" of this unit to be the target. Effect: The target can use 2 FIGHT abilities this phase. After the first is used, however, the target has STRIKE-LAST for the rest of the phase."
+        },
+        {
+          "name": "Plan the Attack",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "Declare: Pick an objective you do not control. Effect: For the rest of the turn, add 1 to hit rolls for combat attacks made by friendly units that target enemy units contesting that objective."
+        }
+      ],
+      "keywords": ["ORDER", "STORMCAST ETERNALS", "HERO", "CAVALRY"]
+    },
+    {
+      "name": "Lord-Veritant",
+      "imageUrl": "images/stormcast_eternals/Lord Veritant.png",
+      "stats": {
+        "move": "5\"",
+        "health": 6,
+        "control": 2,
+        "save": "3+"
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Staff of Abjuration", 
+          "attacks": 1,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 3
+        },
+        {
+          "name": "Judgement Blade", 
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3",
+          "abilities": [
+            { "name": "Anti-Wizard (+1 Rend)", "description": "Add 1 to the Rend characteristic of attacks made with this weapon that target a WIZARD." },
+            { "name": "Anti-Priest (+1 Rend)", "description": "Add 1 to the Rend characteristic of attacks made with this weapon that target a PRIEST." }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Sense Unholy Sorcery",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit's Gryph-crow is a token. This unit has WARD (5+) while its Gryph-crow is on the battlefield. If you make an unmodified ward roll of 1 for this unit, remove its Gryph-crow from the battlefield."
+        },
+        {
+          "name": "Cleansing Fires",
+          "type": "Ability",
+          "timing": "Your Hero phase",
+          "frequency": "N/A",
+          "description": "Declare: Pick a visible enemy unit within 12\" of this unit to be the target, then make a chanting roll of D6. Effect: On a 3+, roll a dice for each model in the target unit. For each 5+, inflict 1 mortal wound on the target unit."
+        }
+      ],
+      "keywords": ["ORDER", "STORMCAST ETERNALS", "HERO", "PRIEST"]
+    },
+    {
+      "name": "Liberators",
+      "imageUrl": "images/stormcast_eternals/liberators.png",
+      "stats": {
+        "move": "5\"",
+        "health": 2,
+        "control": 1,
+        "save": "3+"
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Grandhammer (1 in 5 models)", 
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2,
+          "abilities": [
+            { "name": "Crit (Mortal)", "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage." }
+          ]
+        },
+        {
+          "name": "Warhammer (4 in 5 models)", 
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 1,
+          "abilities": [
+            { "name": "Crit (Mortal)", "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage." }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Stalwart Defenders",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Add 3 to the control characteristic of this unit while it contests an objective wholly within friendly territory."
+        }
+      ],
+      "keywords": ["ORDER", "STORMCAST ETERNALS", "INFANTRY", "REINFORCEMENTS"]
+    },
+    {
+      "name": "Prosecutors",
+      "imageUrl": "images/stormcast_eternals/prosecutors.png",
+      "stats": {
+        "move": "12\"",
+        "health": 2,
+        "control": 1,
+        "save": "3+"
+      },
+      "rangedWeapons": [
+        {
+          "name": "Stormcall Javelin",
+          "range": "10\"",
+          "attacks": 1,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3"
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Stormcall Javelin",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Heralds of Righteousness",
+          "type": "Ability",
+          "timing": "Charge phase",
+          "frequency": "N/A",
+          "description": "When you make a charge roll for this unit, roll 1 additional dice and disregard the lowest roll."
+        },
+        {
+          "name": "Skirmishers",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Models in this unit can move within 2\" of each other horizontally and 6\" of each other vertically, instead of 1\" and 5\" respectively."
+        }
+      ],
+      "keywords": ["ORDER", "STORMCAST ETERNALS", "INFANTRY", "FLY", "REINFORCEMENTS"]
+    }
+  ]
+} 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age of Sigmar: Spearhead Rules</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Age of Sigmar: Spearhead Rules</h1>
+
+    <nav>
+        <label for="faction-select">Select Faction:</label>
+        <select name="factions" id="faction-select">
+            <option value="">--Please choose a faction--</option>
+            <!-- Factions will be loaded here by JavaScript -->
+        </select>
+    </nav>
+
+    <main id="rules-content">
+        <section id="faction-rules" style="display: none;">
+            <h2>Faction Rules</h2>
+            <div id="army-rules">
+                <h3>Army Rules</h3>
+                <!-- Army rules will be loaded here -->
+            </div>
+            <div id="spearhead-composition">
+                <h3>Spearhead Composition</h3>
+                <!-- Composition will be loaded here -->
+            </div>
+            <div id="regiment-ability-selection">
+                <h3>Regiment Ability (Select One)</h3>
+                <!-- Selectable regiment abilities will go here -->
+            </div>
+            <div id="enhancement-selection">
+                <h3>Enhancement (Select One Artefact of Power)</h3>
+                <!-- Selectable enhancements will go here -->
+            </div>
+            <button id="faction-rules-continue" class="continue-button" style="display: none;" disabled>Continue</button>
+        </section>
+
+        <!-- REMOVED Unit List Section -->
+
+        <!-- REMOVED Unit Detail Section -->
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html> 

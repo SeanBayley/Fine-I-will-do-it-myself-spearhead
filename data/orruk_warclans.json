@@ -1,0 +1,17 @@
+{
+  "factionName": "Orruk Warclans",
+  "factionId": "orruk-warclans",
+  "armyRules": [
+    { "name": "Placeholder Army Rule", "description": "Details coming soon..." }
+  ],
+  "enhancements": [
+    { "type": "Placeholder Enhancement", "name": "Placeholder Name", "description": "Details coming soon..." }
+  ],
+  "spearheadComposition": [
+    
+  ],
+  "units": [
+    { "name": "Placeholder Unit 1 (Orruk)", "stats": {}, "weapons": [], "abilities": [], "keywords": [] },
+    { "name": "Placeholder Unit 2 (Orruk)", "stats": {}, "weapons": [], "abilities": [], "keywords": [] }
+  ]
+} 

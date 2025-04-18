@@ -1,0 +1,263 @@
+/* Basic styling will go here */
+
+:root {
+    --background-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --heading-color: #ffffff;
+    --primary-color: #4CAF50; /* Default: Green */
+    --primary-color-rgb: 76, 175, 80; /* RGB for Green */
+    --secondary-color: #333333;
+    --border-color: #555555;
+    --primary-hover-color: #367c39; /* Default hover */
+}
+
+/* --- Faction Theme Overrides --- */
+
+/* Stormcast Eternals Theme (Blue) */
+body.stormcast-eternals {
+    --primary-color: #0d6efd; /* Bootstrap Blue */
+    --primary-color-rgb: 13, 110, 253; /* RGB for Blue */
+    --primary-hover-color: #0a58ca; /* Darker blue for hover */
+}
+
+/* Orruk Warclans Theme (Could be a different green/brown?) */
+/* body.orruk-warclans {
+    --primary-color: #198754; // Example: Bootstrap Green 
+    --primary-hover-color: #146c43;
+} */
+
+/* --- General Styles (Using Variables) --- */
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 1em;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+    color: var(--heading-color);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 1em;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5em;
+}
+
+nav {
+    margin-bottom: 1.5em;
+    padding: 1em;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+}
+
+nav label {
+    margin-right: 0.5em;
+    font-weight: bold;
+}
+
+select#faction-select {
+    padding: 0.5em;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+}
+
+main#rules-content section {
+    background-color: var(--secondary-color);
+    padding: 1em 1.5em;
+    margin-bottom: 1em;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.8em 0;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+li h4 {
+    margin-top: 0;
+    margin-bottom: 0.3em;
+    color: var(--primary-color);
+}
+
+li p {
+    margin: 0.3em 0;
+}
+
+li p strong {
+    color: var(--heading-color);
+}
+
+main#rules-content section#faction-rules #army-rules {
+    /* Styles specific to the army rules container if needed */
+}
+
+.rule-selection-area {
+    display: flex; /* Arrange rule boxes side-by-side */
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    gap: 1em; /* Space between boxes */
+    margin-bottom: 1.5em; /* Space before continue button */
+}
+
+.rule-box {
+    flex: 1 1 300px; /* Allow boxes to grow/shrink, base width 300px */
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    padding: 1em;
+    cursor: pointer;
+    position: relative; /* For radio button positioning */
+    transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.rule-box:hover {
+    border-color: var(--primary-color);
+}
+
+/* Style for the selected box */
+.rule-box.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
+}
+
+/* Hide the actual radio button visually */
+.rule-box input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Style the label which contains the rule content */
+.rule-box label {
+    display: block; /* Make label take up the box space */
+    cursor: pointer;
+}
+
+.rule-box label h4 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.rule-box label p {
+    margin: 0.3em 0;
+}
+
+/* Continue Button Styles */
+.continue-button { /* Use a class for shared styles */
+    display: block; 
+    margin: 1.5em auto 0.5em; /* Adjusted margin for single button */
+    padding: 0.8em 1.5em;
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--heading-color);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.continue-button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+.continue-button:not(:disabled):hover {
+    background-color: var(--primary-hover-color); 
+}
+
+/* Adjustments for ul/li styles if they conflict */
+/* Remove border from li inside rule-box label if needed */
+.rule-box li {
+    border-bottom: none;
+    padding: 0;
+}
+
+/* Reset ul styles within rule-box if needed */
+.rule-box ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure hidden sections are indeed hidden */
+section[style*="display: none;"] {
+    display: none !important;
+}
+
+/* REMOVED Unit List Styles */
+
+/* REMOVED Unit Detail Styles */
+
+/* Ensure hidden sections are indeed hidden */
+section[style*="display: none;"] {
+    display: none !important;
+}
+
+/* Update other elements that used the specific green hex code */
+
+.ability-name {
+    border-bottom: 1px dotted var(--primary-color); 
+    /* ... */
+}
+
+/* NOTE: Need to update the background tint for selected rule boxes */
+/* We'll add RGB versions of colors */
+:root {
+    --background-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --heading-color: #ffffff;
+    --primary-color: #4CAF50; 
+    --primary-color-rgb: 76, 175, 80; /* RGB for Green */
+    --secondary-color: #333333;
+    --border-color: #555555;
+    --primary-hover-color: #367c39;
+}
+
+body.stormcast-eternals {
+    --primary-color: #0d6efd;
+    --primary-color-rgb: 13, 110, 253; /* RGB for Blue */
+    --primary-hover-color: #0a58ca;
+}
+
+.rule-box.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
+}
+
+/* Also update header h2 in units.css if needed */
+/* And potentially border-left in units.css if that was primary */
+
+/* Spearhead Composition Styles */
+#spearhead-composition {
+    margin-top: 1.5em; /* Add some space above */
+}
+
+#spearhead-composition ul {
+    list-style: disc; /* Use standard bullets */
+    padding-left: 1.5em; /* Indent the list */
+    margin-top: 0.5em;
+}
+
+#spearhead-composition li {
+    border-bottom: none; /* Remove borders from list items */
+    padding: 0.2em 0; /* Adjust padding */
+    font-size: 0.95em;
+} 
