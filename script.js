@@ -1,15 +1,20 @@
 // JavaScript code will go here 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const factionSelect = document.getElementById('faction-select');
+    console.log("DOM Loaded. Checking elements..."); // DEBUG
+    // const factionSelect = document.getElementById('faction-select'); // REMOVED
+    const factionGridContainer = document.getElementById('faction-grid'); // NEW
     const factionRulesSection = document.getElementById('faction-rules');
 
     // Get containers
     const armyRulesContainer = document.getElementById('army-rules');
-    const regimentAbilityContainer = document.getElementById('regiment-ability-selection'); // New container
-    const enhancementSelectionContainer = document.getElementById('enhancement-selection'); // New/Renamed container
-    const compositionContainer = document.getElementById('spearhead-composition'); // *** NEW ***
-    const mainContinueButton = document.getElementById('faction-rules-continue'); // Get the main button
+    const regimentAbilityContainer = document.getElementById('regiment-ability-selection');
+    const enhancementSelectionContainer = document.getElementById('enhancement-selection');
+    const compositionContainer = document.getElementById('spearhead-composition');
+    const mainContinueButton = document.getElementById('faction-rules-continue');
+
+    console.log("factionGridContainer:", factionGridContainer); // DEBUG
+    console.log("mainContinueButton:", mainContinueButton); // DEBUG
 
     // Session Storage Keys
     const FACTION_KEY = 'selectedFaction';
@@ -20,9 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkSelectionsComplete() {
         const selectedAbility = regimentAbilityContainer.querySelector('input[name="regiment-ability-selection"]:checked');
         const selectedEnhancement = enhancementSelectionContainer.querySelector('input[name="enhancement-selection"]:checked');
+        // We also need to make sure a faction is selected
+        const selectedFaction = sessionStorage.getItem(FACTION_KEY);
 
-        if (selectedAbility && selectedEnhancement) {
-            mainContinueButton.style.display = 'block'; // Or 'inline-block'
+        if (selectedAbility && selectedEnhancement && selectedFaction) {
+            mainContinueButton.style.display = 'block';
             mainContinueButton.disabled = false;
         } else {
             mainContinueButton.style.display = 'none';
@@ -207,25 +214,30 @@ document.addEventListener('DOMContentLoaded', () => {
         // *** Store selected faction (if valid) and clear related choices ***
         if (selectedDataFile) {
              sessionStorage.setItem(FACTION_KEY, selectedDataFile);
-        } else {
-             sessionStorage.removeItem(FACTION_KEY);
-        }
-        // Clear these *before* loading new data to ensure we only restore if applicable
-        // We re-save them later when user explicitly clicks
-        // Although, for restore-on-back, we rely on what was already saved.
-        // Let's clear them only if the user *manually* selects "--Please choose..." 
-        // OR if the load fails for a restored selection.
-        // We will clear them inside the display functions based on user interaction.
-        // For now, only clear if selectedDataFile is empty. 
-        if (!selectedDataFile) {
+             // Remove selection styling from all cards
+             factionGridContainer.querySelectorAll('.faction-card').forEach(card => card.classList.remove('selected'));
+             // Add selection styling to the chosen card
+             const selectedCard = factionGridContainer.querySelector(`.faction-card[data-file="${CSS.escape(selectedDataFile)}"]`);
+             if (selectedCard) {
+                 selectedCard.classList.add('selected');
+             }
+             // Clear ability/enhancement when faction changes *manually* 
+             // (restoration handles not clearing)
              sessionStorage.removeItem(ABILITY_KEY);
              sessionStorage.removeItem(ENHANCEMENT_KEY);
+        } else {
+             sessionStorage.removeItem(FACTION_KEY);
+             sessionStorage.removeItem(ABILITY_KEY);
+             sessionStorage.removeItem(ENHANCEMENT_KEY);
+             // Clear selection styling from all cards
+             factionGridContainer.querySelectorAll('.faction-card').forEach(card => card.classList.remove('selected'));
         }
+        
         // ********************************************************
 
         // Reset areas when changing selection or selecting default
         displayArmyRules([], armyRulesContainer);
-        displayComposition([], compositionContainer); // *** NEW: Reset composition ***
+        displayComposition([], compositionContainer); 
         displayRegimentAbilitySelection([], regimentAbilityContainer);
         displayEnhancementSelection([], enhancementSelectionContainer);
         factionRulesSection.style.display = 'none';
@@ -259,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Populate HTML with fetched data
                 displayArmyRules(factionData.armyRules, armyRulesContainer);
-                displayComposition(factionData.spearheadComposition, compositionContainer); // *** NEW: Display composition ***
+                displayComposition(factionData.spearheadComposition, compositionContainer); 
                 displayRegimentAbilitySelection(factionData.regimentAbilities, regimentAbilityContainer);
                 displayEnhancementSelection(factionData.enhancements, enhancementSelectionContainer);
 
@@ -289,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
                          sessionStorage.removeItem(ENHANCEMENT_KEY); // Clear if invalid for this faction
                     }
                 }
-                // Update button state after restoring
+                // Update button state after restoring/loading
                 checkSelectionsComplete(); 
                 // *******************************************
             })
@@ -297,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error loading faction data:', error);
                 // Display error messages
                 armyRulesContainer.innerHTML = '<h3>Army Rules</h3><p>Error loading data.</p>';
-                compositionContainer.innerHTML = '<h3>Spearhead Composition</h3><p>Error loading data.</p>'; // *** NEW: Error message ***
+                compositionContainer.innerHTML = '<h3>Spearhead Composition</h3><p>Error loading data.</p>'; 
                 regimentAbilityContainer.innerHTML = '<h3>Regiment Ability</h3><p>Error loading data.</p>';
                 enhancementSelectionContainer.innerHTML = '<h3>Enhancement</h3><p>Error loading data.</p>';
                 factionRulesSection.style.display = 'block'; 
@@ -308,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // --- END loadAndDisplayFaction ---
 
-    // Fetch the list of factions and populate the dropdown
+    // Fetch the list of factions and populate the grid (MODIFIED)
     fetch('data/manifest.json')
         .then(response => {
             if (!response.ok) {
@@ -317,54 +329,83 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(manifest => {
+             // Check container *again* just before using it
+             if (!factionGridContainer) {
+                 console.error("Faction grid container not found right before populating!");
+                 return; 
+             }
+            factionGridContainer.innerHTML = ''; // Clear existing content
+
             manifest.factions.forEach(faction => {
-                const option = document.createElement('option');
-                option.value = faction.dataFile;
-                option.textContent = faction.name;
-                factionSelect.appendChild(option);
+                const factionCard = document.createElement('div');
+                factionCard.className = 'faction-card';
+                factionCard.textContent = faction.name;
+                factionCard.dataset.file = faction.dataFile; // Store file path in data attribute
+
+                // Add click listener
+                factionCard.addEventListener('click', () => {
+                    loadAndDisplayFaction(faction.dataFile);
+                });
+
+                factionGridContainer.appendChild(factionCard);
             });
 
-            // *** Restore faction selection after populating dropdown ***
+            // *** Restore faction selection after populating grid ***
             const storedFaction = sessionStorage.getItem(FACTION_KEY);
-            if (storedFaction && Array.from(factionSelect.options).some(opt => opt.value === storedFaction)) {
-                 console.log('Restoring faction:', storedFaction);
-                 factionSelect.value = storedFaction;
-                 // *** Directly call loading function ***
-                 loadAndDisplayFaction(storedFaction);
-             } else {
-                 sessionStorage.removeItem(FACTION_KEY); // Clear if invalid
+            if (storedFaction) {
+                 const storedFactionCard = factionGridContainer.querySelector(`.faction-card[data-file="${CSS.escape(storedFaction)}"]`);
+                 if (storedFactionCard) {
+                    console.log('Restoring faction:', storedFaction);
+                    // Don't add 'selected' class here, loadAndDisplayFaction will do it
+                    loadAndDisplayFaction(storedFaction); // Load data, which handles highlighting
+                 } else {
+                    console.warn('Stored faction not found in manifest, clearing:', storedFaction);
+                    sessionStorage.removeItem(FACTION_KEY); // Clear if invalid
+                 }
              }
         })
         .catch(error => {
             console.error('Error loading faction list:', error);
-            factionSelect.disabled = true;
-            factionSelect.innerHTML = '<option>Error loading factions</option>';
+            if (factionGridContainer) { // Check if container exists before showing error
+                factionGridContainer.innerHTML = '<p class="error-message">Error loading factions. Please try refreshing.</p>';
+            }
+            // No need to disable anything as there's no dropdown
         });
 
-    // Add event listener to handle faction selection (UPDATED CALLS)
-    factionSelect.addEventListener('change', (event) => {
-        loadAndDisplayFaction(event.target.value);
-    });
+    // REMOVED Faction Select event listener
+    // factionSelect.addEventListener('change', (event) => {
+    //     loadAndDisplayFaction(event.target.value);
+    // });
 
     // --- Main Continue Button Event Listener (MODIFIED) ---
-    mainContinueButton.addEventListener('click', () => {
-        const selectedAbilityRadio = regimentAbilityContainer.querySelector('input[name="regiment-ability-selection"]:checked');
-        const selectedEnhancementRadio = enhancementSelectionContainer.querySelector('input[name="enhancement-selection"]:checked');
-        const selectedFactionDataFile = factionSelect.value; // Get selected faction file path
+    if (mainContinueButton) { 
+        mainContinueButton.addEventListener('click', () => {
+            const selectedAbilityRadio = regimentAbilityContainer.querySelector('input[name="regiment-ability-selection"]:checked');
+            const selectedEnhancementRadio = enhancementSelectionContainer.querySelector('input[name="enhancement-selection"]:checked');
+            // Get selected faction from sessionStorage
+            const selectedFactionDataFile = sessionStorage.getItem(FACTION_KEY); 
 
-        if (selectedAbilityRadio && selectedEnhancementRadio && selectedFactionDataFile) {
-             const selectedAbility = selectedAbilityRadio.value;
-             const selectedEnhancement = selectedEnhancementRadio.value;
-             console.log(`Selected Regiment Ability: ${selectedAbility}`);
-             console.log(`Selected Enhancement: ${selectedEnhancement}`);
-             console.log(`Navigating to units page for: ${selectedFactionDataFile}`);
+            if (selectedAbilityRadio && selectedEnhancementRadio && selectedFactionDataFile) {
+                 const selectedAbility = selectedAbilityRadio.value;
+                 const selectedEnhancement = selectedEnhancementRadio.value;
+                 console.log(`Selected Regiment Ability: ${selectedAbility}`);
+                 console.log(`Selected Enhancement: ${selectedEnhancement}`);
+                 console.log(`Navigating to units page for: ${selectedFactionDataFile}`);
 
-             // Navigate to units.html, passing the data file path
-             // We also pass the selected ability/enhancement if needed later
-             window.location.href = `units.html?faction=${encodeURIComponent(selectedFactionDataFile)}&ability=${encodeURIComponent(selectedAbility)}&enhancement=${encodeURIComponent(selectedEnhancement)}`;
+                 // Navigate to units.html, passing the data file path
+                 window.location.href = `units.html?faction=${encodeURIComponent(selectedFactionDataFile)}&ability=${encodeURIComponent(selectedAbility)}&enhancement=${encodeURIComponent(selectedEnhancement)}`;
 
-        } else {
-            console.error('Error: Continue button clicked but selections not complete or faction not selected.');
-        }
-    });
+            } else {
+                console.error('Error: Continue button clicked but selections not complete or faction not selected.');
+                // Provide user feedback?
+                let errorMsg = "Please ensure you have selected a Faction, Regiment Ability, and Enhancement.";
+                if (!selectedFactionDataFile) errorMsg = "Please select a Faction first.";
+                else if (!selectedAbilityRadio) errorMsg = "Please select a Regiment Ability.";
+                else if (!selectedEnhancementRadio) errorMsg = "Please select an Enhancement.";
+                alert(errorMsg);
+            }
+        });
+    } else {
+        console.error("Could not find the main continue button (#faction-rules-continue) to attach listener.");
+    }
 }); 

@@ -8,7 +8,7 @@
       "type": "Battle Trait",
       "timing": "Movement Phase",
       "frequency": "N/A",
-      "description": "Declare: Pick a friendly unit that is **in the tunnels below** to use this ability. Effect: Set up that unit wholly within 6\" of a corner of the battlefield and more than 9\" from all enemy units.",
+      "description": "Declare: Pick a friendly unit that is in the tunnels below to use this ability. Effect: Set up that unit wholly within 6\" of a corner of the battlefield and more than 9\" from all enemy units.",
       "keywords": ["CORE"]
     },
     {
@@ -16,7 +16,7 @@
       "type": "Battle Trait",
       "timing": "Once Per Battle, Deployment Phase",
       "frequency": "Once per battle",
-      "description": "Declare: Pick a friendly unit that has not been deployed to be the target. Effect: The target unit is set up in reserve **in the tunnels below**. Units **in the tunnels below** that have not used the 'Gnawhole Ambush' ability by the end of the third battle round are destroyed.",
+      "description": "Declare: Pick a friendly unit that has not been deployed to be the target. Effect: The target unit is set up in reserve in the tunnels below. Units in the tunnels below that have not used the 'Gnawhole Ambush' ability by the end of the third battle round are destroyed.",
       "keywords": ["DEPLOY"]
     }
   ],

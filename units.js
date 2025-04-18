@@ -348,6 +348,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         // -------------------------------------
+        
+        // --- NEW: Check for Reinforcements keyword and add core ability ---
+        const hasReinforcements = factionData.units?.some(unit => 
+            unit.keywords?.some(kw => kw.toUpperCase() === 'REINFORCEMENTS')
+        );
+
+        if (hasReinforcements) {
+            phaseAbilities.movement.push({
+                name: "Call for Reinforcements",
+                description: "Declare: Pick a friendly REINFORCEMENTS unit that has been destroyed. Effect: Set up an identical replacement unit on the battlefield, wholly within friendly territory, wholly within 6\" of the battlefield edge and not in combat. Each REINFORCEMENTS unit can only be replaced once. Replacement units cannot themselves be replaced.",
+                source: 'Core Rule',
+                timing: 'Movement Phase',
+                frequency: 'Once per turn per unit' // Clarified frequency
+            });
+             console.log("Added 'Call for Reinforcements' to Movement phase.");
+        }
+        // --- END Reinforcements Check ---
 
         // --- Gather dynamic abilities by phase --- 
         // Army Rules
@@ -633,6 +650,16 @@ document.addEventListener('DOMContentLoaded', () => {
             span.addEventListener('mouseout', hideTooltip);
             // span.addEventListener('mousemove', moveTooltip); // If needed
         });
+    }
+
+    // --- NEW: Back Button Navigation --- 
+    const backButton = document.getElementById('back-button');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    } else {
+        console.error("Could not find the back button (#back-button) to attach listener.");
     }
 
 }); 

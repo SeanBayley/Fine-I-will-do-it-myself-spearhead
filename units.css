@@ -5,6 +5,7 @@ header {
     margin-bottom: 1em;
     padding-bottom: 0.8em;
     border-bottom: 1px solid var(--border-color);
+    position: relative;
 }
 
 header h1 {
@@ -449,4 +450,58 @@ details.phase-section > ul > li .ability-source {
 .unit-thumbnail-link:hover .unit-thumbnail-image {
     transform: scale(1.1);
     box-shadow: 0 0 5px var(--primary-color);
-} 
+}
+
+/* --- NEW: Back Button Styles --- */
+/* Removed old centered button styles */
+
+#back-button {
+    position: absolute; /* Position relative to header */
+    top: 0.8em;  /* Adjust slightly */
+    left: 1em; 
+    width: auto; /* Let content determine width */
+    height: 38px; /* Slightly smaller height */
+    padding: 0 15px; /* Horizontal padding for pill shape */
+    font-size: 1.2em; /* Adjust arrow size */
+    line-height: 38px; /* Match height */
+    font-weight: normal; /* Less bold maybe? */
+    color: var(--primary-color); /* Lighter arrow color - CHANGED */
+    background-color: var(--secondary-color); /* Match background */
+    /* border: 2px solid var(--primary-color); Removed */
+    border: none; /* No border */
+    border-radius: 50px; /* Pill shape */
+    cursor: pointer;
+    transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Added color transition */
+    text-align: center;
+    /* Neumorphic shadows for dark theme */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4), /* Dark shadow */
+                -4px -4px 8px rgba(255, 255, 255, 0.05); /* Light shadow */
+}
+
+#back-button:hover {
+    background-color: var(--primary-color); /* UPDATED */
+    color: var(--background-color); /* UPDATED - contrast */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), /* Slightly stronger dark */
+                -5px -5px 10px rgba(255, 255, 255, 0.07); /* Slightly stronger light */
+    transform: translateY(-1px); /* Subtle lift */
+}
+
+#back-button:active {
+    /* Simulate being pressed */
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.5), /* Inset dark */
+                inset -3px -3px 6px rgba(255, 255, 255, 0.05); /* Inset light */
+    transform: translateY(1px); /* Press down slightly */
+    background-color: var(--primary-hover-color); /* Use hover color when pressed */
+    color: var(--background-color);
+}
+
+/* Ensure header has relative positioning for absolute positioning of button */
+header {
+    /* Style the header if needed */
+    margin-bottom: 1em;
+    padding-bottom: 0.8em;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+/* --- END Back Button Styles --- */ 
