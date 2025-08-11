@@ -15,6 +15,10 @@
     {
       "name": "Seraphon",
       "dataFile": "data/seraphon.json"
+    },
+    {
+      "name": "Ossiarch Bonereapers",
+      "dataFile": "data/ossiarch_bonereapers.json"
     }
   ]
 } 

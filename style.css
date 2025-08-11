@@ -237,6 +237,20 @@ body.stormcast-eternals {
     --primary-hover-color: #0a58ca;
 }
 
+/* Seraphon Theme (Turquoise) */
+body.seraphon {
+    --primary-color: #40E0D0; /* Turquoise */
+    --primary-color-rgb: 64, 224, 208; /* RGB for Turquoise */
+    --primary-hover-color: #30B0A0; /* Darker turquoise for hover */
+}
+
+/* Ossiarch Bonereapers Theme (Bone) */
+body.ossiarch-bonereapers {
+    --primary-color: #F5F5DC; /* Beige/Bone color */
+    --primary-color-rgb: 245, 245, 220; /* RGB for Bone */
+    --primary-hover-color: #E8E8D0; /* Darker bone for hover */
+}
+
 .rule-box.selected {
     border-color: var(--primary-color);
     background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */

@@ -1,0 +1,252 @@
+{
+  "factionName": "Ossiarch Bonereapers",
+  "factionId": "ossiarch-bonereapers",
+  "armyRules": [
+    {
+      "name": "Ossiarch Commands",
+      "type": "Battle Trait",
+      "timing": "Battle Round Start",
+      "frequency": "Each battle round",
+      "description": "OSSIARCH COMMANDS are abilities that can only be used by spending Ossiarch command points. At the start of the battle round, you receive 2 Ossiarch command points. Each OSSIARCH COMMAND costs 1 Ossiarch command point to use. The same unit cannot use more than one OSSIARCH COMMAND in the same phase. At the end of the battle round, all remaining Ossiarch command points are lost."
+    },
+    {
+      "name": "Reserve Contingent",
+      "type": "Battle Trait",
+      "timing": "Deployment Phase",
+      "frequency": "Once per battle",
+      "description": "One of your Mortek Guard units is not set up during the deployment phase. Instead, from the third battle round onwards, it can use the Contingent Arrival ability."
+    },
+    {
+      "name": "Contingent Arrival",
+      "type": "Battle Trait",
+      "timing": "Movement Phase",
+      "frequency": "From 3rd battle round",
+      "description": "Set up this unit anywhere on the battlefield wholly within 3\" of a battlefield edge and more than 6\" from all enemy units."
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "Impenetrable Ranks",
+      "type": "Regiment Ability",
+      "timing": "Combat Phase",
+      "frequency": "Once per battle, any combat phase",
+      "description": "Pick a friendly unit to use this ability. Until the end of the phase, add 1 to ward rolls for that unit.",
+      "keywords": "OSSIARCH COMMAND"
+    },
+    {
+      "name": "Re-form Ranks",
+      "type": "Regiment Ability",
+      "timing": "Movement Phase",
+      "frequency": "Once per battle, your movement phase",
+      "description": "Pick a friendly Mortek Guard unit in combat to use this ability. That unit can use a RETREAT ability this phase without any mortal damage being inflicted on it.",
+      "keywords": "OSSIARCH COMMAND"
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "Murderous Drive",
+      "type": "Passive Enhancement",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Your general's Soulreaper Scythe has Crit (2 Hits).",
+      "lore": "This Soulreaper is animated by especially vicious and warlike spirits."
+    },
+    {
+      "name": "Unstoppable Commander",
+      "type": "Movement Phase Enhancement",
+      "timing": "Movement Phase",
+      "frequency": "Once per turn",
+      "description": "Declare: Pick a friendly Mortek Guard unit wholly within 12\" of your general, then roll a dice. Effect: On a 2+, add 3\" to that unit's Move characteristic this phase."
+    },
+    {
+      "name": "Empower Nadirite Weapons",
+      "type": "Hero Phase Enhancement",
+      "timing": "Hero Phase",
+      "frequency": "Once per turn",
+      "description": "Declare: Pick a visible friendly Mortek Guard unit wholly within 12\" of your general, then make a casting roll of 2D6. Effect: On a 5+, until the start of your next turn, add 1 to the Rend characteristic of that unit's melee weapons."
+    },
+    {
+      "name": "Marrowpact",
+      "type": "Passive Enhancement",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Each time your general uses a FIGHT ability, after all of their attacks have been resolved, Heal (X) your general where X is the number of damage points allocated by those attacks."
+    }
+  ],
+  "spearheadComposition": [
+    "1 Mortisan Soulreaper",
+    "10 Mortek Guard",
+    "10 Mortek Guard",
+    "5 Kavalos Deathriders",
+    "1 Gothizzar Harvester"
+  ],
+  "units": [
+    {
+      "name": "Mortisan Soulreaper",
+      "imageUrl": "images/ossiarch_bonereapers/mortisan_soulreaper.png",
+      "stats": {
+        "move": "6\"",
+        "health": 5,
+        "control": 2,
+        "save": "4+"
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Soulreaper Scythe",
+          "attacks": 4,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 2,
+          "damage": 2,
+          "abilities": [
+            { "name": "Crit (2 Hits)", "description": "Each time you roll a 6 to hit with this weapon, that hit scores 2 hits on the target instead of 1." }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Soulreaper",
+          "description": "This model can attempt to cast 1 spell in your hero phase and attempt to unbind 1 spell in the enemy hero phase.",
+          "timing": "Hero Phase",
+          "frequency": "Once per turn"
+        },
+        {
+          "name": "Deathly Invigoration",
+          "description": "In your hero phase, you can pick 1 friendly OSSIARCH BONEREAPERS unit wholly within 12\" of this model. If you do so, heal up to D3 wounds allocated to that unit.",
+          "timing": "Hero Phase",
+          "frequency": "Once per turn"
+        }
+      ]
+    },
+    {
+      "name": "Mortek Guard",
+      "imageUrl": "images/ossiarch_bonereapers/mortek_guard.png",
+      "stats": {
+        "move": "5\"",
+        "health": 10,
+        "control": 2,
+        "save": "4+"
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Nadirite Blade",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        },
+        {
+          "name": "Nadirite Spear",
+          "attacks": 1,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1,
+          "abilities": [
+            { "name": "Reach", "description": "This weapon can be used to attack units that are within 2\" of this model." }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Shieldwall",
+          "description": "Add 1 to save rolls for attacks that target this unit while it has 3 or more models.",
+          "timing": "Passive",
+          "frequency": "N/A"
+        },
+        {
+          "name": "Nadirite Weapons",
+          "description": "If the unmodified hit roll for an attack made with a Nadirite weapon is 6, that attack has a rend characteristic of -2 instead of -1.",
+          "timing": "Passive",
+          "frequency": "N/A"
+        }
+      ]
+    },
+    {
+      "name": "Kavalos Deathriders",
+      "imageUrl": "images/ossiarch_bonereapers/kavalos_deathriders.png",
+      "stats": {
+        "move": "10\"",
+        "health": 5,
+        "control": 2,
+        "save": "4+"
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Nadirite Blade",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        },
+        {
+          "name": "Deathrider Lance",
+          "attacks": 1,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 2,
+          "damage": 2,
+          "abilities": [
+            { "name": "Lance", "description": "Add 1 to the damage characteristic of this weapon if the target made a charge move in the same turn." }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Deathrider Charge",
+          "description": "Add 1 to hit rolls for attacks made with Deathrider Lances if this unit made a charge move in the same turn.",
+          "timing": "Combat Phase",
+          "frequency": "After charge"
+        }
+      ]
+    },
+    {
+      "name": "Gothizzar Harvester",
+      "imageUrl": "images/ossiarch_bonereapers/gothizzar_harvester.png",
+      "stats": {
+        "move": "8\"",
+        "health": 8,
+        "control": 2,
+        "save": "4+"
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Bone Scythe",
+          "attacks": 4,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 2,
+          "damage": 2
+        },
+        {
+          "name": "Bone-tipped Claws",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Harvest of Bones",
+          "description": "At the end of the combat phase, if any enemy models were slain by wounds caused by this model's attacks in that phase, you can heal up to D3 wounds allocated to a friendly OSSIARCH BONEREAPERS unit wholly within 12\" of this model.",
+          "timing": "End of Combat Phase",
+          "frequency": "Once per phase"
+        },
+        {
+          "name": "Bone Harvest",
+          "description": "If this model is within 3\" of an objective marker, add 1 to the control score of friendly OSSIARCH BONEREAPERS units that are contesting that objective marker.",
+          "timing": "Passive",
+          "frequency": "N/A"
+        }
+      ]
+    }
+  ]
+} 
