@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- NEW: Function to Load and Display Faction Data ---
-    function loadAndDisplayFaction(selectedDataFile) {
+    function loadAndDisplayFaction(selectedDataFile, isRestoring = false) {
         // Reset body class
         document.body.className = ''; // Remove previous faction classes
 
@@ -221,10 +221,12 @@ document.addEventListener('DOMContentLoaded', () => {
              if (selectedCard) {
                  selectedCard.classList.add('selected');
              }
-             // Clear ability/enhancement when faction changes *manually* 
-             // (restoration handles not clearing)
-             sessionStorage.removeItem(ABILITY_KEY);
-             sessionStorage.removeItem(ENHANCEMENT_KEY);
+             // Clear ability/enhancement ONLY when faction changes *manually*
+             if (!isRestoring) { 
+                 console.log("Manual faction change - clearing sub-selections."); // DEBUG
+                 sessionStorage.removeItem(ABILITY_KEY);
+                 sessionStorage.removeItem(ENHANCEMENT_KEY);
+             }
         } else {
              sessionStorage.removeItem(FACTION_KEY);
              sessionStorage.removeItem(ABILITY_KEY);
@@ -357,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (storedFactionCard) {
                     console.log('Restoring faction:', storedFaction);
                     // Don't add 'selected' class here, loadAndDisplayFaction will do it
-                    loadAndDisplayFaction(storedFaction); // Load data, which handles highlighting
+                    loadAndDisplayFaction(storedFaction, true); // Pass true for isRestoring
                  } else {
                     console.warn('Stored faction not found in manifest, clearing:', storedFaction);
                     sessionStorage.removeItem(FACTION_KEY); // Clear if invalid

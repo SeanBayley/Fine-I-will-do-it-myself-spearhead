@@ -148,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // *** NEW: Apply Enhancement Effects to Units ***
                 const selectedEnhancementNameForUnitMod = decodeURIComponent(getQueryParam('enhancement') || '');
+                
                 if (selectedEnhancementNameForUnitMod && factionData.units) {
                      // Stormcast Specific Enhancements (Example)
                      if (factionData.factionId === 'stormcast-eternals') {
@@ -217,6 +218,34 @@ document.addEventListener('DOMContentLoaded', () => {
                          }
                      }
                      // --- End Skaven Specific Enhancements ---
+                     // --- Seraphon Specific Enhancements ---
+                     else if (factionData.factionId.trim() === 'seraphon') { // Added .trim() here for safety
+                         const targetUnitSeraphon = factionData.units.find(u => u.name === "Saurus Oldblood on Carnosaur");
+                         if (targetUnitSeraphon) {
+                            if (selectedEnhancementNameForUnitMod === "BLADE OF REALITIES") {
+                                const targetWeapon = targetUnitSeraphon.meleeWeapons?.find(w => w.name === "Relic Celestite Weapon");
+                                if (targetWeapon) {
+                                     // Assuming rend is stored as a number or can be parsed
+                                    const currentRend = parseInt(targetWeapon.rend); 
+                                    if (!isNaN(currentRend)) {
+                                         targetWeapon.rend = currentRend + 1;
+                                         console.log(`Applied BLADE OF REALITIES: ${targetUnitSeraphon.name}'s ${targetWeapon.name} rend changed to ${targetWeapon.rend}`);
+                                    } else {
+                                        // Handle cases like "-" or if parsing fails
+                                        console.warn(`Could not parse rend value '${targetWeapon.rend}' for ${targetWeapon.name} to apply BLADE OF REALITIES.`);
+                                        // Optionally set to 1 if it was "-"? targetWeapon.rend = 1;
+                                    }
+                                }
+                            } else if (selectedEnhancementNameForUnitMod === "THE WRATH OF CHOTEC") {
+                                const targetWeapon = targetUnitSeraphon.rangedWeapons?.find(w => w.name === "Sunbolt Gauntlet");
+                                if (targetWeapon) {
+                                    targetWeapon.attacks = 6;
+                                    console.log(`Applied THE WRATH OF CHOTEC: ${targetUnitSeraphon.name}'s ${targetWeapon.name} attacks changed to ${targetWeapon.attacks}`);
+                                }
+                            }
+                         }
+                     }
+                     // --- End Seraphon Specific Enhancements ---
                 }
                 // ********************************************
 
@@ -337,10 +366,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Display separately if timing is passive/other
                     const enhancementDiv = document.createElement('div');
                     enhancementDiv.className = 'selected-enhancement-display';
+                    // *** Use data-description instead of data-tooltip ***
                     enhancementDiv.innerHTML = `
                         <h4>Selected Enhancement</h4>
                         <p>
-                            <span class="ability-name" data-tooltip="${escapeHtml(selectedEnhancement.description)}">${escapeHtml(selectedEnhancement.name)}</span>
+                            <span class="ability-name" data-description="${escapeHtml(selectedEnhancement.description)}" data-timing="" data-frequency="">${escapeHtml(selectedEnhancement.name)}</span>
                         </p>
                     `;
                     phaseColumn.querySelector('h2').insertAdjacentElement('afterend', enhancementDiv);

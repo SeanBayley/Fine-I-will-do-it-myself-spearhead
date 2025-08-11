@@ -11,6 +11,10 @@
     {
       "name": "Skaven",
       "dataFile": "data/skaven.json"
+    },
+    {
+      "name": "Seraphon",
+      "dataFile": "data/seraphon.json"
     }
   ]
 } 

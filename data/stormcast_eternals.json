@@ -22,7 +22,7 @@
         "name": "Blaze of Glory",
         "type": "Regiment Ability",
         "timing": "Combat phase",
-        "frequency": "Once per battle",
+        "frequency": "Once per battle, any combat phase",
         "description": "Pick a friendly unit in combat and until the end of the phase each time a model from that unit is slain roll a D6. On a 4+ an enemy unit in combat with that unit takes 1 mortal wound."
     },
     {
@@ -51,15 +51,15 @@
     {
       "name": "Null Pendant",
       "type": "Artefact of Power",
-      "timing": "End of Turn",
-      "frequency": "Once per battle",
+      "timing": "Any End of Turn",
+      "frequency": "Once per battle, end of any turn",
       "description": "Roll a dice for each enemy unit contesting the same objective as your general . On a 2+ subtract the roll from the control score of that unit this turn."
     },
     {
       "name": "Quicksilver Draught",
       "type": "Artefact of Power",
       "timing": "Combat phase",
-      "frequency": "Once per battle",
+      "frequency": "Once per battle, any combat phase",
       "description": "Your general has Strike-First this phase"
     }
   ],
@@ -105,8 +105,8 @@
         {
           "name": "Deliver Judgement",
           "type": "Ability",
-          "timing": "Once Per Battle, Any Combat Phase",
-          "frequency": "N/A",
+          "timing": "Combat phase",
+          "frequency": "Once per battle, any combat phase",
           "description": "Declare: Pick a friendly non-HERO unit wholly within 12\" of this unit to be the target. Effect: The target can use 2 FIGHT abilities this phase. After the first is used, however, the target has STRIKE-LAST for the rest of the phase."
         },
         {
@@ -207,7 +207,7 @@
         {
           "name": "Stalwart Defenders",
           "type": "Ability",
-          "timing": "Passive",
+          "timing": "End of Turn",
           "frequency": "N/A",
           "description": "Add 3 to the control characteristic of this unit while it contests an objective wholly within friendly territory."
         }

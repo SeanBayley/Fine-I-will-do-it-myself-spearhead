@@ -289,7 +289,7 @@
         {
           "name": "Seething Swarm",
           "type": "Ability",
-          "timing": "End of Turn",
+          "timing": "Any End of Turn",
           "frequency": "N/A",
           "description": "Effect: You can return D3 slain models to this unit at the end of any turn."
         }
