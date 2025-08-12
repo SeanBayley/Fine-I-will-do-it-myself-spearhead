@@ -7,40 +7,37 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Age of Sigmar: Spearhead Rules</h1>
+    <div class="app-container">
+        <h1 class="app-title">Age of Sigmar: Spearhead Rules</h1>
 
-    <nav>
-        <!-- Faction grid will be loaded here by JavaScript -->
-        <div id="faction-grid"></div>
-    </nav>
+        <nav>
+            <!-- Faction grid will be loaded here by JavaScript -->
+            <div id="faction-grid"></div>
+        </nav>
 
-    <main id="rules-content">
-        <section id="faction-rules" style="display: none;">
-            <h2>Faction Rules</h2>
-            <div id="army-rules">
-                <h3>Army Rules</h3>
-                <!-- Army rules will be loaded here -->
-            </div>
-            <div id="spearhead-composition">
-                <h3>Spearhead Composition</h3>
-                <!-- Composition will be loaded here -->
-            </div>
-            <div id="regiment-ability-selection">
-                <h3>Regiment Ability (Select One)</h3>
-                <!-- Selectable regiment abilities will go here -->
-            </div>
-            <div id="enhancement-selection">
-                <h3>Enhancement (Select One Artefact of Power)</h3>
-                <!-- Selectable enhancements will go here -->
-            </div>
-            <button id="faction-rules-continue" class="continue-button" style="display: none;" disabled>Continue</button>
-        </section>
-
-        <!-- REMOVED Unit List Section -->
-
-        <!-- REMOVED Unit Detail Section -->
-
-    </main>
+        <main id="rules-content">
+            <section id="faction-rules" style="display: none;">
+                <h2>Faction Rules</h2>
+                <div id="army-rules">
+                    <h3>Army Rules</h3>
+                    <!-- Army rules will be loaded here -->
+                </div>
+                <div id="spearhead-composition">
+                    <h3>Spearhead Composition</h3>
+                    <!-- Composition will be loaded here -->
+                </div>
+                <div id="regiment-ability-selection">
+                    <h3>Regiment Ability (Select One)</h3>
+                    <!-- Selectable regiment abilities will go here -->
+                </div>
+                <div id="enhancement-selection">
+                    <h3>Enhancement (Select One Artefact of Power)</h3>
+                    <!-- Selectable enhancements will go here -->
+                </div>
+                <button id="faction-rules-continue" class="continue-button" style="display: none;" disabled>Continue</button>
+            </section>
+        </main>
+    </div>
 
     <script src="script.js"></script>
 </body>

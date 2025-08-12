@@ -2,6 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const unitCardsContainer = document.getElementById('unit-cards-container');
     const factionNameHeader = document.getElementById('faction-name-header');
 
+    // --- UI helper: apply staggered reveal to a NodeList or container+selector ---
+    function applyReveal(target, selector, baseDelay = 0, stepMs = 60) {
+        let elements;
+        if (selector && target && typeof target.querySelectorAll === 'function') {
+            elements = target.querySelectorAll(selector);
+        } else if (target && typeof target.forEach === 'function') {
+            elements = target;
+        } else {
+            elements = [];
+        }
+        elements.forEach((el, idx) => {
+            el.classList.add('reveal-in');
+            el.style.animationDelay = `${baseDelay + idx * stepMs}ms`;
+        });
+    }
+
     // --- Function to get URL parameters ---
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -257,12 +273,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     factionData.units.forEach(unit => {
                          displayUnitCard(unit, unitCardsContainer);
                     });
+                    // Reveal cards after render
+                    applyReveal(unitCardsContainer, '.unit-card', 0, 60);
                 } else {
                      unitCardsContainer.innerHTML = '<p>No units found for this faction.</p>';
                 }
 
                 // Populate Phase Rules (using potentially modified factionData)
                 populatePhaseRules(factionData);
+
+                // Reveal phase sections
+                const phaseColumn = document.getElementById('phase-rules-column');
+                applyReveal(phaseColumn, 'details.phase-section', 150, 80);
 
             })
             .catch(error => {

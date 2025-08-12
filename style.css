@@ -318,3 +318,159 @@ body.ossiarch-bonereapers {
 } */
 
 /* --- End Faction Grid Styles --- */ 
+
+/* --- Modern UI Enhancements --- */
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Animated ambient background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(var(--primary-color-rgb), 0.08), transparent 60%),
+        radial-gradient(1000px 600px at 80% 30%, rgba(255, 255, 255, 0.06), transparent 60%),
+        radial-gradient(800px 600px at 50% 100%, rgba(255, 255, 255, 0.03), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2));
+    animation: floatBg 30s ease-in-out infinite alternate;
+}
+
+@keyframes floatBg {
+    0% { transform: translate3d(0,0,0); }
+    100% { transform: translate3d(0,-20px,0); }
+}
+
+/* Gradient, animated title */
+.app-title {
+    margin: 0 0 1rem 0;
+    text-align: center;
+    background-image: linear-gradient(90deg, var(--primary-color) 0%, #a78bfa 50%, var(--primary-color) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 12s linear infinite;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 24px rgba(var(--primary-color-rgb), 0.25);
+}
+
+@keyframes shine {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* Glass surfaces for cards/sections */
+nav,
+main#rules-content section {
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.05),
+        rgba(255,255,255,0.03)
+    );
+    border: 1px solid rgba(var(--primary-color-rgb), 0.25);
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* Faction cards - glass + interactive */
+.faction-card {
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(var(--primary-color-rgb), 0.35);
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transform: perspective(600px) translateZ(0);
+    will-change: transform, box-shadow, border-color;
+    transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.faction-card:hover {
+    border-color: rgba(var(--primary-color-rgb), 0.7);
+    transform: perspective(600px) translateY(-4px) rotateX(1deg) rotateY(-2deg) scale(1.015);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.faction-card.selected {
+    border-color: rgba(var(--primary-color-rgb), 0.9);
+    box-shadow: 0 16px 30px rgba(0,0,0,0.4), 0 0 16px rgba(var(--primary-color-rgb), 0.45);
+}
+
+/* Rule boxes - interactive */
+.rule-box {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid rgba(var(--primary-color-rgb), 0.25);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.rule-box:hover {
+    border-color: rgba(var(--primary-color-rgb), 0.6);
+}
+
+.rule-box.selected {
+    border-color: rgba(var(--primary-color-rgb), 0.9);
+    background-color: rgba(var(--primary-color-rgb), 0.12);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35), 0 0 10px rgba(var(--primary-color-rgb), 0.35);
+}
+
+/* Continue button - pill + glow */
+.continue-button {
+    position: sticky;
+    bottom: 1rem;
+    z-index: 10;
+    border-radius: 9999px;
+    padding: 0.9em 1.6em;
+    letter-spacing: 0.2px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35), 0 0 0 rgba(var(--primary-color-rgb), 0);
+    transition: transform 120ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.continue-button:not(:disabled):hover {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.45), 0 0 14px rgba(var(--primary-color-rgb), 0.35);
+}
+
+/* Focus styles */
+.faction-card:focus-visible,
+.rule-box:focus-visible,
+.continue-button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+}
+
+/* Subtle reveal animation utility */
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal-in {
+    animation: fadeSlideUp 450ms ease both;
+}
+
+/* Scrollbar styling (WebKit) */
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.04);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(var(--primary-color-rgb), 0.7), rgba(var(--primary-color-rgb), 0.45));
+    border-radius: 8px;
+    border: 2px solid rgba(0,0,0,0.2);
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+} 

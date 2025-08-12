@@ -8,54 +8,56 @@
     <link rel="stylesheet" href="units.css"> <!-- Link unit-specific styles -->
 </head>
 <body>
-    <header>
-        <h1>Age of Sigmar: Spearhead Units</h1>
-        <h2 id="faction-name-header">Faction Name Loading...</h2>
-        <button id="back-button">&laquo;</button>
-    </header>
-
-    <main id="units-content" class="units-page-layout">
-        <!-- Unit Cards Container Now First -->
-        <div id="unit-cards-container">
-            <!-- Unit cards will be loaded here by units.js -->
-        </div>
-
-        <!-- Phase Rules Column Now Second -->
-        <aside id="phase-rules-column">
-            <h2>Phase Rules</h2>
-            <!-- Phase rules content will go here -->
-            <!-- REMOVED Placeholder -->
-
-            <details class="phase-section" data-phase="hero">
-                <summary>Hero Phase</summary>
-                <!-- Content added by JS -->
-            </details>
-            <details class="phase-section" data-phase="movement">
-                <summary>Movement Phase</summary>
-                 <!-- Content added by JS -->
-            </details>
-            <details class="phase-section" data-phase="shooting">
-                <summary>Shooting Phase</summary>
-                 <!-- Content added by JS -->
-            </details>
-            <details class="phase-section" data-phase="charge">
-                <summary>Charge Phase</summary>
-                 <!-- Content added by JS -->
-            </details>
-            <details class="phase-section" data-phase="combat">
-                <summary>Combat Phase</summary>
-                 <!-- Content added by JS -->
-            </details>
-            <details class="phase-section" data-phase="taking-damage">
-                <summary>Taking Damage</summary>
-                 <!-- Content added by JS -->
-            </details>
-            <details class="phase-section" data-phase="end">
-                <summary>End of Turn</summary>
-                 <!-- Content added by JS -->
-            </details>
-        </aside>
-    </main>
+    <div class="app-container">
+        <header>
+            <h1 class="app-title">Age of Sigmar: Spearhead Units</h1>
+            <h2 id="faction-name-header">Faction Name Loading...</h2>
+            <button id="back-button">&laquo;</button>
+        </header>
+    
+        <main id="units-content" class="units-page-layout">
+            <!-- Unit Cards Container Now First -->
+            <div id="unit-cards-container">
+                <!-- Unit cards will be loaded here by units.js -->
+            </div>
+    
+            <!-- Phase Rules Column Now Second -->
+            <aside id="phase-rules-column">
+                <h2>Phase Rules</h2>
+                <!-- Phase rules content will go here -->
+                <!-- REMOVED Placeholder -->
+    
+                <details class="phase-section" data-phase="hero">
+                    <summary>Hero Phase</summary>
+                    <!-- Content added by JS -->
+                </details>
+                <details class="phase-section" data-phase="movement">
+                    <summary>Movement Phase</summary>
+                     <!-- Content added by JS -->
+                </details>
+                <details class="phase-section" data-phase="shooting">
+                    <summary>Shooting Phase</summary>
+                     <!-- Content added by JS -->
+                </details>
+                <details class="phase-section" data-phase="charge">
+                    <summary>Charge Phase</summary>
+                     <!-- Content added by JS -->
+                </details>
+                <details class="phase-section" data-phase="combat">
+                    <summary>Combat Phase</summary>
+                     <!-- Content added by JS -->
+                </details>
+                <details class="phase-section" data-phase="taking-damage">
+                    <summary>Taking Damage</summary>
+                     <!-- Content added by JS -->
+                </details>
+                <details class="phase-section" data-phase="end">
+                    <summary>End of Turn</summary>
+                     <!-- Content added by JS -->
+                </details>
+            </aside>
+        </main>
+    </div>
 
     <script src="units.js"></script>
 </body>

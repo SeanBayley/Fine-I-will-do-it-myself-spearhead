@@ -13,6 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const compositionContainer = document.getElementById('spearhead-composition');
     const mainContinueButton = document.getElementById('faction-rules-continue');
 
+    // --- UI helper: apply staggered reveal to a NodeList or container+selector ---
+    function applyReveal(target, selector, baseDelay = 0, stepMs = 60) {
+        let elements;
+        if (selector && target && typeof target.querySelectorAll === 'function') {
+            elements = target.querySelectorAll(selector);
+        } else if (target && typeof target.forEach === 'function') {
+            elements = target;
+        } else {
+            elements = [];
+        }
+        elements.forEach((el, idx) => {
+            el.classList.add('reveal-in');
+            el.style.animationDelay = `${baseDelay + idx * stepMs}ms`;
+        });
+    }
+
     console.log("factionGridContainer:", factionGridContainer); // DEBUG
     console.log("mainContinueButton:", mainContinueButton); // DEBUG
 
@@ -122,6 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ruleBox.appendChild(label);
             selectionArea.appendChild(ruleBox);
         });
+
+        // Apply reveal animation to the newly created boxes
+        applyReveal(selectionArea, '.rule-box', 0, 80);
     }
 
     // --- New Helper function to display Enhancement Selection ---
@@ -188,6 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ruleBox.appendChild(label);
             selectionArea.appendChild(ruleBox);
         });
+
+        // Apply reveal animation to the newly created boxes
+        applyReveal(selectionArea, '.rule-box', 0, 80);
     }
 
     // --- NEW: Helper function to display Spearhead Composition ---
@@ -351,6 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 factionGridContainer.appendChild(factionCard);
             });
+
+            // Staggered reveal of faction cards
+            applyReveal(factionGridContainer, '.faction-card', 0, 70);
 
             // *** Restore faction selection after populating grid ***
             const storedFaction = sessionStorage.getItem(FACTION_KEY);
