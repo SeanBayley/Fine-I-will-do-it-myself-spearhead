@@ -409,8 +409,12 @@ main#rules-content section {
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
+/* Enhance hover state for rule selection boxes (Regiment Ability & Enhancements) */
 .rule-box:hover {
     border-color: rgba(var(--primary-color-rgb), 0.6);
+    background-color: rgba(var(--primary-color-rgb), 0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 10px rgba(var(--primary-color-rgb), 0.2);
 }
 
 .rule-box.selected {
@@ -474,3 +478,29 @@ main#rules-content section {
 @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
 } 
+
+/* --- NEW: Per-card Theme Overrides for Faction Buttons --- */
+.faction-card.theme-stormcast-eternals { 
+    --primary-color: #0d6efd; 
+    --primary-color-rgb: 13, 110, 253; 
+    --primary-hover-color: #0a58ca; 
+}
+
+.faction-card.theme-seraphon { 
+    --primary-color: #40E0D0; 
+    --primary-color-rgb: 64, 224, 208; 
+    --primary-hover-color: #30B0A0; 
+}
+
+.faction-card.theme-ossiarch-bonereapers { 
+    --primary-color: #F5F5DC; 
+    --primary-color-rgb: 245, 245, 220; 
+    --primary-hover-color: #E8E8D0; 
+}
+
+.faction-card.theme-skaven { 
+    --primary-color: #8FD129; 
+    --primary-color-rgb: 143, 209, 41; 
+    --primary-hover-color: #6EA723; 
+}
+/* --- END Per-card Theme Overrides --- */ 
