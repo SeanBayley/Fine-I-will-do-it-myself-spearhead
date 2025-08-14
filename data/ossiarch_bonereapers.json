@@ -26,7 +26,7 @@
   ],
   "regimentAbilities": [
     {
-      "name": "Impenetrable Ranks",
+      "name": "Impenetrable Ranks (OSSIARCH COMMAND)",
       "type": "Regiment Ability",
       "timing": "Combat Phase",
       "frequency": "Once per battle, any combat phase",
@@ -34,7 +34,7 @@
       "keywords": "OSSIARCH COMMAND"
     },
     {
-      "name": "Re-form Ranks",
+      "name": "Re-form Ranks (OSSIARCH COMMAND)",
       "type": "Regiment Ability",
       "timing": "Movement Phase",
       "frequency": "Once per battle, your movement phase",
@@ -99,20 +99,18 @@
           "wound": "3+",
           "rend": 2,
           "damage": 2,
-          "abilities": [
-            { "name": "Crit (2 Hits)", "description": "Each time you roll a 6 to hit with this weapon, that hit scores 2 hits on the target instead of 1." }
-          ]
+          "abilities": []
         }
       ],
       "abilities": [
         {
-          "name": "Soulreaper",
-          "description": "This model can attempt to cast 1 spell in your hero phase and attempt to unbind 1 spell in the enemy hero phase.",
+          "name": "DRAIN VITALITY",
+          "description": "Declare: Pick a visible enemy unit within 18\" of this unit to be the target, then make a casting roll of 2D6. Effect: On a 6+, subtract 1 from hit rolls for attacks made by the target unit until the start of your next turn.",
           "timing": "Hero Phase",
           "frequency": "Once per turn"
         },
         {
-          "name": "Deathly Invigoration",
+          "name": "Deathly Invigoration (OSSIARCH COMMAND)",
           "description": "In your hero phase, you can pick 1 friendly OSSIARCH BONEREAPERS unit wholly within 12\" of this model. If you do so, heal up to D3 wounds allocated to that unit.",
           "timing": "Hero Phase",
           "frequency": "Once per turn"
@@ -146,20 +144,14 @@
           "rend": 1,
           "damage": 1,
           "abilities": [
-            { "name": "Reach", "description": "This weapon can be used to attack units that are within 2\" of this model." }
+            { "name": "Anti-charge (+1 rend)", "description": "If this unit is charged, add 1 to the rend characteristic of this weapon." }
           ]
         }
       ],
       "abilities": [
         {
-          "name": "Shieldwall",
-          "description": "Add 1 to save rolls for attacks that target this unit while it has 3 or more models.",
-          "timing": "Passive",
-          "frequency": "N/A"
-        },
-        {
-          "name": "Nadirite Weapons",
-          "description": "If the unmodified hit roll for an attack made with a Nadirite weapon is 6, that attack has a rend characteristic of -2 instead of -1.",
+          "name": "NADIRITE ASSAULT (OSSIARCH COMMAND)",
+          "description": "Until the end of the phase, this unit’s melee weapons have Crit (2 Hits).",
           "timing": "Passive",
           "frequency": "N/A"
         }
@@ -170,36 +162,36 @@
       "imageUrl": "images/ossiarch_bonereapers/kavalos_deathriders.png",
       "stats": {
         "move": "10\"",
-        "health": 5,
-        "control": 2,
+        "health": 3,
+        "control": 1,
         "save": "4+"
       },
       "rangedWeapons": [],
       "meleeWeapons": [
         {
-          "name": "Nadirite Blade",
-          "attacks": 2,
-          "hit": "4+",
+          "name": "Nadirite Spear",
+          "attacks": 3,
+          "hit": "3+",
           "wound": "4+",
           "rend": 1,
-          "damage": 1
+          "damage": 1,
+          "abilities": [
+            { "name": "Charge (+1 damage)", "description": "Add 1 to the damage characteristic of this weapon if the target made a charge move in the same turn." }
+          ]
         },
         {
-          "name": "Deathrider Lance",
-          "attacks": 1,
-          "hit": "4+",
-          "wound": "4+",
-          "rend": 2,
-          "damage": 2,
-          "abilities": [
-            { "name": "Lance", "description": "Add 1 to the damage characteristic of this weapon if the target made a charge move in the same turn." }
-          ]
+          "name": "Kavalos Steed’s Hooves and Teeth",
+          "attacks": 2,
+          "hit": "5+",
+          "wound": "3+",
+          "rend": 0,
+          "damage": 1
         }
       ],
       "abilities": [
         {
-          "name": "Deathrider Charge",
-          "description": "Add 1 to hit rolls for attacks made with Deathrider Lances if this unit made a charge move in the same turn.",
+          "name": "DEATHRIDER WEDGE (OSSIARCH COMMAND)",
+          "description": "Models in this unit can pass across enemy Infantry models as if this unit had Fly. After this unit has charged, you can pick an enemy unit within 12\" of this unit and roll a dice. If the roll is 2+, inflict D3 mortal wounds on that unit.",
           "timing": "Combat Phase",
           "frequency": "After charge"
         }
@@ -209,41 +201,49 @@
       "name": "Gothizzar Harvester",
       "imageUrl": "images/ossiarch_bonereapers/gothizzar_harvester.png",
       "stats": {
-        "move": "8\"",
-        "health": 8,
-        "control": 2,
+        "move": "6\"",
+        "health": 10,
+        "control": 5,
         "save": "4+"
       },
-      "rangedWeapons": [],
+      "rangedWeapons": [{
+        "name": "Death’s Head Maw",
+        "range": "12\"",
+        "attacks": 4,
+        "hit": "4+",
+        "wound": "4+",
+        "rend": 1,
+        "damage": 1
+      }],
       "meleeWeapons": [
         {
-          "name": "Bone Scythe",
-          "attacks": 4,
-          "hit": "3+",
-          "wound": "3+",
+          "name": "Soulcrusher Bludgeons",
+          "attacks": 6,
+          "hit": "4+",
+          "wound": "2+",
           "rend": 2,
           "damage": 2
         },
         {
-          "name": "Bone-tipped Claws",
-          "attacks": 3,
+          "name": "Ossified Hooves and Tail",
+          "attacks": 4,
           "hit": "4+",
           "wound": "3+",
           "rend": 1,
-          "damage": 1
+          "damage": 2
         }
       ],
       "abilities": [
         {
-          "name": "Harvest of Bones",
-          "description": "At the end of the combat phase, if any enemy models were slain by wounds caused by this model's attacks in that phase, you can heal up to D3 wounds allocated to a friendly OSSIARCH BONEREAPERS unit wholly within 12\" of this model.",
+          "name": "Bone Harvest",
+          "description": "At the end of the combat phase, for each enemy model that was slain by wounds caused by this model's attacks in that phase, you gain 1 Blood Tithe point, to a maximum of 6.",
           "timing": "End of Combat Phase",
           "frequency": "Once per phase"
         },
         {
-          "name": "Bone Harvest",
-          "description": "If this model is within 3\" of an objective marker, add 1 to the control score of friendly OSSIARCH BONEREAPERS units that are contesting that objective marker.",
-          "timing": "Passive",
+          "name": "Repair Construct",
+          "description": "Pick a Mortek Guard unit wholly within 6\" of this model. Then roll a dice for each Blood Tithe point you have. For Each 4+ you can return one slain model to that unit. then set your blood tithe points to 0.",
+          "timing": "End of Turn",
           "frequency": "N/A"
         }
       ]
