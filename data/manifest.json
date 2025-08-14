@@ -5,10 +5,6 @@
       "dataFile": "data/stormcast_eternals.json"
     },
     {
-      "name": "Orruk Warclans",
-      "dataFile": "data/orruk_warclans.json"
-    },
-    {
       "name": "Skaven",
       "dataFile": "data/skaven.json"
     },

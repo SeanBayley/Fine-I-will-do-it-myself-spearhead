@@ -366,6 +366,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 factionCard.textContent = faction.name;
                 factionCard.dataset.file = faction.dataFile; // Store file path in data attribute
 
+                // Add per-card theme class based on file or name
+                const idFromFile = (faction.dataFile || '')
+                    .replace(/^.*\/(.*)\.json$/, '$1') // extract filename without extension
+                    .replace(/_/g, '-');
+                if (idFromFile) {
+                    factionCard.classList.add(`theme-${idFromFile}`);
+                }
+
                 // Add click listener
                 factionCard.addEventListener('click', () => {
                     loadAndDisplayFaction(faction.dataFile);
