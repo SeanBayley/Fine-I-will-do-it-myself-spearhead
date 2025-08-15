@@ -724,6 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isGameActive: false,
         currentRound: 1,
         currentTurn: 'player', // 'player' or 'enemy'
+        startingPlayer: null,
         currentPhase: 0, // Index of current phase
         phases: ['hero', 'movement', 'shooting', 'charge', 'combat', 'taking-damage', 'end'],
         phaseNames: ['Hero Phase', 'Movement Phase', 'Shooting Phase', 'Charge Phase', 'Combat Phase', 'Taking Damage', 'End of Turn'],
@@ -984,20 +985,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- SCORING FUNCTIONS ---
-    function showScoringModal() {
-        // Determine if this is the first or second turn of the round
-        // We need to track which turn this is within the round
-        const isFirstTurnOfRound = gameState.currentTurn === 'player' && gameState.currentPhase === 0;
-        const isSecondTurnOfRound = gameState.currentTurn === 'enemy';
+    // Configuration for the currently open scoring modal
+    let currentScoringConfig = { showModal: true, showPrimary: true, allowedActions: ['keep', 'score', 'bin'] };
+    
+    function determineScoringModalConfig() {
+        const starting = gameState.startingPlayer || 'player';
+        const isPlayerTurn = gameState.currentTurn === 'player';
+        // 4 modes derived from starting player and whose turn it is
+        // - Player starts, end of player's turn: show primary, actions [score, keep]
+        // - Player starts, end of enemy's turn: hide primary, actions [keep, bin]
+        // - Enemy starts, end of enemy's turn: no modal
+        // - Enemy starts, end of player's turn: show primary, actions [score, bin, keep]
+        if (starting === 'player') {
+            if (isPlayerTurn) {
+                return { showModal: true, showPrimary: true, allowedActions: ['score', 'keep'] };
+            } else {
+                return { showModal: true, showPrimary: false, allowedActions: ['keep', 'bin'] };
+            }
+        } else {
+            if (!isPlayerTurn) {
+                return { showModal: false, showPrimary: false, allowedActions: [] };
+            } else {
+                return { showModal: true, showPrimary: true, allowedActions: ['score', 'bin', 'keep'] };
+            }
+        }
+    }
+    
+    function showScoringModal(config) {
+        // Determine config and store it for score calculations
+        currentScoringConfig = config || determineScoringModalConfig();
         
-        // Show primary objectives only on player's turn (regardless of first or second)
+        // Show/hide primary objectives section based on config
         const primaryObjectivesSection = document.querySelector('.scoring-section:first-child');
         if (primaryObjectivesSection) {
-            primaryObjectivesSection.style.display = gameState.currentTurn === 'player' ? 'block' : 'none';
+            primaryObjectivesSection.style.display = currentScoringConfig.showPrimary ? 'block' : 'none';
         }
         
-        // Reset checkboxes only if showing primary objectives
-        if (gameState.currentTurn === 'player') {
+        // Reset primary checkboxes only if showing primary
+        if (currentScoringConfig.showPrimary) {
             document.getElementById('primary-1').checked = false;
             document.getElementById('primary-2').checked = false;
             document.getElementById('primary-3').checked = false;
@@ -1020,23 +1045,17 @@ document.addEventListener('DOMContentLoaded', () => {
             tacticCard.className = 'tactic-scoring-card';
             tacticCard.dataset.cardNumber = cardNumber;
             
-            // Determine which buttons to show based on turn and turn order
+            // Build buttons based on allowed actions
             let actionButtons = '';
-            
-            if (gameState.currentTurn === 'player') {
-                // Player turn: always show Keep, Score, and Bin
-                actionButtons = `
-                    <button class="tactic-action-btn keep-btn" data-action="keep">Keep</button>
-                    <button class="tactic-action-btn score-btn" data-action="score">Score</button>
-                    <button class="tactic-action-btn bin-btn" data-action="bin">Bin</button>
-                `;
-            } else {
-                // Enemy turn: only show Keep and Bin (no Score option)
-                actionButtons = `
-                    <button class="tactic-action-btn keep-btn" data-action="keep">Keep</button>
-                    <button class="tactic-action-btn bin-btn" data-action="bin">Bin</button>
-                `;
-            }
+            currentScoringConfig.allowedActions.forEach(action => {
+                if (action === 'keep') {
+                    actionButtons += '<button class="tactic-action-btn keep-btn" data-action="keep">Keep<\/button>';
+                } else if (action === 'score') {
+                    actionButtons += '<button class="tactic-action-btn score-btn" data-action="score">Score<\/button>';
+                } else if (action === 'bin') {
+                    actionButtons += '<button class="tactic-action-btn bin-btn" data-action="bin">Bin<\/button>';
+                }
+            });
             
             tacticCard.innerHTML = `
                 <div class="tactic-card-info">
@@ -1058,7 +1077,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Add event listeners for primary objective checkboxes only if showing them
-        if (gameState.currentTurn === 'player') {
+        if (currentScoringConfig.showPrimary) {
             document.getElementById('primary-1').addEventListener('change', updateScoreDisplay);
             document.getElementById('primary-2').addEventListener('change', updateScoreDisplay);
             document.getElementById('primary-3').addEventListener('change', updateScoreDisplay);
@@ -1081,7 +1100,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTacticAction(cardNumber, action, tacticCard) {
         switch (action) {
             case 'keep':
-                gameState.keptCards.push(cardNumber);
+                if (!gameState.keptCards.includes(cardNumber)) {
+                    gameState.keptCards.push(cardNumber);
+                }
+                // Remove from current round cards so it is not offered again this round
+                {
+                    const idx = gameState.currentRoundCards.indexOf(cardNumber);
+                    if (idx > -1) gameState.currentRoundCards.splice(idx, 1);
+                }
                 tacticCard.remove();
                 break;
             case 'score':
@@ -1116,27 +1142,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function updateScoreDisplay() {
-        // Calculate primary score only if showing primary objectives (player turn)
+        // Calculate primary score depending on visibility
+        const existingRoundScore = gameState.scores.rounds[gameState.currentRound] || { primary: 0, tactics: 0, total: 0 };
         let primaryScore = 0;
-        if (gameState.currentTurn === 'player') {
+        if (currentScoringConfig && currentScoringConfig.showPrimary) {
             if (document.getElementById('primary-1').checked) primaryScore++;
             if (document.getElementById('primary-2').checked) primaryScore++;
             if (document.getElementById('primary-3').checked) primaryScore++;
+        } else {
+            // Preserve existing recorded primary when primary section is hidden
+            primaryScore = existingRoundScore.primary || 0;
         }
         
         // Get current round tactic score
-        const currentRoundScore = gameState.scores.rounds[gameState.currentRound] || { tactics: 0 };
-        const tacticScore = currentRoundScore.tactics;
+        const tacticScore = (gameState.scores.rounds[gameState.currentRound] || { tactics: 0 }).tactics;
         
         // Calculate round total
         const roundTotal = primaryScore + tacticScore;
         
-        // Calculate game total
+        // Calculate game total without double-counting the current round
         let gameTotal = 0;
-        Object.values(gameState.scores.rounds).forEach(roundScore => {
-            gameTotal += roundScore.total;
+        Object.entries(gameState.scores.rounds).forEach(([roundNumber, roundScore]) => {
+            if (parseInt(roundNumber, 10) !== gameState.currentRound) {
+                gameTotal += roundScore.total;
+            }
         });
-        gameTotal += roundTotal; // Add current round
+        gameTotal += roundTotal; // Add preview of current round
         
         // Update display
         primaryScoreSpan.textContent = primaryScore;
@@ -1147,18 +1178,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function confirmScoring() {
         // Calculate final scores for this round
+        const existingRoundScore = gameState.scores.rounds[gameState.currentRound] || { primary: 0, tactics: 0, total: 0 };
         let primaryScore = 0;
-        if (gameState.currentTurn === 'player') {
+        if (currentScoringConfig && currentScoringConfig.showPrimary) {
             if (document.getElementById('primary-1').checked) primaryScore++;
             if (document.getElementById('primary-2').checked) primaryScore++;
             if (document.getElementById('primary-3').checked) primaryScore++;
+        } else {
+            // Preserve existing primary when no primary scoring this modal
+            primaryScore = existingRoundScore.primary || 0;
         }
         
-        const currentRoundScore = gameState.scores.rounds[gameState.currentRound] || { tactics: 0 };
-        const tacticScore = currentRoundScore.tactics;
+        const tacticScore = (gameState.scores.rounds[gameState.currentRound] || { tactics: 0 }).tactics;
         const roundTotal = primaryScore + tacticScore;
         
-        // Store the round scores
+        // Store the round scores (preserving or setting values)
         gameState.scores.rounds[gameState.currentRound] = {
             primary: primaryScore,
             tactics: tacticScore,
@@ -1201,39 +1235,45 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // If we've completed all phases for this turn
         if (gameState.currentPhase >= gameState.phases.length) {
-            // Show scoring modal at end of both player and enemy turns
-            showScoringModal();
-            return; // Don't continue until scoring is confirmed
+            // Decide whether to show the scoring modal based on turn order
+            const config = determineScoringModalConfig();
+            if (config.showModal) {
+                showScoringModal(config);
+            } else {
+                // Skip modal and proceed directly to next turn
+                continueToNextTurn();
+            }
+            return; // Don't continue until scoring is confirmed or we advanced turn
         }
         
         updateGameDisplay();
         highlightCurrentPhase();
     }
     
-    function continueToNextTurn() {
-        // Switch turns
-        gameState.currentTurn = gameState.currentTurn === 'player' ? 'enemy' : 'player';
-        gameState.currentPhase = 0;
-        
-        // If both players have had their turn, advance to next round
-        if (gameState.currentTurn === 'player') {
-            gameState.currentRound++;
-            
-            // Draw new cards for the new round
-            if (gameState.currentRound <= 4) {
-                drawCardsForRound();
-            }
-            
-            // Check if game is over
-            if (gameState.currentRound > 4) {
-                endGame();
-                return;
-            }
-        }
-        
-        updateGameDisplay();
-        highlightCurrentPhase();
-    }
+    	function continueToNextTurn() {
+		// Switch turns
+		gameState.currentTurn = gameState.currentTurn === 'player' ? 'enemy' : 'player';
+		gameState.currentPhase = 0;
+		
+		// If we are returning to the starting player, a new round begins
+		if (gameState.startingPlayer && gameState.currentTurn === gameState.startingPlayer) {
+			gameState.currentRound++;
+			
+			// Draw new cards for the new round
+			if (gameState.currentRound <= 4) {
+				drawCardsForRound();
+			}
+			
+			// Check if game is over
+			if (gameState.currentRound > 4) {
+				endGame();
+				return;
+			}
+		}
+		
+		updateGameDisplay();
+		highlightCurrentPhase();
+	}
 
     function updateGameDisplay() {
         currentTurnSpan.textContent = gameState.currentTurn === 'player' ? 'Your Turn' : 'Enemy Turn';
@@ -1266,38 +1306,39 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverModal.style.display = 'flex';
     }
 
-    function resetGame() {
-        gameState.isGameActive = false;
-        gameState.currentRound = 1;
-        gameState.currentTurn = 'player';
-        gameState.currentPhase = 0;
-        
-        // Reset card system
-        gameState.drawnCards = [];
-        gameState.currentRoundCards = [];
-        gameState.cardsByRound = {};
-        gameState.usedCards = [];
-        gameState.keptCards = [];
-        gameState.scoredCards = [];
-        
-        // Reset scoring system
-        gameState.scores = {
-            rounds: {},
-            gameTotal: 0
-        };
-        
-        gameSetup.style.display = 'block';
-        gameInProgress.style.display = 'none';
-        cardDisplay.style.display = 'none';
-        gameOverModal.style.display = 'none';
-        tacticModal.style.display = 'none';
-        scoringModal.style.display = 'none';
-        
-        // Remove active highlighting
-        document.querySelectorAll('.phase-section').forEach(section => {
-            section.classList.remove('active');
-        });
-    }
+    	function resetGame() {
+		gameState.isGameActive = false;
+		gameState.currentRound = 1;
+		gameState.currentTurn = 'player';
+		gameState.startingPlayer = null;
+		gameState.currentPhase = 0;
+		
+		// Reset card system
+		gameState.drawnCards = [];
+		gameState.currentRoundCards = [];
+		gameState.cardsByRound = {};
+		gameState.usedCards = [];
+		gameState.keptCards = [];
+		gameState.scoredCards = [];
+		
+		// Reset scoring system
+		gameState.scores = {
+			rounds: {},
+			gameTotal: 0
+		};
+		
+		gameSetup.style.display = 'block';
+		gameInProgress.style.display = 'none';
+		cardDisplay.style.display = 'none';
+		gameOverModal.style.display = 'none';
+		tacticModal.style.display = 'none';
+		scoringModal.style.display = 'none';
+		
+		// Remove active highlighting
+		document.querySelectorAll('.phase-section').forEach(section => {
+			section.classList.remove('active');
+		});
+	}
 
     // --- EVENT LISTENERS ---
     startGameBtn.addEventListener('click', () => {
@@ -1328,12 +1369,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     yourTurnBtn.addEventListener('click', () => {
         gameState.currentTurn = 'player';
+        gameState.startingPlayer = 'player';
         turnModal.style.display = 'none';
         startGame();
     });
 
     enemyTurnBtn.addEventListener('click', () => {
         gameState.currentTurn = 'enemy';
+        gameState.startingPlayer = 'enemy';
         turnModal.style.display = 'none';
         startGame();
     });
