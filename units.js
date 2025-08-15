@@ -736,6 +736,8 @@ document.addEventListener('DOMContentLoaded', () => {
         usedCards: [], // Track which cards have been used
         keptCards: [], // Track which cards are kept for next round
         scoredCards: [], // Track which cards have been scored
+        // New centralized card status storage
+        cardStates: {}, // Store each card's status: Pending, Used, Scored, Kept, Discarded
         battleTactics: [], // Will store battle tactics data
         // Scoring system
         scores: {
@@ -796,10 +798,105 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error loading battle tactics:', error);
             });
     }
+
+    // Card status management functions
+    function getCardStatus(cardNumber) {
+        return gameState.cardStates[cardNumber] || 'Pending';
+    }
+
+    function setCardStatus(cardNumber, status) {
+        const validStatuses = ['Pending', 'Used', 'Scored', 'Kept', 'Discarded'];
+        if (!validStatuses.includes(status)) {
+            console.error(`Invalid card status: ${status}`);
+            return;
+        }
+        
+        // Update the centralized status
+        gameState.cardStates[cardNumber] = status;
+        
+        // Update legacy arrays for backward compatibility
+        const cardNum = parseInt(cardNumber);
+        
+        // Remove from all legacy arrays first
+        gameState.usedCards = gameState.usedCards.filter(c => c !== cardNum);
+        gameState.keptCards = gameState.keptCards.filter(c => c !== cardNum);
+        gameState.scoredCards = gameState.scoredCards.filter(c => c !== cardNum);
+        
+        // Add to appropriate legacy array
+        switch (status) {
+            case 'Used':
+                if (!gameState.usedCards.includes(cardNum)) {
+                    gameState.usedCards.push(cardNum);
+                }
+                break;
+            case 'Scored':
+                if (!gameState.scoredCards.includes(cardNum)) {
+                    gameState.scoredCards.push(cardNum);
+                }
+                break;
+            case 'Kept':
+                if (!gameState.keptCards.includes(cardNum)) {
+                    gameState.keptCards.push(cardNum);
+                }
+                break;
+        }
+        
+        console.log(`Card ${cardNumber} status set to: ${status}`);
+    }
+
+    // Modal logic controller
+    function determineModalAndButtonState(isEndOfRound, isPlayerTurn) {
+        const startingPlayer = gameState.startingPlayer || 'player';
+        
+        // Determine if modal should appear
+        let showModal = false;
+        let showPrimary = false;
+        let availableButtons = [];
+        
+        if (isEndOfRound) {
+            if (startingPlayer === 'player') {
+                if (isPlayerTurn) {
+                    // Player starts, end of player's turn
+                    showModal = true;
+                    showPrimary = true;
+                    availableButtons = ['score', 'keep'];
+                } else {
+                    // Player starts, end of enemy's turn  
+                    showModal = true;
+                    showPrimary = false;
+                    availableButtons = ['keep', 'discard'];
+                }
+            } else {
+                // Enemy starts
+                if (isPlayerTurn) {
+                    // Enemy starts, end of player's turn
+                    showModal = true;
+                    showPrimary = true;
+                    availableButtons = ['score', 'discard', 'keep'];
+                } else {
+                    // Enemy starts, end of enemy's turn
+                    showModal = false;
+                    showPrimary = false;
+                    availableButtons = [];
+                }
+            }
+        }
+        
+        return {
+            showModal,
+            showPrimary,
+            allowedActions: availableButtons
+        };
+    }
     
     function drawCardsForRound() {
         // Start with kept cards from previous round
         const cardsForThisRound = [...gameState.keptCards];
+        
+        // Set kept cards status back to Pending for the new round
+        gameState.keptCards.forEach(cardNumber => {
+            setCardStatus(cardNumber, 'Pending');
+        });
         gameState.keptCards = []; // Clear kept cards
         
         // Clear any cards that weren't kept (used, scored, or binned)
@@ -817,6 +914,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const drawnCard = availableCards.splice(randomIndex, 1)[0];
             cardsForThisRound.push(drawnCard);
             gameState.drawnCards.push(drawnCard);
+            
+            // Set new cards as Pending
+            setCardStatus(drawnCard, 'Pending');
         }
         
         // Track which round these cards were drawn in
@@ -828,31 +928,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayCurrentCards() {
         currentCards.innerHTML = '';
         
-        if (gameState.currentRoundCards.length === 0) {
+        // Get all cards for the current round (regardless of status)
+        const currentRoundCards = gameState.cardsByRound[gameState.currentRound] || [];
+        
+        if (currentRoundCards.length === 0) {
             currentCards.innerHTML = '<p style="color: white; font-style: italic;">No cards drawn for this round</p>';
             return;
         }
         
-        gameState.currentRoundCards.forEach(cardNumber => {
+        currentRoundCards.forEach(cardNumber => {
             const cardElement = document.createElement('div');
             cardElement.className = 'card';
             cardElement.dataset.cardNumber = cardNumber;
             
-            // Check if card has been used or scored
-            if (gameState.usedCards.includes(cardNumber)) {
-                cardElement.classList.add('used');
-            } else if (gameState.scoredCards.includes(cardNumber)) {
-                cardElement.classList.add('scored');
-            }
+            // Use the centralized card status system
+            const cardStatus = getCardStatus(cardNumber);
+            cardElement.classList.add(cardStatus.toLowerCase());
             
             // Find the battle tactic for this card
             const tactic = gameState.battleTactics.find(t => t.cardNumber === cardNumber);
             if (tactic) {
                 // Display the tactic name
                 cardElement.textContent = tactic.name;
-                cardElement.title = `${tactic.name}: ${tactic.requirement}`; // Show name and requirement on hover
+                cardElement.title = `${tactic.name}: ${tactic.requirement} [Status: ${cardStatus}]`; // Show name, requirement, and status on hover
             } else {
                 cardElement.textContent = cardNumber;
+                cardElement.title = `Card ${cardNumber} [Status: ${cardStatus}]`;
             }
             
             // Add click event
@@ -896,21 +997,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 cardElement.className = 'card drawn';
                 cardElement.dataset.cardNumber = cardNumber;
                 
-                // Check if card has been used or scored
-                if (gameState.usedCards.includes(cardNumber)) {
-                    cardElement.classList.add('used');
-                } else if (gameState.scoredCards.includes(cardNumber)) {
-                    cardElement.classList.add('scored');
-                }
+                // Use the centralized card status system
+                const cardStatus = getCardStatus(cardNumber);
+                cardElement.classList.add(cardStatus.toLowerCase());
                 
                 // Find the battle tactic for this card
                 const tactic = gameState.battleTactics.find(t => t.cardNumber === cardNumber);
                 if (tactic) {
                     // Display the tactic name
                     cardElement.textContent = tactic.name;
-                    cardElement.title = `${tactic.name}: ${tactic.requirement}`; // Show name and requirement on hover
+                    cardElement.title = `${tactic.name}: ${tactic.requirement} [Status: ${cardStatus}]`; // Show name, requirement, and status on hover
                 } else {
                     cardElement.textContent = cardNumber;
+                    cardElement.title = `Card ${cardNumber} [Status: ${cardStatus}]`;
                 }
                 
                 // Add click event
@@ -948,19 +1047,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // Store the current card number for the use command button
         tacticModal.dataset.currentCard = cardNumber;
         
-        // Check if card is from current round and not used/scored
-        const isCurrentRoundCard = gameState.currentRoundCards.includes(cardNumber);
-        const isUsed = gameState.usedCards.includes(cardNumber);
-        const isScored = gameState.scoredCards.includes(cardNumber);
+        // Check if card is from current round and its status
+        const currentRoundCards = gameState.cardsByRound[gameState.currentRound] || [];
+        const isCurrentRoundCard = currentRoundCards.includes(cardNumber);
+        const cardStatus = getCardStatus(cardNumber);
         
         if (!isCurrentRoundCard) {
             useCommandBtn.textContent = 'Not Current Round';
             useCommandBtn.disabled = true;
-        } else if (isUsed) {
+        } else if (cardStatus === 'Used') {
             useCommandBtn.textContent = 'Command Used';
             useCommandBtn.disabled = true;
-        } else if (isScored) {
+        } else if (cardStatus === 'Scored') {
             useCommandBtn.textContent = 'Card Scored';
+            useCommandBtn.disabled = true;
+        } else if (cardStatus === 'Kept') {
+            useCommandBtn.textContent = 'Card Kept';
+            useCommandBtn.disabled = true;
+        } else if (cardStatus === 'Discarded') {
+            useCommandBtn.textContent = 'Card Discarded';
             useCommandBtn.disabled = true;
         } else {
             useCommandBtn.textContent = 'Use Command';
@@ -989,26 +1094,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentScoringConfig = { showModal: true, showPrimary: true, allowedActions: ['keep', 'score', 'bin'] };
     
     function determineScoringModalConfig() {
-        const starting = gameState.startingPlayer || 'player';
+        const isEndOfRound = gameState.currentPhase >= gameState.phases.length;
         const isPlayerTurn = gameState.currentTurn === 'player';
-        // 4 modes derived from starting player and whose turn it is
-        // - Player starts, end of player's turn: show primary, actions [score, keep]
-        // - Player starts, end of enemy's turn: hide primary, actions [keep, bin]
-        // - Enemy starts, end of enemy's turn: no modal
-        // - Enemy starts, end of player's turn: show primary, actions [score, bin, keep]
-        if (starting === 'player') {
-            if (isPlayerTurn) {
-                return { showModal: true, showPrimary: true, allowedActions: ['score', 'keep'] };
-            } else {
-                return { showModal: true, showPrimary: false, allowedActions: ['keep', 'bin'] };
-            }
-        } else {
-            if (!isPlayerTurn) {
-                return { showModal: false, showPrimary: false, allowedActions: [] };
-            } else {
-                return { showModal: true, showPrimary: true, allowedActions: ['score', 'bin', 'keep'] };
-            }
-        }
+        
+        // Use the new modal logic controller
+        return determineModalAndButtonState(isEndOfRound, isPlayerTurn);
     }
     
     function showScoringModal(config) {
@@ -1031,9 +1121,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear previous battle tactics
         battleTacticsScoring.innerHTML = '';
         
-        // Get available battle tactics (not used as commands)
-        const availableTactics = gameState.currentRoundCards.filter(cardNumber => 
-            !gameState.usedCards.includes(cardNumber)
+        // Get available battle tactics (only cards with Pending status from current round)
+        const currentRoundCards = gameState.cardsByRound[gameState.currentRound] || [];
+        const availableTactics = currentRoundCards.filter(cardNumber => 
+            getCardStatus(cardNumber) === 'Pending'
         );
         
         // Create battle tactic cards for scoring
@@ -1054,6 +1145,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     actionButtons += '<button class="tactic-action-btn score-btn" data-action="score">Score<\/button>';
                 } else if (action === 'bin') {
                     actionButtons += '<button class="tactic-action-btn bin-btn" data-action="bin">Bin<\/button>';
+                } else if (action === 'discard') {
+                    actionButtons += '<button class="tactic-action-btn bin-btn" data-action="discard">Discard<\/button>';
                 }
             });
             
@@ -1100,19 +1193,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTacticAction(cardNumber, action, tacticCard) {
         switch (action) {
             case 'keep':
-                if (!gameState.keptCards.includes(cardNumber)) {
-                    gameState.keptCards.push(cardNumber);
-                }
-                // Remove from current round cards so it is not offered again this round
-                {
-                    const idx = gameState.currentRoundCards.indexOf(cardNumber);
-                    if (idx > -1) gameState.currentRoundCards.splice(idx, 1);
-                }
+                setCardStatus(cardNumber, 'Kept');
                 tacticCard.remove();
                 break;
             case 'score':
-                // Add to scored cards for the current round
-                gameState.scoredCards.push(cardNumber);
+                setCardStatus(cardNumber, 'Scored');
+                // Add to scores for the current round
                 if (!gameState.scores.rounds[gameState.currentRound]) {
                     gameState.scores.rounds[gameState.currentRound] = {
                         primary: 0,
@@ -1121,23 +1207,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 }
                 gameState.scores.rounds[gameState.currentRound].tactics++;
-                // Remove from current round cards since it's been scored
-                const scoreCardIndex = gameState.currentRoundCards.indexOf(cardNumber);
-                if (scoreCardIndex > -1) {
-                    gameState.currentRoundCards.splice(scoreCardIndex, 1);
-                }
                 tacticCard.remove();
                 break;
             case 'bin':
-                // Remove from current round cards (discard)
-                const cardIndex = gameState.currentRoundCards.indexOf(cardNumber);
-                if (cardIndex > -1) {
-                    gameState.currentRoundCards.splice(cardIndex, 1);
-                }
+            case 'discard':
+                setCardStatus(cardNumber, 'Discarded');
                 tacticCard.remove();
                 break;
         }
         
+        // Update the card display to reflect new status
+        displayCurrentCards();
         updateScoreDisplay();
     }
     
@@ -1320,6 +1400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		gameState.usedCards = [];
 		gameState.keptCards = [];
 		gameState.scoredCards = [];
+		gameState.cardStates = {}; // Reset card status storage
 		
 		// Reset scoring system
 		gameState.scores = {
@@ -1353,8 +1434,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     useCommandBtn.addEventListener('click', () => {
         const cardNumber = parseInt(tacticModal.dataset.currentCard);
-        if (cardNumber && gameState.currentRoundCards.includes(cardNumber) && !gameState.usedCards.includes(cardNumber) && !gameState.scoredCards.includes(cardNumber)) {
-            gameState.usedCards.push(cardNumber);
+        const currentRoundCards = gameState.cardsByRound[gameState.currentRound] || [];
+        if (cardNumber && currentRoundCards.includes(cardNumber) && getCardStatus(cardNumber) === 'Pending') {
+            // Mark card as used using the new status system
+            setCardStatus(cardNumber, 'Used');
             useCommandBtn.textContent = 'Command Used';
             useCommandBtn.disabled = true;
             
