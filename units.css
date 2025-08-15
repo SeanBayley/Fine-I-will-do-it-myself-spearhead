@@ -536,3 +536,745 @@ details.phase-section > summary:hover {
 .unit-card.reveal-in {
     animation: fadeSlideUp 450ms ease both;
 } 
+
+/* Game Controls Styles */
+.game-controls {
+    background: #2c3e50;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.game-setup {
+    text-align: center;
+}
+
+.start-game-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.start-game-btn:hover {
+    background: #229954;
+}
+
+.game-in-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.game-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.turn-indicator {
+    background: #3498db;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.turn-indicator.enemy-turn {
+    background: #e74c3c;
+}
+
+.round-info {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.next-phase-btn {
+    background: #f39c12;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.next-phase-btn:hover {
+    background: #e67e22;
+}
+
+.end-game-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.end-game-btn:hover {
+    background: #c0392b;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #34495e;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #ecf0f1;
+}
+
+.turn-options {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.turn-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    flex: 1;
+    max-width: 150px;
+}
+
+.turn-btn:hover {
+    background: #2980b9;
+}
+
+.new-game-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.new-game-btn:hover {
+    background: #229954;
+}
+
+.close-game-btn {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.close-game-btn:hover {
+    background: #7f8c8d;
+}
+
+/* Active Phase Highlighting */
+.phase-section.active {
+    border-left: 4px solid #f39c12;
+    background-color: rgba(243, 156, 18, 0.1);
+}
+
+.phase-section.active summary {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+/* Card Display Styles */
+.card-display {
+    background: #34495e;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.card-display h3 {
+    color: white;
+    margin: 0;
+    font-size: 18px;
+}
+
+.toggle-cards-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.toggle-cards-btn:hover {
+    background: #2980b9;
+}
+
+.current-cards {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    width: 120px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    border: 2px solid #fff;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+    padding: 8px;
+    line-height: 1.2;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.card.drawn {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    opacity: 0.7;
+}
+
+/* Round-organized card display styles */
+.rounds-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.round-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.round-label {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Responsive Design for Game Controls */
+@media (max-width: 768px) {
+    .game-in-progress {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .game-info {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .turn-options {
+        flex-direction: column;
+    }
+    
+    .turn-btn {
+        max-width: none;
+    }
+    
+    .current-cards {
+        gap: 10px;
+    }
+    
+    .card {
+        width: 100px;
+        height: 70px;
+        font-size: 12px;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toggle-cards-btn {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+    
+    .round-label {
+        font-size: 12px;
+        padding: 3px 8px;
+    }
+    
+    .rounds-container {
+        gap: 12px;
+    }
+    
+    .round-section {
+        gap: 6px;
+    }
+    
+    .cards-container {
+        gap: 8px;
+    }
+}
+
+/* Battle Tactic Modal Styles */
+.tactic-modal-content {
+    max-width: 500px;
+    text-align: left;
+}
+
+.tactic-section,
+.command-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tactic-section h4,
+.command-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #f39c12;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tactic-section p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.requirement-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.requirement-section h5 {
+    margin: 0 0 8px 0;
+    color: #e74c3c;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.requirement-section p {
+    margin: 0;
+    line-height: 1.4;
+    font-size: 13px;
+    color: #ecf0f1;
+    font-weight: 500;
+}
+
+.command-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.command-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.command-row strong {
+    color: #3498db;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.command-row span {
+    font-size: 14px;
+    line-height: 1.4;
+    padding-left: 10px;
+}
+
+.close-tactic-btn {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.close-tactic-btn:hover {
+    background: #7f8c8d;
+}
+
+.tactic-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.use-command-btn {
+    background: #f39c12;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.use-command-btn:hover {
+    background: #e67e22;
+}
+
+.use-command-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Used card styling */
+.card.used {
+    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+    opacity: 0.8;
+}
+
+.card.used:hover {
+    background: linear-gradient(135deg, #e67e22, #d35400) !important;
+}
+
+/* Scored card styling */
+.card.scored {
+    background: linear-gradient(135deg, #27ae60, #229954) !important;
+    opacity: 0.8;
+}
+
+.card.scored:hover {
+    background: linear-gradient(135deg, #229954, #1e8449) !important;
+}
+
+/* Scoring Modal Styles */
+.scoring-modal-content {
+    max-width: 600px;
+    text-align: left;
+}
+
+.scoring-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scoring-section h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #f39c12;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Primary Objectives Checkboxes */
+.primary-objectives {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.objective-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: #ecf0f1;
+    position: relative;
+    padding-left: 35px;
+}
+
+.objective-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid #3498db;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.objective-checkbox:hover input ~ .checkmark {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+
+.objective-checkbox input:checked ~ .checkmark {
+    background-color: #3498db;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.objective-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.objective-checkbox .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Battle Tactics Scoring */
+.battle-tactics-scoring {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.tactic-scoring-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.tactic-scoring-card:hover {
+    background: rgba(231, 76, 60, 0.2);
+    border-color: rgba(231, 76, 60, 0.5);
+}
+
+.tactic-card-info {
+    flex: 1;
+}
+
+.tactic-card-name {
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.tactic-card-requirement {
+    font-size: 12px;
+    color: #bdc3c7;
+    font-style: italic;
+}
+
+.tactic-card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.tactic-action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.keep-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.keep-btn:hover {
+    background: #229954;
+}
+
+.score-btn {
+    background: #f39c12;
+    color: white;
+}
+
+.score-btn:hover {
+    background: #e67e22;
+}
+
+.bin-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.bin-btn:hover {
+    background: #c0392b;
+}
+
+.tactic-action-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Score Summary */
+.score-summary {
+    background: rgba(52, 152, 219, 0.1);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+}
+
+.score-row:last-child {
+    border-bottom: none;
+}
+
+.score-row.total {
+    font-weight: bold;
+    color: #f39c12;
+    font-size: 16px;
+    border-top: 2px solid rgba(243, 156, 18, 0.3);
+    border-bottom: none;
+}
+
+.score-row.game-total {
+    font-weight: bold;
+    color: #27ae60;
+    font-size: 18px;
+    border-top: 2px solid rgba(39, 174, 96, 0.3);
+    border-bottom: none;
+}
+
+.scoring-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.confirm-scoring-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.confirm-scoring-btn:hover {
+    background: #229954;
+} 

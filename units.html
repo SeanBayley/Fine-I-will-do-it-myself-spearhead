@@ -14,6 +14,39 @@
             <h2 id="faction-name-header">Faction Name Loading...</h2>
             <button id="back-button">&laquo;</button>
         </header>
+
+        <!-- Game Controls Section -->
+        <div id="game-controls" class="game-controls">
+            <div id="game-setup" class="game-setup">
+                <button id="start-game-btn" class="start-game-btn">Start Game</button>
+            </div>
+            
+            <div id="game-in-progress" class="game-in-progress" style="display: none;">
+                <div class="game-info">
+                    <div class="turn-indicator">
+                        <span id="current-turn">Your Turn</span>
+                    </div>
+                    <div class="round-info">
+                        <span>Round: </span>
+                        <span id="current-round">1</span>
+                        <span>/4</span>
+                    </div>
+                </div>
+                <button id="next-phase-btn" class="next-phase-btn">Next Phase</button>
+                <button id="end-game-btn" class="end-game-btn">End Game</button>
+            </div>
+        </div>
+
+        <!-- Card Display Section -->
+        <div id="card-display" class="card-display" style="display: none;">
+            <div class="card-header">
+                <h3 id="card-title">Round Cards</h3>
+                <button id="toggle-cards-btn" class="toggle-cards-btn">Show All Drawn</button>
+            </div>
+            <div id="current-cards" class="current-cards">
+                <!-- Cards will be displayed here -->
+            </div>
+        </div>
     
         <main id="units-content" class="units-page-layout">
             <!-- Unit Cards Container Now First -->
@@ -58,6 +91,124 @@
             </aside>
         </main>
     </div>
+
+    <!-- Turn Selection Modal -->
+    <div id="turn-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Whose Turn Is It?</h3>
+            <div class="turn-options">
+                <button id="your-turn-btn" class="turn-btn">Your Turn</button>
+                <button id="enemy-turn-btn" class="turn-btn">Enemy Turn</button>
+            </div>
+        </div>
+    </div>
+
+            <!-- Game Over Modal -->
+        <div id="game-over-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Game Over!</h3>
+                <p>All 4 rounds have been completed.</p>
+                <button id="new-game-btn" class="new-game-btn">Start New Game</button>
+                <button id="close-game-btn" class="close-game-btn">Close</button>
+            </div>
+        </div>
+        
+                 <!-- Battle Tactic Modal -->
+         <div id="tactic-modal" class="modal" style="display: none;">
+             <div class="modal-content tactic-modal-content">
+                 <h3 id="tactic-title">Battle Tactic</h3>
+                 <div class="tactic-section">
+                     <h4>Battle Tactic</h4>
+                     <p id="tactic-description">Battle tactic description will appear here.</p>
+                     <div class="requirement-section">
+                         <h5>Requirement</h5>
+                         <p id="tactic-requirement">Requirement will appear here.</p>
+                     </div>
+                 </div>
+                 <div class="command-section">
+                     <h4>Command Ability</h4>
+                     <div class="command-details">
+                         <div class="command-row">
+                             <strong>Name:</strong> <span id="command-name">Command name</span>
+                         </div>
+                         <div class="command-row">
+                             <strong>Timing:</strong> <span id="command-timing">Timing</span>
+                         </div>
+                         <div class="command-row">
+                             <strong>Declare:</strong> <span id="command-declare">Declaration</span>
+                         </div>
+                         <div class="command-row">
+                             <strong>Effect:</strong> <span id="command-effect">Effect description</span>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="tactic-buttons">
+                     <button id="use-command-btn" class="use-command-btn">Use Command</button>
+                     <button id="close-tactic-btn" class="close-tactic-btn">Close</button>
+                 </div>
+             </div>
+         </div>
+
+         <!-- Scoring Modal -->
+         <div id="scoring-modal" class="modal" style="display: none;">
+             <div class="modal-content scoring-modal-content">
+                 <h3>End of Turn Scoring</h3>
+                 
+                 <!-- Primary Objectives Section -->
+                 <div class="scoring-section">
+                     <h4>Primary Objectives</h4>
+                     <div class="primary-objectives">
+                         <label class="objective-checkbox">
+                             <input type="checkbox" id="primary-1">
+                             <span class="checkmark"></span>
+                             You hold one objective
+                         </label>
+                         <label class="objective-checkbox">
+                             <input type="checkbox" id="primary-2">
+                             <span class="checkmark"></span>
+                             You hold two objectives
+                         </label>
+                         <label class="objective-checkbox">
+                             <input type="checkbox" id="primary-3">
+                             <span class="checkmark"></span>
+                             You hold more objectives than your opponent
+                         </label>
+                     </div>
+                 </div>
+
+                 <!-- Battle Tactics Section -->
+                 <div class="scoring-section">
+                     <h4>Battle Tactics</h4>
+                     <div id="battle-tactics-scoring" class="battle-tactics-scoring">
+                         <!-- Battle tactic cards will be dynamically added here -->
+                     </div>
+                 </div>
+
+                 <!-- Score Summary -->
+                 <div class="score-summary">
+                     <div class="score-row">
+                         <span>Primary Score:</span>
+                         <span id="primary-score">0</span>
+                     </div>
+                     <div class="score-row">
+                         <span>Battle Tactic Score:</span>
+                         <span id="tactic-score">0</span>
+                     </div>
+                     <div class="score-row total">
+                         <span>Round Total:</span>
+                         <span id="round-total">0</span>
+                     </div>
+                     <div class="score-row game-total">
+                         <span>Game Total:</span>
+                         <span id="game-total">0</span>
+                     </div>
+                 </div>
+
+                 <div class="scoring-buttons">
+                     <button id="confirm-scoring-btn" class="confirm-scoring-btn">Confirm Scoring</button>
+                 </div>
+             </div>
+         </div>
 
     <script src="units.js"></script>
 </body>

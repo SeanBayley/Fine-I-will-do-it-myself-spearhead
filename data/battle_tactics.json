@@ -1,0 +1,148 @@
+{
+  "battleTactics": [
+    {
+      "cardNumber": 1,
+      "name": "Raze",
+      "description": "The enemy's fortifications crumble before your relentless assault. Leave nothing standing in your wake.",
+      "requirement": "Destroy a unit with 5 or more models",
+      "command": {
+        "name": "Coordinated Strike",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit within 3\" of another friendly unit",
+        "effect": "Add 1 to hit rolls for attacks made by the picked unit until the end of the phase"
+      }
+    },
+    {
+      "cardNumber": 2,
+      "name": "Dominion",
+      "description": "Your forces establish control over the battlefield, claiming territory and strategic positions.",
+      "requirement": "Score 3 or more victory points from objectives",
+      "command": {
+        "name": "Hold the Line",
+        "timing": "End of Turn",
+        "declare": "Pick a friendly unit wholly within 6\" of an objective",
+        "effect": "That unit counts as 2 models for the purposes of contesting that objective until the end of the turn"
+      }
+    },
+    {
+      "cardNumber": 3,
+      "name": "Overwhelm",
+      "description": "A coordinated assault crashes into the enemy lines like a tidal wave, overwhelming their defenses.",
+      "requirement": "Charge with 3 or more units in the same turn",
+      "command": {
+        "name": "Swift Advance",
+        "timing": "Charge Phase",
+        "declare": "Pick up to 3 friendly units",
+        "effect": "Add 1 to charge rolls for the picked units until the end of the phase"
+      }
+    },
+    {
+      "cardNumber": 4,
+      "name": "Precision",
+      "description": "A surgical strike executed with deadly accuracy. Quality over quantity proves decisive.",
+      "requirement": "Destroy an enemy unit with a unit that has 3 or fewer models",
+      "command": {
+        "name": "Precision Strike",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit with 3 or fewer models",
+        "effect": "Add 1 to wound rolls for attacks made by the picked unit until the end of the phase"
+      }
+    },
+    {
+      "cardNumber": 5,
+      "name": "Supremacy",
+      "description": "Your forces dominate the battlefield, holding multiple strategic positions simultaneously.",
+      "requirement": "Control 4 or more objectives at the end of your turn",
+      "command": {
+        "name": "Territorial Control",
+        "timing": "Movement Phase",
+        "declare": "Pick a friendly unit",
+        "effect": "That unit can run and still charge later in the turn"
+      }
+    },
+    {
+      "cardNumber": 6,
+      "name": "Swarm",
+      "description": "The weight of numbers overwhelms even the mightiest foe. Your horde strikes with coordinated fury.",
+      "requirement": "Destroy an enemy unit with a unit that has a wounds characteristic of 1",
+      "command": {
+        "name": "Overwhelm",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit with a wounds characteristic of 1",
+        "effect": "Add 1 to the attacks characteristic of melee weapons used by the picked unit until the end of the phase"
+      }
+    },
+    {
+      "cardNumber": 7,
+      "name": "Invasion",
+      "description": "Your forces penetrate deep into enemy territory, establishing footholds behind their lines.",
+      "requirement": "Score 2 or more victory points from objectives in your opponent's territory",
+      "command": {
+        "name": "Deep Strike",
+        "timing": "Movement Phase",
+        "declare": "Pick a friendly unit",
+        "effect": "That unit can move an extra 3\" when it makes a normal move"
+      }
+    },
+    {
+      "cardNumber": 8,
+      "name": "Titan Slayer",
+      "description": "Your mighty warriors bring down the enemy's greatest champions, proving their supremacy in single combat.",
+      "requirement": "Destroy an enemy unit with a unit that has a wounds characteristic of 4 or more",
+      "command": {
+        "name": "Titan's Might",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit with a wounds characteristic of 4 or more",
+        "effect": "Add 1 to the damage characteristic of melee weapons used by the picked unit until the end of the phase"
+      }
+    },
+    {
+      "cardNumber": 9,
+      "name": "Conquest",
+      "description": "Your forces establish a permanent presence in enemy territory, claiming their lands as your own.",
+      "requirement": "Control 3 or more objectives in your opponent's territory",
+      "command": {
+        "name": "Invasion",
+        "timing": "End of Turn",
+        "declare": "Pick up to 3 friendly units wholly within your opponent's territory",
+        "effect": "Each picked unit counts as 2 models for the purposes of contesting objectives until the end of the turn"
+      }
+    },
+    {
+      "cardNumber": 10,
+      "name": "Elite Hunters",
+      "description": "Your veteran warriors prove their worth, bringing down formidable foes through skill and experience.",
+      "requirement": "Destroy an enemy unit with a unit that has a wounds characteristic of 2 or 3",
+      "command": {
+        "name": "Elite Strike",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit with a wounds characteristic of 2 or 3",
+        "effect": "Add 1 to hit rolls and 1 to wound rolls for attacks made by the picked unit until the end of the phase"
+      }
+    },
+    {
+      "cardNumber": 11,
+      "name": "Total Control",
+      "description": "Your strategic mastery is complete. Every objective falls under your banner.",
+      "requirement": "Score 4 or more victory points from objectives",
+      "command": {
+        "name": "Dominion",
+        "timing": "End of Turn",
+        "declare": "Pick up to 4 friendly units",
+        "effect": "Each picked unit counts as 2 models for the purposes of contesting objectives until the end of the turn"
+      }
+    },
+    {
+      "cardNumber": 12,
+      "name": "Monster Slayer",
+      "description": "Your greatest champions face the enemy's mightiest beasts and emerge victorious.",
+      "requirement": "Destroy an enemy unit with a unit that has a wounds characteristic of 5 or more",
+      "command": {
+        "name": "Colossal Fury",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit with a wounds characteristic of 5 or more",
+        "effect": "Add 1 to hit rolls, 1 to wound rolls, and 1 to the damage characteristic of melee weapons used by the picked unit until the end of the phase"
+      }
+    }
+  ]
+}
