@@ -1044,6 +1044,31 @@ details.phase-section > summary:hover {
     background: linear-gradient(135deg, #229954, #1e8449) !important;
 }
 
+/* Kept card styling */
+.card.kept {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+    opacity: 0.8;
+}
+
+.card.kept:hover {
+    background: linear-gradient(135deg, #2980b9, #1f618d) !important;
+}
+
+/* Discarded card styling */
+.card.discarded {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d) !important;
+    opacity: 0.6;
+}
+
+.card.discarded:hover {
+    background: linear-gradient(135deg, #7f8c8d, #566573) !important;
+}
+
+/* Pending card styling (default) */
+.card.pending {
+    /* Keep the default card styling */
+}
+
 /* Scoring Modal Styles */
 .scoring-modal-content {
     max-width: 600px;
