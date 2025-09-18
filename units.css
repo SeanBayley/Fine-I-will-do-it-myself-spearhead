@@ -1,22 +1,25 @@
 /* Unit Page Specific Styles */
 
 header {
-    /* Style the header if needed */
-    margin-bottom: 1em;
-    padding-bottom: 0.8em;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--border-color);
     position: relative;
 }
 
 header h1 {
-    margin-bottom: 0.2em;
+    margin-bottom: 0.5rem;
+    font-size: 1.875rem;
+    font-weight: bold;
+    letter-spacing: -0.025em;
 }
 
 header h2 {
     margin-top: 0;
     color: var(--primary-color);
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 header p a {
@@ -30,27 +33,26 @@ header p a:hover {
 /* --- New Layout for Units Page --- */
 .units-page-layout {
     display: grid;
-    /* grid-template-columns: 1fr 250px; */ /* Original width */
-    grid-template-columns: 1fr 300px; /* Increased width for phase column */
-    gap: 1.5em; /* Gap between columns */
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
 }
 
 #phase-rules-column {
     background-color: var(--secondary-color);
     border: 1px solid var(--border-color);
-    border-radius: 5px;
-    padding: 0.8em 1.2em;
-    height: fit-content; /* Make column height adjust to content */
-    /* Optional: Add a border-left if you want a visual separator */
-    /* border-left: 1px solid var(--border-color); */
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    height: fit-content;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 #phase-rules-column h2 {
     text-align: center;
     margin-top: 0;
-    font-size: 1.3em;
+    font-size: 1.5rem;
+    font-weight: bold;
     border-bottom: 1px solid var(--primary-color);
-    padding-bottom: 0.4em;
+    padding-bottom: 0.75rem;
 }
 
 /* --- Unit Cards Container (Left Column Now) --- */
@@ -65,10 +67,73 @@ header p a:hover {
 .unit-card {
     background-color: var(--secondary-color);
     border: 1px solid var(--border-color);
-    border-radius: 5px; /* Slightly smaller radius */
-    padding: 0.8em 1.2em; /* Reduced padding */
-    /* Remove flex styles if they were on the section before */
-    /* REMOVED border-left as it's no longer the rightmost element in this layout */
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease-in-out;
+}
+
+.unit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-500);
+}
+
+/* Unit Header with Background Image */
+.unit-header {
+    position: relative;
+    padding: 2rem 1.5rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.unit-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+    z-index: 1;
+}
+
+.unit-image-link {
+    display: block;
+    position: relative;
+    z-index: 2;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.unit-image-link:hover {
+    opacity: 0.9;
+}
+
+.unit-image-link::after {
+    content: '🔍';
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.unit-image-link:hover::after {
+    opacity: 1;
+}
+
+.unit-header-content {
+    position: relative;
+    z-index: 2;
 }
 
 .unit-card h3 { /* Unit Name */
@@ -78,6 +143,13 @@ header p a:hover {
     margin-bottom: 0.8em; /* Reduced margin */
     margin-top: 0;
     font-size: 1.3em; /* Slightly smaller */
+    color: var(--heading-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Unit Content */
+.unit-content {
+    padding: 1.5rem;
 }
 
 .stats-container {
@@ -89,6 +161,8 @@ header p a:hover {
     margin-bottom: 1em; /* Reduced margin */
     padding-bottom: 0.8em; /* Reduced padding */
     border-bottom: 1px solid var(--border-color);
+    position: relative;
+    z-index: 2;
 }
 
 .stat-box {
@@ -321,13 +395,8 @@ details.weapon-section > table.weapons-table {
 /* Adjust table cell padding slightly if needed */
 details.weapon-section > table.weapons-table th,
 details.weapon-section > table.weapons-table td {
-     /* padding: 0.5em; */ /* Example adjustment */
+    padding: 0.5em;
 }
-
-/* Remove the old margin-bottom rule */
-/* details.weapon-section[open] > summary {
-    margin-bottom: 0.5em;
-} */ 
 
 /* Styles for Collapsible Phase Sections (Similar to Weapon Sections) */
 details.phase-section {
@@ -399,10 +468,7 @@ details.phase-section > ul > li .ability-source {
     margin-top: 0.2em;
 }
 
-/* Remove the old margin-bottom rule */
-/* details.weapon-section[open] > summary {
-    margin-bottom: 0.5em;
-} */ 
+/* Remove the old margin-bottom rule - now handled by new styling */
 
 /* Style for the dynamically added Selected Enhancement */
 .selected-enhancement-display {
@@ -452,59 +518,48 @@ details.phase-section > ul > li .ability-source {
     box-shadow: 0 0 5px var(--primary-color);
 }
 
-/* --- NEW: Back Button Styles --- */
-/* Removed old centered button styles */
-
-#back-button {
-    position: absolute; /* Position relative to header */
-    top: 0.8em;  /* Adjust slightly */
-    left: 1em; 
-    width: auto; /* Let content determine width */
-    height: 38px; /* Slightly smaller height */
-    padding: 0 15px; /* Horizontal padding for pill shape */
-    font-size: 1.2em; /* Adjust arrow size */
-    line-height: 38px; /* Match height */
-    font-weight: normal; /* Less bold maybe? */
-    color: var(--primary-color); /* Lighter arrow color - CHANGED */
-    background-color: var(--secondary-color); /* Match background */
-    /* border: 2px solid var(--primary-color); Removed */
-    border: none; /* No border */
-    border-radius: 50px; /* Pill shape */
-    cursor: pointer;
-    transition: box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Added color transition */
-    text-align: center;
-    /* Neumorphic shadows for dark theme */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4), /* Dark shadow */
-                -4px -4px 8px rgba(255, 255, 255, 0.05); /* Light shadow */
-}
-
-#back-button:hover {
-    background-color: var(--primary-color); /* UPDATED */
-    color: var(--background-color); /* UPDATED - contrast */
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), /* Slightly stronger dark */
-                -5px -5px 10px rgba(255, 255, 255, 0.07); /* Slightly stronger light */
-    transform: translateY(-1px); /* Subtle lift */
-}
-
-#back-button:active {
-    /* Simulate being pressed */
-    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.5), /* Inset dark */
-                inset -3px -3px 6px rgba(255, 255, 255, 0.05); /* Inset light */
-    transform: translateY(1px); /* Press down slightly */
-    background-color: var(--primary-hover-color); /* Use hover color when pressed */
-    color: var(--background-color);
-}
-
-/* Ensure header has relative positioning for absolute positioning of button */
-header {
-    /* Style the header if needed */
-    margin-bottom: 1em;
-    padding-bottom: 0.8em;
+/* Faction Header */
+.faction-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--border-color);
-    position: relative;
+    margin-bottom: 1rem;
 }
 
-/* --- END Back Button Styles --- */ 
+.faction-header h2 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Back Button Styles */
+.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--border-color);
+    color: #d1d5db;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.back-button:hover {
+    background-color: var(--primary-600);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.back-button:active {
+    transform: translateY(0);
+    background-color: var(--primary-700);
+} 
 
 /* --- Modern Card Interactions --- */
 .unit-card {
@@ -539,11 +594,101 @@ details.phase-section > summary:hover {
 
 /* Game Controls Styles */
 .game-controls {
-    background: #2c3e50;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Turn Order Selection Styles */
+.turn-order-selection {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.turn-order-selection::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-500), var(--primary-600), var(--primary-500));
+}
+
+.turn-order-prompt h3 {
+    color: var(--primary-color);
+    margin: 0 0 0.75rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.turn-order-prompt p {
+    color: var(--text-color);
+    margin: 0 0 2rem 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.turn-order-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.turn-order-btn {
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+    color: white;
+    border: 1px solid var(--primary-500);
+    border-radius: 0.75rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    min-width: 180px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.turn-order-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.turn-order-btn:hover {
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-400);
+}
+
+.turn-order-btn:hover::before {
+    left: 100%;
+}
+
+.turn-order-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .game-setup {
@@ -551,85 +696,586 @@ details.phase-section > summary:hover {
 }
 
 .start-game-btn {
-    background: #27ae60;
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
     color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 6px;
+    border: 1px solid var(--primary-500);
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    font-weight: 700;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.start-game-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .start-game-btn:hover {
-    background: #229954;
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-400);
+}
+
+.start-game-btn:hover::before {
+    left: 100%;
+}
+
+.start-game-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .game-in-progress {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
+    align-items: stretch;
+    gap: 2rem;
+    padding: 1.5rem;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.game-info {
+.game-left-section {
     display: flex;
-    gap: 20px;
-    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.game-right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.score-cards-container {
+    display: flex;
+    gap: 1rem;
+    flex: 1;
+}
+
+.game-status-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.game-controls-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
 }
 
 .turn-indicator {
-    background: #3498db;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.turn-indicator.player-turn {
+    background-color: var(--primary-600);
     color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 14px;
+    border-color: var(--primary-500);
 }
 
 .turn-indicator.enemy-turn {
-    background: #e74c3c;
+    background-color: #e74c3c;
+    color: white;
+    border-color: #c0392b;
 }
 
-.round-info {
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
+.round-phase-info {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
+
+/* Score Section */
+.score-section {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 0;
+}
+
+.score-section h3 {
+    color: var(--text-color);
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.score-display #current-score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Score Breakdown */
+.score-breakdown {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.breakdown-row:last-child {
+    margin-bottom: 0;
+}
+
+.breakdown-label {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.breakdown-row span:last-child {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.score-label {
+    font-size: 0.75rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Cards Section */
+.cards-section {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 0;
+}
+
+.cards-section h3 {
+    color: var(--text-color);
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.current-cards-display {
+    min-height: 60px;
+}
+
+.no-cards-message {
+    color: var(--text-color);
+    opacity: 0.6;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+.view-all-cards-btn {
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+    color: white;
+    border: 1px solid var(--primary-500);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.view-all-cards-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.view-all-cards-btn:hover {
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-400);
+}
+
+.view-all-cards-btn:hover::before {
+    left: 100%;
+}
+
+.view-all-cards-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Current Card Items */
+.current-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.current-card-item:hover {
+    background-color: var(--background-color);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.current-card-item.active {
+    border-left: 3px solid var(--primary-color);
+}
+
+.current-card-item.used {
+    border-left: 3px solid #f39c12;
+    opacity: 0.7;
+}
+
+.current-card-item.scored {
+    border-left: 3px solid #27ae60;
+    opacity: 0.8;
+}
+
+.card-number {
+    font-weight: 700;
+    color: var(--primary-color);
+    min-width: 20px;
+}
+
+.card-name {
+    flex: 1;
+    margin: 0 0.5rem;
+    color: var(--text-color);
+}
+
+.card-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* All Cards Library Modal */
+.all-cards-modal-content {
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    width: 1600px !important;
+    height: 800px !important;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 1600px;
+    padding: 0 !important;
+    text-align: left !important;
+    background-color: var(--secondary-color) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--secondary-color);
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.modal-close:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+
+.cards-library-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background-color: var(--background-color);
+}
+
+.all-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.library-card-item {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.library-card-item:hover {
+    background-color: var(--background-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.library-card-item.not-drawn {
+    opacity: 0.6;
+    border-style: dashed;
+}
+
+.library-card-item.not-drawn:hover {
+    opacity: 0.8;
+}
+
+.library-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.library-card-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    min-width: 30px;
+}
+
+.library-card-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.library-card-status.pending {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.library-card-status.used {
+    background-color: #f39c12;
+    color: white;
+}
+
+.library-card-status.scored {
+    background-color: #27ae60;
+    color: white;
+}
+
+.library-card-status.kept {
+    background-color: #8e44ad;
+    color: white;
+}
+
+.library-card-status.discarded {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.library-card-status.not-drawn {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.library-card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.library-card-description {
+    font-size: 0.875rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.library-card-requirement {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-style: italic;
+}
+
+/* Responsive design for all cards modal */
+@media (max-width: 1800px) {
+    .all-cards-modal-content {
+        width: 1400px;
+    }
+}
+
+@media (max-width: 1600px) {
+    .all-cards-modal-content {
+        width: 1200px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .all-cards-modal-content {
+        width: 1000px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .all-cards-modal-content {
+        width: 90vw;
+    }
+    
+    .all-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .all-cards-modal-content {
+        width: 95vw;
+        height: 90vh;
+    }
+    
+    .all-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 
 .next-phase-btn {
-    background: #f39c12;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 6px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .next-phase-btn:hover {
-    background: #e67e22;
+    background-color: var(--primary-600);
+    color: white;
+    border-color: var(--primary-500);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.next-phase-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .end-game-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 6px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .end-game-btn:hover {
-    background: #c0392b;
+    background-color: #e74c3c;
+    color: white;
+    border-color: #c0392b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
+.end-game-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
 
 /* Modal Styles */
 .modal {
@@ -847,12 +1493,40 @@ details.phase-section > summary:hover {
     .game-in-progress {
         flex-direction: column;
         align-items: stretch;
+        gap: 1.5rem;
+        padding: 1rem;
     }
     
-    .game-info {
-        justify-content: center;
-        flex-wrap: wrap;
+    .game-left-section {
+        gap: 1rem;
     }
+    
+    .game-right-section {
+        gap: 1rem;
+    }
+    
+    .score-cards-container {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .game-status-section {
+        gap: 0.75rem;
+    }
+    
+    .game-controls-section {
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .game-controls-section button {
+        flex: 1;
+    }
+    
+    .score-display #current-score {
+        font-size: 1.5rem;
+    }
+}
     
     .turn-options {
         flex-direction: column;
@@ -979,49 +1653,384 @@ details.phase-section > summary:hover {
 }
 
 .close-tactic-btn {
-    background: #95a5a6;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 6px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    margin-top: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    flex: 1;
 }
 
 .close-tactic-btn:hover {
-    background: #7f8c8d;
+    background-color: var(--background-color);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .tactic-buttons {
     display: flex;
-    gap: 10px;
+    gap: 1rem;
     justify-content: center;
-    margin-top: 15px;
+    margin-top: 1.5rem;
 }
 
 .use-command-btn {
-    background: #f39c12;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 6px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    flex: 1;
 }
 
 .use-command-btn:hover {
-    background: #e67e22;
+    background-color: var(--primary-600);
+    color: white;
+    border-color: var(--primary-500);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .use-command-btn:disabled {
-    background: #95a5a6;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
     cursor: not-allowed;
     opacity: 0.6;
+    transform: none;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* --- ABILITY TARGETING MODAL --- */
+.targeting-modal-content {
+    max-width: 800px !important;
+    width: 90% !important;
+    max-height: 90vh !important;
+    padding: 2rem !important;
+    text-align: left !important;
+    background-color: var(--background-color) !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    border: 1px solid var(--border-color);
+}
+
+.targeting-info {
+    background: linear-gradient(135deg, var(--secondary-color), var(--background-color));
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.ability-info h3 {
+    color: var(--primary-700);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.ability-info p {
+    color: var(--text-color);
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+}
+
+.targeting-criteria {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.targeting-criteria span {
+    background-color: var(--primary-100);
+    color: var(--primary-700);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid var(--primary-200);
+}
+
+.targeting-instructions {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.targeting-instructions p {
+    color: var(--text-color);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.targeting-units-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background-color: var(--secondary-color);
+}
+
+.targeting-unit-card {
+    background: linear-gradient(135deg, var(--background-color), var(--secondary-color));
+    border: 2px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.targeting-unit-card:hover {
+    border-color: var(--primary-400);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.targeting-unit-card.selected {
+    border-color: var(--primary-500);
+    background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+}
+
+.targeting-unit-card.invalid {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--error-color);
+}
+
+.targeting-unit-card.invalid:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.targeting-unit-name {
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.targeting-unit-keywords {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.targeting-unit-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.targeting-unit-stat {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-color);
+}
+
+.targeting-unit-stat .stat-label {
+    color: var(--text-muted);
+}
+
+.targeting-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.cancel-targeting-btn {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-targeting-btn:hover {
+    background-color: var(--background-color);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Unit highlighting for targeting */
+.unit-card.targeting-highlight {
+    border: 3px solid var(--primary-500) !important;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2) !important;
+    transform: scale(1.02) !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.unit-card.targeting-invalid {
+    border: 3px solid var(--error-color) !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+/* Effect indicators on unit cards */
+.unit-card.has-effects {
+    position: relative;
+}
+
+/* Gold border for units with active effects */
+.unit-card.has-active-effects {
+    border: 3px solid #FFD700 !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3) !important;
+    animation: goldGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes goldGlow {
+    0% {
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.5);
+    }
+}
+
+.effect-symbols {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.25rem;
+    flex-direction: column;
+}
+
+.effect-symbol {
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: bold;
+    border: 2px solid var(--background-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    line-height: 1;
+    text-align: center;
+}
+
+.effect-symbol:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.effect-tooltip {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    margin-bottom: 0.25rem;
+}
+
+.effect-symbol:hover .effect-tooltip {
+    opacity: 1;
+}
+
+.effect-symbol {
+    position: relative;
+}
+
+/* Ability activation buttons */
+.ability-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ability-activate-btn {
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    border: none;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.ability-activate-btn:hover {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ability-activate-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ability-activate-btn:disabled,
+.ability-activate-btn.disabled {
+    background: var(--secondary-color);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.6;
+}
+
+/* Temporary effect abilities */
+.temp-effect-ability {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 0.5rem;
+    margin: 0.25rem 0;
+    padding: 0.25rem 0.5rem;
+}
+
+.temp-effect {
+    color: #FFD700 !important;
+    font-weight: 700 !important;
+    font-style: italic;
+}
+
+.temp-effect:hover {
+    color: #FFA500 !important;
 }
 
 /* Used card styling */
@@ -1064,10 +2073,7 @@ details.phase-section > summary:hover {
     background: linear-gradient(135deg, #7f8c8d, #566573) !important;
 }
 
-/* Pending card styling (default) */
-.card.pending {
-    /* Keep the default card styling */
-}
+/* Pending card styling (default) - uses default card styling */
 
 /* Scoring Modal Styles */
 .scoring-modal-content {
@@ -1302,4 +2308,68 @@ details.phase-section > summary:hover {
 
 .confirm-scoring-btn:hover {
     background: #229954;
+}
+
+/* Card Drawing Modal Styles */
+.card-drawing-modal-content {
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: #34495e;
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+    padding: 30px;
+    color: var(--text-color);
+}
+
+.card-management-section {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+}
+
+.card-management-section h4 {
+    margin: 0 0 15px 0;
+    color: var(--primary-color);
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.card-management-section p {
+    margin: 0 0 20px 0;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.card-management-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.card-drawing-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.confirm-card-drawing-btn {
+    padding: 12px 24px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
+}
+
+.confirm-card-drawing-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 } 

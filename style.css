@@ -1,14 +1,30 @@
-/* Basic styling will go here */
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Space+Grotesk:wght@400;500;700');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
+/* CSS Custom Properties - Base Theme */
 :root {
-    --background-color: #1a1a1a;
+    --background-color: #030712; /* gray-950 */
     --text-color: #e0e0e0;
     --heading-color: #ffffff;
-    --primary-color: #4CAF50; /* Default: Green */
-    --primary-color-rgb: 76, 175, 80; /* RGB for Green */
-    --secondary-color: #333333;
-    --border-color: #555555;
-    --primary-hover-color: #367c39; /* Default hover */
+    --primary-color: #3b82f6; /* Default: Blue */
+    --primary-color-rgb: 59, 130, 246; /* RGB for Blue */
+    --secondary-color: #111827; /* gray-900 */
+    --border-color: #1f2937; /* gray-800 */
+    --primary-hover-color: #2563eb; /* Default hover */
+    
+    /* Extended color palette */
+    --primary-50: #eff6ff;
+    --primary-100: #dbeafe;
+    --primary-200: #bfdbfe;
+    --primary-300: #93c5fd;
+    --primary-400: #60a5fa;
+    --primary-500: #3b82f6;
+    --primary-600: #2563eb;
+    --primary-700: #1d4ed8;
+    --primary-800: #1e40af;
+    --primary-900: #1e3a8a;
+    --primary-950: #172554;
 }
 
 /* --- Faction Theme Overrides --- */
@@ -18,6 +34,9 @@ body.stormcast-eternals {
     --primary-color: #0d6efd; /* Bootstrap Blue */
     --primary-color-rgb: 13, 110, 253; /* RGB for Blue */
     --primary-hover-color: #0a58ca; /* Darker blue for hover */
+    --primary-500: #0d6efd;
+    --primary-600: #0a58ca;
+    --primary-700: #084298;
 }
 
 /* Orruk Warclans Theme (Could be a different green/brown?) */
@@ -28,12 +47,17 @@ body.stormcast-eternals {
 
 /* --- General Styles (Using Variables) --- */
 
+/* Base Styles */
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: "Space Grotesk", "Noto Sans", sans-serif;
     margin: 0;
-    padding: 1em;
+    padding: 0;
     line-height: 1.6;
 }
 
@@ -50,11 +74,41 @@ h1 {
     padding-bottom: 0.5em;
 }
 
-nav {
-    margin-bottom: 1.5em;
-    padding: 1em;
-    background-color: var(--secondary-color);
-    border-radius: 5px;
+/* Main Content */
+main {
+    flex: 1;
+    padding: 2rem 1rem;
+}
+
+@media (min-width: 768px) {
+    main {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Faction Selection Section */
+.faction-selection-section {
+    grid-column: span 3;
+    text-align: center;
+}
+
+.faction-selection-section .app-title {
+    margin-bottom: 2rem;
+    font-size: 2.25rem;
+    font-weight: bold;
+    letter-spacing: -0.025em;
+}
+
+#rules-content {
+    grid-column: span 3;
 }
 
 nav label {
@@ -72,10 +126,11 @@ select#faction-select {
 
 main#rules-content section {
     background-color: var(--secondary-color);
-    padding: 1em 1.5em;
-    margin-bottom: 1em;
-    border-radius: 5px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
     border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 ul {
@@ -118,23 +173,27 @@ main#rules-content section#faction-rules #army-rules {
 }
 
 .rule-box {
-    flex: 1 1 300px; /* Allow boxes to grow/shrink, base width 300px */
-    border: 2px solid var(--border-color);
-    border-radius: 5px;
-    padding: 1em;
+    flex: 1 1 300px;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
     cursor: pointer;
-    position: relative; /* For radio button positioning */
-    transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+    background-color: var(--secondary-color);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .rule-box:hover {
-    border-color: var(--primary-color);
+    border-color: var(--primary-500);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* Style for the selected box */
 .rule-box.selected {
-    border-color: var(--primary-color);
-    background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
+    border-color: var(--primary-500);
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    box-shadow: 0 0 0 2px var(--primary-500);
 }
 
 /* Hide the actual radio button visually */
@@ -161,37 +220,39 @@ main#rules-content section#faction-rules #army-rules {
 }
 
 /* Continue Button Styles */
-.continue-button { /* Use a class for shared styles */
-    display: block; 
-    margin: 1.5em auto 0.5em; /* Adjusted margin for single button */
-    padding: 0.8em 1.5em;
-    font-size: 1em;
+.continue-button {
+    display: block;
+    margin: 1.5rem auto 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
-    color: var(--heading-color);
-    background-color: var(--primary-color);
+    color: white;
+    background-color: var(--primary-600);
     border: none;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .continue-button:disabled {
     background-color: var(--border-color);
     cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .continue-button:not(:disabled):hover {
-    background-color: var(--primary-hover-color); 
+    background-color: var(--primary-700);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Adjustments for ul/li styles if they conflict */
-/* Remove border from li inside rule-box label if needed */
 .rule-box li {
     border-bottom: none;
     padding: 0;
 }
 
-/* Reset ul styles within rule-box if needed */
 .rule-box ul {
     margin: 0;
     padding: 0;
@@ -242,6 +303,9 @@ body.seraphon {
     --primary-color: #40E0D0; /* Turquoise */
     --primary-color-rgb: 64, 224, 208; /* RGB for Turquoise */
     --primary-hover-color: #30B0A0; /* Darker turquoise for hover */
+    --primary-500: #40E0D0;
+    --primary-600: #30B0A0;
+    --primary-700: #20A090;
 }
 
 /* Ossiarch Bonereapers Theme (Bone) */
@@ -249,6 +313,9 @@ body.ossiarch-bonereapers {
     --primary-color: #F5F5DC; /* Beige/Bone color */
     --primary-color-rgb: 245, 245, 220; /* RGB for Bone */
     --primary-hover-color: #E8E8D0; /* Darker bone for hover */
+    --primary-500: #F5F5DC;
+    --primary-600: #E8E8D0;
+    --primary-700: #DCDCC0;
 }
 
 .rule-box.selected {
@@ -280,33 +347,35 @@ body.ossiarch-bonereapers {
 
 #faction-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Responsive columns */
-    gap: 1em;
-    padding: 0.5em 0; /* Add some padding */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
 }
 
 .faction-card {
-    border: 2px solid var(--border-color);
-    border-radius: 5px;
-    padding: 1em 0.8em;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem 1rem;
     background-color: var(--secondary-color);
     color: var(--text-color);
     cursor: pointer;
     text-align: center;
-    transition: border-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
     font-weight: bold;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .faction-card:hover {
-    border-color: var(--primary-color);
-    transform: translateY(-3px); /* Slight lift on hover */
+    border-color: var(--primary-500);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .faction-card.selected {
-    border-color: var(--primary-color);
-    background-color: rgba(var(--primary-color-rgb), 0.1); /* Use theme tint */
-    box-shadow: 0 0 8px rgba(var(--primary-color-rgb), 0.5); /* Add glow */
-    transform: translateY(-1px); /* Maintain slight lift when selected */
+    border-color: var(--primary-500);
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    box-shadow: 0 0 0 2px var(--primary-500);
+    transform: translateY(-1px);
 }
 
 /* Hide the actual radio button (if we decide to use them internally) */
@@ -319,12 +388,115 @@ body.ossiarch-bonereapers {
 
 /* --- End Faction Grid Styles --- */ 
 
-/* --- Modern UI Enhancements --- */
-
+/* Layout */
 .app-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1.5rem;
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+    header {
+        padding: 1rem 2.5rem;
+    }
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+}
+
+.header-logo .material-symbols-outlined {
+    color: var(--primary-500);
+    font-size: 1.875rem;
+}
+
+.header-logo h1 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Navigation */
+nav {
+    display: none;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    nav {
+        display: flex;
+    }
+}
+
+nav a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: var(--primary-400);
+}
+
+/* Header Right */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.help-button {
+    display: flex;
+    height: 2.5rem;
+    width: 2.5rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--border-color);
+    color: #d1d5db;
+    border: none;
+    transition: all 0.2s;
+}
+
+.help-button:hover {
+    background-color: #374151;
+    color: white;
+}
+
+.user-avatar {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    width: 2.5rem;
+    height: 2.5rem;
 }
 
 /* Animated ambient background */

@@ -10,10 +10,20 @@
 <body>
     <div class="app-container">
         <header>
-            <h1 class="app-title">Age of Sigmar: Spearhead Units</h1>
-            <h2 id="faction-name-header">Faction Name Loading...</h2>
-            <button id="back-button">&laquo;</button>
+            <div class="header-left">
+                <a class="header-logo" href="index.html">
+                    <span class="material-symbols-outlined">shield</span>
+                    <h1>Spearhead</h1>
+                </a>
+            </div>
         </header>
+        
+        <div class="faction-header">
+            <button id="back-button" class="back-button">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </button>
+            <h2 id="faction-name-header">Faction Name Loading...</h2>
+        </div>
 
         <!-- Game Controls Section -->
         <div id="game-controls" class="game-controls">
@@ -22,18 +32,68 @@
             </div>
             
             <div id="game-in-progress" class="game-in-progress" style="display: none;">
-                <div class="game-info">
-                    <div class="turn-indicator">
-                        <span id="current-turn">Your Turn</span>
+                <!-- Left Section: Game Status & Controls -->
+                <div class="game-left-section">
+                    <div class="game-status-section">
+                        <div class="turn-indicator">
+                            <span id="current-turn">Your Turn</span>
+                        </div>
+                        <div class="round-phase-info">
+                            <span>Round </span>
+                            <span id="current-round">1</span>
+                            <span>/4 - </span>
+                            <span id="current-phase">Hero Phase</span>
+                        </div>
                     </div>
-                    <div class="round-info">
-                        <span>Round: </span>
-                        <span id="current-round">1</span>
-                        <span>/4</span>
+                    
+                    <div class="game-controls-section">
+                        <button id="next-phase-btn" class="next-phase-btn">Next Phase</button>
+                        <button id="end-game-btn" class="end-game-btn">End Game</button>
                     </div>
                 </div>
-                <button id="next-phase-btn" class="next-phase-btn">Next Phase</button>
-                <button id="end-game-btn" class="end-game-btn">End Game</button>
+                
+                <!-- Right Section: Score & Cards -->
+                <div class="game-right-section">
+                    <div class="score-cards-container">
+                        <div class="score-section">
+                            <h3>Score</h3>
+                            <div class="score-display">
+                                <span id="current-score">0</span>
+                                <span class="score-label">Victory Points</span>
+                            </div>
+                            <div class="score-breakdown">
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Primary:</span>
+                                    <span id="main-primary-score">0</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Battle Tactics:</span>
+                                    <span id="main-tactic-score">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cards-section">
+                            <h3>Current Cards</h3>
+                            <div id="current-cards-display" class="current-cards-display">
+                                <div class="no-cards-message">No cards drawn yet</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="view-all-cards-btn" class="view-all-cards-btn">View All Cards</button>
+                </div>
+            </div>
+            
+            <div id="turn-order-selection" class="turn-order-selection" style="display: none;">
+                <div class="turn-order-prompt">
+                    <h3>Round <span id="round-number">1</span> - Who goes first?</h3>
+                    <p>Select which player will take the first turn this round:</p>
+                </div>
+                <div class="turn-order-buttons">
+                    <button id="player-first-btn" class="turn-order-btn">You Go First</button>
+                    <button id="opponent-first-btn" class="turn-order-btn">Opponent Goes First</button>
+                </div>
             </div>
         </div>
 
@@ -150,65 +210,127 @@
          </div>
 
          <!-- Scoring Modal -->
-         		  <div id="scoring-modal" class="modal" style="display: none;">
-		      <div class="modal-content scoring-modal-content">
-		          <h3 id="scoring-round-title">End of Turn Scoring</h3>
-		          
-		          <!-- Primary Objectives Section -->
-		          <div class="scoring-section">
-		              <h4>Primary Objectives</h4>
-		              <div class="primary-objectives">
-		                  <label class="objective-checkbox">
-		                      <input type="checkbox" id="primary-1">
-		                      <span class="checkmark"></span>
-		                      You hold one objective
-		                  </label>
-		                  <label class="objective-checkbox">
-		                      <input type="checkbox" id="primary-2">
-		                      <span class="checkmark"></span>
-		                      You hold two objectives
-		                  </label>
-		                  <label class="objective-checkbox">
-		                      <input type="checkbox" id="primary-3">
-		                      <span class="checkmark"></span>
-		                      You hold more objectives than your opponent
-		                  </label>
-		              </div>
-		          </div>
-		
-		          <!-- Battle Tactics Section -->
-		          <div class="scoring-section">
-		              <h4>Battle Tactics</h4>
-		              <div id="battle-tactics-scoring" class="battle-tactics-scoring">
-		                  <!-- Battle tactic cards will be dynamically added here -->
-		              </div>
-		          </div>
-		
-		          <!-- Score Summary -->
-		          <div class="score-summary">
-		              <div class="score-row">
-		                  <span>Primary Score:</span>
-		                  <span id="primary-score">0</span>
-		              </div>
-		              <div class="score-row">
-		                  <span>Battle Tactic Score:</span>
-		                  <span id="tactic-score">0</span>
-		              </div>
-		              <div class="score-row total">
-		                  <span>Round Total:</span>
-		                  <span id="round-total">0</span>
-		              </div>
-		              <div class="score-row game-total">
-		                  <span>Game Total:</span>
-		                  <span id="game-total">0</span>
-		              </div>
-		          </div>
-		
-		          <div class="scoring-buttons">
-		              <button id="confirm-scoring-btn" class="confirm-scoring-btn">Confirm Scoring</button>
-		          </div>
-		      </div>
-		  </div>
+         <div id="scoring-modal" class="modal" style="display: none;">
+             <div class="modal-content scoring-modal-content">
+                 <h3 id="scoring-round-title">End of Turn Scoring</h3>
+                 
+                 <!-- Primary Objectives Section -->
+                 <div class="scoring-section">
+                     <h4>Primary Objectives</h4>
+                     <div class="primary-objectives">
+                         <label class="objective-checkbox">
+                             <input type="checkbox" id="primary-1">
+                             <span class="checkmark"></span>
+                             You hold one objective
+                         </label>
+                         <label class="objective-checkbox">
+                             <input type="checkbox" id="primary-2">
+                             <span class="checkmark"></span>
+                             You hold two objectives
+                         </label>
+                         <label class="objective-checkbox">
+                             <input type="checkbox" id="primary-3">
+                             <span class="checkmark"></span>
+                             You hold more objectives than your opponent
+                         </label>
+                     </div>
+                 </div>
+         
+                 <!-- Battle Tactics Section -->
+                 <div class="scoring-section">
+                     <h4>Battle Tactics</h4>
+                     <div id="battle-tactics-scoring" class="battle-tactics-scoring">
+                         <!-- Battle tactic cards will be dynamically added here -->
+                     </div>
+                 </div>
+         
+                 <!-- Score Summary -->
+                 <div class="score-summary">
+                     <div class="score-row">
+                         <span>Primary Score:</span>
+                         <span id="primary-score">0</span>
+                     </div>
+                     <div class="score-row">
+                         <span>Battle Tactic Score:</span>
+                         <span id="tactic-score">0</span>
+                     </div>
+                     <div class="score-row total">
+                         <span>Round Total:</span>
+                         <span id="round-total">0</span>
+                     </div>
+                     <div class="score-row game-total">
+                         <span>Game Total:</span>
+                         <span id="game-total">0</span>
+                     </div>
+                 </div>
+         
+                 <div class="scoring-buttons">
+                     <button id="confirm-scoring-btn" class="confirm-scoring-btn">Confirm Scoring</button>
+                 </div>
+             </div>
+         </div>
+
+         <!-- Card Drawing Modal -->
+         <div id="card-drawing-modal" class="modal" style="display: none;">
+             <div class="modal-content card-drawing-modal-content">
+                 <h3 id="card-drawing-title">End of Round - Card Management</h3>
+                 
+                 <!-- Card Management Section -->
+                 <div class="card-management-section">
+                     <h4>Manage Your Cards</h4>
+                     <p>Choose which cards to keep for the next round or discard them.</p>
+                     <div id="card-management-cards" class="card-management-cards">
+                         <!-- Cards will be dynamically added here -->
+                     </div>
+                 </div>
+         
+                 <div class="card-drawing-buttons">
+                     <button id="confirm-card-drawing-btn" class="confirm-card-drawing-btn">Continue to Next Round</button>
+                 </div>
+             </div>
+         </div>
+
+        <!-- All Cards Library Modal -->
+        <div id="all-cards-modal" class="modal" style="display: none;">
+            <div class="modal-content all-cards-modal-content">
+                <div class="modal-header">
+                    <h2>All Battle Tactics Cards</h2>
+                    <button class="modal-close" onclick="document.getElementById('all-cards-modal').style.display='none'">&times;</button>
+                </div>
+                <div class="cards-library-container">
+                    <div id="all-cards-grid" class="all-cards-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ability Targeting Modal -->
+        <div id="targeting-modal" class="modal" style="display: none;">
+            <div class="modal-content targeting-modal-content">
+                <div class="modal-header">
+                    <h2 id="targeting-modal-title">Select Target</h2>
+                    <button class="modal-close" onclick="closeTargetingModal()">&times;</button>
+                </div>
+                <div class="targeting-info">
+                    <div class="ability-info">
+                        <h3 id="targeting-ability-name">Ability Name</h3>
+                        <p id="targeting-ability-description">Ability description</p>
+                        <div class="targeting-criteria">
+                            <span id="targeting-range">Range: 12"</span>
+                            <span id="targeting-keywords">Keywords: SERAPHON</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="targeting-instructions">
+                    <p>Click on a unit card below to select it as your target:</p>
+                </div>
+                <div id="targeting-units-grid" class="targeting-units-grid">
+                    <!-- Target units will be populated here -->
+                </div>
+                <div class="targeting-actions">
+                    <button id="cancel-targeting-btn" class="cancel-targeting-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
 
     <script src="units.js"></script>
 </body>

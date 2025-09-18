@@ -39,28 +39,83 @@
       "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
-      "description": "The bearer has a ward of 5+."
+      "description": "The bearer has a ward of 5+.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Lord-Vigilant on Gryph-stalker"
+          },
+          "ability": {
+            "name": "Ward (5+)",
+            "description": "For every point damage inflicted on this unit, roll a D6 and on a 5+ that damage is ignored",
+            "timing": "Passive",
+            "type": "Enhancement Granted"
+          }
+        }
+      ]
     },
     {
       "name": "Morrda's Talon",
       "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
-      "description": "Your general's greataxe has Crit(Mortal)"
+      "description": "Your general's greataxe has Crit(Mortal)",
+      "effects": [
+        {
+          "type": "addWeaponAbility",
+          "target": {
+            "unit": "Lord-Vigilant on Gryph-stalker",
+            "weapon": "Hallowed Greataxe"
+          },
+          "ability": {
+            "name": "Crit (Mortal)",
+            "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage."
+          }
+        }
+      ]
     },
     {
       "name": "Null Pendant",
       "type": "Artefact of Power",
       "timing": "Any End of Turn",
       "frequency": "Once per battle, end of any turn",
-      "description": "Roll a dice for each enemy unit contesting the same objective as your general . On a 2+ subtract the roll from the control score of that unit this turn."
+      "description": "Roll a dice for each enemy unit contesting the same objective as your general . On a 2+ subtract the roll from the control score of that unit this turn.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Lord-Vigilant on Gryph-stalker"
+          },
+          "ability": {
+            "name": "Null Pendant",
+            "description": "Roll a dice for each enemy unit contesting the same objective as your general. On a 2+ subtract the roll from the control score of that unit this turn.",
+            "timing": "Any End of Turn",
+            "frequency": "Once per battle, end of any turn"
+          }
+        }
+      ]
     },
     {
       "name": "Quicksilver Draught",
       "type": "Artefact of Power",
       "timing": "Combat phase",
       "frequency": "Once per battle, any combat phase",
-      "description": "Your general has Strike-First this phase"
+      "description": "Your general has Strike-First this phase",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Lord-Vigilant on Gryph-stalker"
+          },
+          "ability": {
+            "name": "Quicksilver Draught",
+            "description": "Your general has Strike-First this phase",
+            "timing": "Combat phase",
+            "frequency": "Once per battle, any combat phase"
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [
@@ -73,6 +128,7 @@
     {
       "name": "Lord-Vigilant on Gryph-stalker",
       "imageUrl": "images/stormcast_eternals/Lord Vigilant.png",
+      "backgroundPosition": 70,
       "stats": {
         "move": "12\"",
         "health": 8,
@@ -122,6 +178,7 @@
     {
       "name": "Lord-Veritant",
       "imageUrl": "images/stormcast_eternals/Lord Veritant.png",
+      "backgroundPosition": 80,
       "stats": {
         "move": "5\"",
         "health": 6,
@@ -172,6 +229,7 @@
     {
       "name": "Liberators",
       "imageUrl": "images/stormcast_eternals/liberators.png",
+      "backgroundPosition": 60,
       "stats": {
         "move": "5\"",
         "health": 2,
@@ -217,6 +275,7 @@
     {
       "name": "Prosecutors",
       "imageUrl": "images/stormcast_eternals/prosecutors.png",
+      "backgroundPosition": 70,
       "stats": {
         "move": "12\"",
         "health": 2,

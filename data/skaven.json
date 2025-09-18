@@ -42,28 +42,88 @@
       "type": "Artefact of Power", 
       "timing": "Passive", 
       "frequency": "N/A",
-      "description": "Your general's Ratling Pistol has an Attacks characteristic of 2D6 instead of D6."
+      "description": "Your general's Ratling Pistol has an Attacks characteristic of 2D6 instead of D6.",
+      "effects": [
+        {
+          "type": "modifyWeaponStat",
+          "target": {
+            "unit": "Clawlord on Gnaw-beast",
+            "weapon": "Ratling Pistol"
+          },
+          "stat": "attacks",
+          "value": "2D6"
+        }
+      ]
     },
     {
       "name": "Warpstone Charm",
       "type": "Artefact of Power",
       "timing": "Combat phase",
       "frequency": "N/A",
-      "description": "Subtract 1 from save rolls for enemy units in combat with your general."
+      "description": "Subtract 1 from save rolls for enemy units in combat with your general.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Clawlord on Gnaw-beast"
+          },
+          "ability": {
+            "name": "Warpstone Charm",
+            "description": "Subtract 1 from save rolls for enemy units in combat with your general.",
+            "timing": "Combat phase",
+            "frequency": "N/A"
+          }
+        }
+      ]
     },
     {
       "name": "Cloak of Stitched Victories",
       "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
-      "description": "Your general has WARD (5+)."
+      "description": "Your general has WARD (5+).",
+      "effects": [
+        {
+          "type": "modifyAbility",
+          "target": {
+            "unit": "Clawlord on Gnaw-beast",
+            "ability": "Ward (6+)"
+          },
+          "modifications": {
+            "name": "Ward (5+)",
+            "description": "Roll a dice each time a wound or mortal wound is allocated to this unit. On a 5+, that wound or mortal wound is negated."
+          }
+        },
+        {
+          "type": "modifyKeyword",
+          "target": {
+            "unit": "Clawlord on Gnaw-beast"
+          },
+          "oldKeyword": "WARD (6+)",
+          "newKeyword": "WARD (5+)"
+        }
+      ]
     },
     {
       "name": "Lead the Seething Horde",
       "type": "Artefact of Power",
       "timing": "Movement Phase",
       "frequency": "N/A", 
-      "description": "Instead of using the set-up instructions in the 'Call for Reinforcements' ability, the replacement unit can be set up wholly within 13\" of this unit and not in combat."
+      "description": "Instead of using the set-up instructions in the 'Call for Reinforcements' ability, the replacement unit can be set up wholly within 13\" of this unit and not in combat.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Clawlord on Gnaw-beast"
+          },
+          "ability": {
+            "name": "Lead the Seething Horde",
+            "description": "Instead of using the set-up instructions in the 'Call for Reinforcements' ability, the replacement unit can be set up wholly within 13\" of this unit and not in combat.",
+            "timing": "Movement Phase",
+            "frequency": "N/A"
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [
@@ -79,6 +139,7 @@
     { 
       "name": "Clawlord on Gnaw-beast", 
       "imageUrl": "images/skaven/clawlord_on_gnaw_beast.png",
+      "backgroundPosition": 75,
       "stats": { 
         "move": "9\"", 
         "health": 7, 
@@ -142,6 +203,7 @@
      { 
       "name": "Grey Seer", 
       "imageUrl": "images/skaven/grey_seer.png",
+      "backgroundPosition": 80,
       "stats": { 
         "move": "6\"", 
         "health": 5, 
@@ -180,6 +242,7 @@
     {
       "name": "Warlock Engineer", 
       "imageUrl": "images/skaven/warlock_engineer.png",
+      "backgroundPosition": 70,
       "stats": { 
         "move": "6\"", 
         "health": 5, 
@@ -224,6 +287,7 @@
     {
       "name": "Rat Ogors", 
       "imageUrl": "images/skaven/rat_ogors.png",
+      "backgroundPosition": 50,
       "stats": { 
         "move": "6\"", 
         "health": 4, 
@@ -268,6 +332,7 @@
     {
       "name": "Clanrats", 
       "imageUrl": "images/skaven/clanrats.png",
+      "backgroundPosition": 60,
       "stats": { 
         "move": "6\"", 
         "health": 1, 

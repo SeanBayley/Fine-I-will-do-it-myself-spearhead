@@ -45,32 +45,86 @@
   "enhancements": [
     {
       "name": "Murderous Drive",
-      "type": "Passive Enhancement",
+      "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
       "description": "Your general's Soulreaper Scythe has Crit (2 Hits).",
-      "lore": "This Soulreaper is animated by especially vicious and warlike spirits."
+      "effects": [
+        {
+          "type": "addWeaponAbility",
+          "target": {
+            "unit": "Mortisan Soulreaper",
+            "weapon": "Soulreaper Scythe"
+          },
+          "ability": {
+            "name": "Crit (2 Hits)",
+            "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts 2 hits instead of 1."
+          }
+        }
+      ]
     },
     {
       "name": "Unstoppable Commander",
-      "type": "Movement Phase Enhancement",
+      "type": "Artefact of Power",
       "timing": "Movement Phase",
       "frequency": "Once per turn",
-      "description": "Declare: Pick a friendly Mortek Guard unit wholly within 12\" of your general, then roll a dice. Effect: On a 2+, add 3\" to that unit's Move characteristic this phase."
+      "description": "Declare: Pick a friendly Mortek Guard unit wholly within 12\" of your general, then roll a dice. Effect: On a 2+, add 3\" to that unit's Move characteristic this phase.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Mortisan Soulreaper"
+          },
+          "ability": {
+            "name": "Unstoppable Commander",
+            "description": "Declare: Pick a friendly Mortek Guard unit wholly within 12\" of your general, then roll a dice. Effect: On a 2+, add 3\" to that unit's Move characteristic this phase.",
+            "timing": "Movement Phase",
+            "frequency": "Once per turn"
+          }
+        }
+      ]
     },
     {
       "name": "Empower Nadirite Weapons",
-      "type": "Hero Phase Enhancement",
+      "type": "Artefact of Power",
       "timing": "Hero Phase",
       "frequency": "Once per turn",
-      "description": "Declare: Pick a visible friendly Mortek Guard unit wholly within 12\" of your general, then make a casting roll of 2D6. Effect: On a 5+, until the start of your next turn, add 1 to the Rend characteristic of that unit's melee weapons."
+      "description": "Declare: Pick a visible friendly Mortek Guard unit wholly within 12\" of your general, then make a casting roll of 2D6. Effect: On a 5+, until the start of your next turn, add 1 to the Rend characteristic of that unit's melee weapons.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Mortisan Soulreaper"
+          },
+          "ability": {
+            "name": "Empower Nadirite Weapons",
+            "description": "Declare: Pick a visible friendly Mortek Guard unit wholly within 12\" of your general, then make a casting roll of 2D6. Effect: On a 5+, until the start of your next turn, add 1 to the Rend characteristic of that unit's melee weapons.",
+            "timing": "Hero Phase",
+            "frequency": "Once per turn"
+          }
+        }
+      ]
     },
     {
       "name": "Marrowpact",
-      "type": "Passive Enhancement",
+      "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
-      "description": "Each time your general uses a FIGHT ability, after all of their attacks have been resolved, Heal (X) your general where X is the number of damage points allocated by those attacks."
+      "description": "Each time your general uses a FIGHT ability, after all of their attacks have been resolved, Heal (X) your general where X is the number of damage points allocated by those attacks.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Mortisan Soulreaper"
+          },
+          "ability": {
+            "name": "Marrowpact",
+            "description": "Each time your general uses a FIGHT ability, after all of their attacks have been resolved, Heal (X) your general where X is the number of damage points allocated by those attacks.",
+            "timing": "Passive",
+            "frequency": "N/A"
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [
@@ -84,6 +138,7 @@
     {
       "name": "Mortisan Soulreaper",
       "imageUrl": "images/ossiarch_bonereapers/mortisan_soulreaper.png",
+      "backgroundPosition": 75,
       "stats": {
         "move": "6\"",
         "health": 5,
@@ -120,6 +175,7 @@
     {
       "name": "Mortek Guard",
       "imageUrl": "images/ossiarch_bonereapers/mortek_guard.png",
+      "backgroundPosition": 60,
       "stats": {
         "move": "5\"",
         "health": 10,
@@ -160,6 +216,7 @@
     {
       "name": "Kavalos Deathriders",
       "imageUrl": "images/ossiarch_bonereapers/kavalos_deathriders.png",
+      "backgroundPosition": 70,
       "stats": {
         "move": "10\"",
         "health": 3,
@@ -200,6 +257,7 @@
     {
       "name": "Gothizzar Harvester",
       "imageUrl": "images/ossiarch_bonereapers/gothizzar_harvester.png",
+      "backgroundPosition": 50,
       "stats": {
         "move": "6\"",
         "health": 10,
