@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to apply enhancement effects systematically
     function applyEnhancementEffect(effect, units) {
+        // Handle both old and new enhancement structures
+        if (!effect.target || !effect.target.unit) {
+            console.warn('Enhancement effect missing target unit information:', effect);
+            return;
+        }
+        
         const targetUnit = units.find(u => u.name === effect.target.unit);
         if (!targetUnit) {
             console.warn(`Target unit '${effect.target.unit}' not found for enhancement effect`);
@@ -323,13 +329,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Find the selected enhancement
                     const selectedEnhancement = factionData.enhancements.find(enh => enh.name === selectedEnhancementNameForUnitMod);
                     
-                    if (selectedEnhancement && selectedEnhancement.effects) {
+                    if (selectedEnhancement) {
                         console.log(`Applying enhancement: ${selectedEnhancementNameForUnitMod}`);
                         
-                        // Apply each effect from the enhancement
-                        selectedEnhancement.effects.forEach(effect => {
-                            applyEnhancementEffect(effect, factionData.units);
-                        });
+                        // Handle new targeting-based enhancements (don't apply automatically)
+                        if (selectedEnhancement.targeting && selectedEnhancement.effects) {
+                            console.log('Enhancement has targeting - will be available in phase rules');
+                            // Don't apply automatically, let the targeting system handle it
+                        }
+                        // Handle legacy enhancement effects
+                        else if (selectedEnhancement.legacy_effects) {
+                            selectedEnhancement.legacy_effects.forEach(effect => {
+                                applyEnhancementEffect(effect, factionData.units);
+                            });
+                        }
+                        // Handle old structure for backward compatibility
+                        else if (selectedEnhancement.effects && selectedEnhancement.effects[0]?.target?.unit) {
+                            selectedEnhancement.effects.forEach(effect => {
+                                applyEnhancementEffect(effect, factionData.units);
+                            });
+                        }
                     }
                 }
                 // ********************************************
@@ -450,7 +469,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         description: selectedEnhancement.description,
                         source: 'Enhancement',
                         timing: selectedEnhancement.timing,
-                        frequency: selectedEnhancement.frequency
+                        frequency: selectedEnhancement.frequency,
+                        targeting: selectedEnhancement.targeting, // NEW
+                        effects: selectedEnhancement.effects, // NEW
+                        usage: selectedEnhancement.usage, // NEW
+                        abilityData: selectedEnhancement // Store full data
                     });
                     enhancementAddedToPhase = true; // Mark that it was handled
                 } else {
@@ -498,7 +521,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         description: rule.description, 
                         source: 'Army Rule', 
                         timing: rule.timing,
-                        frequency: rule.frequency
+                        frequency: rule.frequency,
+                        targeting: rule.targeting, // NEW
+                        effects: rule.effects, // NEW
+                        usage: rule.usage, // NEW
+                        abilityData: rule // Store full data
                     });
                 }
             });
@@ -515,7 +542,11 @@ document.addEventListener('DOMContentLoaded', () => {
                              description: ability.description, 
                              source: 'Regiment Ability', 
                              timing: ability.timing,
-                             frequency: ability.frequency
+                             frequency: ability.frequency,
+                             targeting: ability.targeting, // NEW
+                             effects: ability.effects, // NEW
+                             usage: ability.usage, // NEW
+                             abilityData: ability // Store full data
                          });
                      }
                  }
@@ -613,6 +644,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         source: ability.source, 
                         timing: ability.timing,
                         frequency: ability.frequency,
+                        targeting: ability.targeting, // NEW
+                        effects: ability.effects, // NEW
+                        usage: ability.usage, // NEW
+                        abilityData: ability.abilityData, // NEW
                         isCore: false 
                     });
                 });
@@ -634,10 +669,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         const frequency = escapeHtml(item.frequency || '');
                         const source = escapeHtml(item.source || '');
                         
-                        listItem.innerHTML = `
-                            <span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(item.name)}</span>
-                            <span class="ability-source">(${source})</span>
-                        `;
+                        // Check if ability has targeting
+                        if (item.targeting && item.effects) {
+                            const canUse = canUsePhaseAbility(item);
+                            const usageText = item.usage ? getUsageText(item) : '';
+                            
+                            listItem.innerHTML = `
+                                <div class="ability-with-button">
+                                    <span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(item.name)}${usageText}</span>
+                                    <span class="ability-source">(${source})</span>
+                                    <button class="phase-ability-use-btn ${canUse ? '' : 'disabled'}" 
+                                            data-ability-source="${source}"
+                                            data-ability-name="${escapeHtml(item.name)}"
+                                            ${canUse ? '' : 'disabled'}>
+                                        ${canUse ? 'Use' : 'Used'}
+                                    </button>
+                                </div>
+                            `;
+                        } else {
+                            // Regular ability without targeting
+                            listItem.innerHTML = `
+                                <span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(item.name)}</span>
+                                <span class="ability-source">(${source})</span>
+                            `;
+                        }
                     }
                     list.appendChild(listItem);
                 });
@@ -657,6 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         setupTooltips(); // *** ADD Call setup after populating phases ***
+        attachPhaseAbilityListeners(); // *** ADD Call to attach phase ability listeners ***
     }
 
     // --- Helper function to escape HTML for attributes ---
@@ -813,7 +869,22 @@ document.addEventListener('DOMContentLoaded', () => {
             gameTotal: 0
         },
         // Ability usage tracking
-        abilityUsage: {} // Format: "unitName:abilityName" -> { used: number, maxUses: number, resetPeriod: string }
+        abilityUsage: {}, // Format: "unitName:abilityName" -> { used: number, maxUses: number, resetPeriod: string }
+        // Phase ability usage tracking
+        enhancementUsage: {}, // Track enhancement ability uses
+        regimentAbilityUsage: {}, // Track regiment ability uses
+        armyRuleUsage: {}, // Track army rule uses
+        // Effect system
+        effectSymbols: {
+            "charge_roll": "⚡",
+            "save": "🛡️", 
+            "move": "🏃",
+            "wound": "💪",
+            "attack": "⚔️",
+            "hit": "🎯",
+            "rend": "🗡️",
+            "damage": "💥"
+        }
     };
 
     // --- GAME CONTROLS ---
@@ -836,7 +907,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let previousModal = null;
     
     // --- ABILITY TARGETING SYSTEM ---
+    /**
+     * Represents an active ability effect applied to a unit
+     * @class AbilityEffect
+     */
     class AbilityEffect {
+        /**
+         * Creates a new ability effect
+         * @param {Object} ability - The ability that created this effect
+         * @param {Object} target - The unit this effect is applied to
+         * @param {Object} caster - The unit that cast this ability
+         * @param {string} duration - How long the effect lasts (until_end_of_phase, until_end_of_turn, until_end_of_round)
+         * @param {string[]} activePhases - Which phases this effect is active in
+         */
         constructor(ability, target, caster, duration, activePhases) {
             this.id = generateUniqueId();
             this.ability = ability;
@@ -852,6 +935,10 @@ document.addEventListener('DOMContentLoaded', () => {
             this.isActive = true;
         }
         
+        /**
+         * Checks if this effect has expired based on its duration
+         * @returns {boolean} True if the effect has expired
+         */
         isExpired() {
             const currentTurn = gameState.currentTurn;
             const currentPhase = gameState.currentPhase;
@@ -875,6 +962,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
+        /**
+         * Checks if this effect is active in the current game phase
+         * @returns {boolean} True if the effect is active in the current phase
+         */
         isActiveInCurrentPhase() {
             if (!this.isActive) return false;
             if (this.isExpired()) return false;
@@ -912,7 +1003,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    /**
+     * Handles targeting validation for abilities
+     * @class TargetingSystem
+     */
     class TargetingSystem {
+        /**
+         * Gets all valid targets for an ability
+         * @param {Object} ability - The ability to find targets for
+         * @param {Object} caster - The unit casting the ability
+         * @returns {Object[]} Array of valid target units
+         */
         getValidTargets(ability, caster) {
             if (!ability.targeting) return [];
             
@@ -959,6 +1060,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return validTargets;
         }
         
+        /**
+         * Checks if a unit is a valid target for an ability
+         * @param {Object} unit - The unit to check
+         * @param {Object} criteria - The targeting criteria
+         * @param {Object} caster - The unit casting the ability
+         * @returns {boolean} True if the unit is a valid target
+         */
         isValidTarget(unit, criteria, caster) {
             // Check if unit matches keywords
             if (criteria.keywords) {
@@ -976,18 +1084,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             }
             
+            // Check if excluding general
+            if (criteria.exclude_general && unit.keywords && unit.keywords.includes('HERO')) {
+                return false;
+            }
+            
             // Check max targets (will be handled at selection level)
             
             return true;
         }
     }
     
+    /**
+     * Manages active effects and their lifecycle
+     * @class EffectManager
+     */
     class EffectManager {
         constructor() {
             this.activeEffects = [];
             this.effectHistory = [];
         }
         
+        /**
+         * Adds a new effect to the active effects list
+         * @param {AbilityEffect} effect - The effect to add
+         */
         addEffect(effect) {
             this.activeEffects.push(effect);
             this.effectHistory.push({
@@ -997,6 +1118,10 @@ document.addEventListener('DOMContentLoaded', () => {
             this.updateEffectDisplay();
         }
         
+        /**
+         * Removes an effect by its ID
+         * @param {string} effectId - The ID of the effect to remove
+         */
         removeEffect(effectId) {
             const effectIndex = this.activeEffects.findIndex(e => e.id === effectId);
             if (effectIndex !== -1) {
@@ -1057,6 +1182,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const existingTempAbilities = unitCard.querySelectorAll('.temp-effect-ability');
             existingTempAbilities.forEach(ability => ability.remove());
             
+            // Remove existing effect symbol badges
+            const existingEffectBadges = unitCard.querySelectorAll('.effect-badges');
+            existingEffectBadges.forEach(badge => badge.remove());
+            
             // Add visual indicators if there are active effects
             if (unitEffects.length > 0) {
                 unitCard.classList.add('has-effects');
@@ -1073,6 +1202,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (activeEffects.length > 0) {
                     unitCard.classList.add('has-active-effects');
+                    
+                    // Add effect symbol badges to unit card header
+                    this.addEffectSymbolBadges(unitCard, activeEffects);
                     
                     // Add temporary effect abilities to the abilities list
                     const abilitiesList = unitCard.querySelector('.abilities-list');
@@ -1106,6 +1238,86 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
+        }
+        
+        addEffectSymbolBadges(unitCard, activeEffects) {
+            // Create effect badges container
+            const effectBadges = document.createElement('div');
+            effectBadges.className = 'effect-badges';
+            
+            // Group effects by stat type for stacking display
+            const effectsByStat = {};
+            activeEffects.forEach(effect => {
+                const statType = effect.ability.effects[0]?.stat || 'unknown';
+                if (!effectsByStat[statType]) {
+                    effectsByStat[statType] = [];
+                }
+                effectsByStat[statType].push(effect);
+            });
+            
+            // Create symbol badges for each stat type
+            Object.entries(effectsByStat).forEach(([statType, effects]) => {
+                const symbol = gameState.effectSymbols[statType] || '⚡';
+                const badge = document.createElement('span');
+                badge.className = 'effect-badge';
+                badge.textContent = symbol;
+                badge.title = this.createEffectTooltip(effects);
+                
+                // Add click handler for debugging
+                badge.addEventListener('click', () => {
+                    console.log('Effect badge clicked:', { statType, effects });
+                });
+                
+                effectBadges.appendChild(badge);
+            });
+            
+            // Insert effect badges after the unit name
+            const unitNameElement = unitCard.querySelector('h3');
+            if (unitNameElement && unitNameElement.parentNode) {
+                unitNameElement.parentNode.insertBefore(effectBadges, unitNameElement.nextSibling);
+            }
+        }
+        
+        createEffectTooltip(effects) {
+            return effects.map(effect => {
+                const effectData = effect.ability.effects[0];
+                const caster = effect.caster.name;
+                const duration = effect.duration;
+                const phases = effect.activePhases.join(', ');
+                const modifier = effectData?.modifier || '+1';
+                const description = effectData?.description || 'Active effect';
+                
+                // Add command source indicator
+                const source = caster.includes('Command') || caster.includes('Scroll') || caster.includes('Stand') || caster.includes('Rise') || caster.includes('Fall') || caster.includes('Go') ? '⚡ COMMAND' : caster;
+                
+                return `${effect.ability.name} (${source}): ${description}\nModifier: ${modifier}\nDuration: ${duration}\nActive in: ${phases}`;
+            }).join('\n\n');
+        }
+        
+        removeAllEffectsForUnit(unitName) {
+            const effectsToRemove = this.activeEffects.filter(effect => 
+                effect.target.name === unitName
+            );
+            
+            effectsToRemove.forEach(effect => {
+                this.removeEffect(effect.id);
+            });
+            
+            console.log(`Removed ${effectsToRemove.length} effects for unit: ${unitName}`);
+        }
+        
+        validateEffectData(effectData) {
+            if (!effectData || !effectData.ability || !effectData.target || !effectData.caster) {
+                console.warn('Invalid effect data provided:', effectData);
+                return false;
+            }
+            
+            if (!effectData.ability.effects || effectData.ability.effects.length === 0) {
+                console.warn('Ability has no effects defined:', effectData.ability);
+                return false;
+            }
+            
+            return true;
         }
     }
     
@@ -1167,6 +1379,236 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // --- PHASE ABILITY USAGE TRACKING ---
+    function getEnhancementUsageKey(abilityName) {
+        return `enhancement_${abilityName}`;
+    }
+    
+    function getRegimentAbilityUsageKey(abilityName) {
+        return `regiment_${abilityName}`;
+    }
+    
+    function getArmyRuleUsageKey(abilityName) {
+        return `army_rule_${abilityName}`;
+    }
+    
+    function canUseEnhancementAbility(abilityName, maxUses) {
+        const key = getEnhancementUsageKey(abilityName);
+        const usage = gameState.enhancementUsage[key];
+        if (!usage) return true;
+        return usage.used < maxUses;
+    }
+    
+    function canUseRegimentAbility(abilityName, maxUses) {
+        const key = getRegimentAbilityUsageKey(abilityName);
+        const usage = gameState.regimentAbilityUsage[key];
+        if (!usage) return true;
+        return usage.used < maxUses;
+    }
+    
+    function canUseArmyRule(abilityName, maxUses) {
+        const key = getArmyRuleUsageKey(abilityName);
+        const usage = gameState.armyRuleUsage[key];
+        if (!usage) return true;
+        return usage.used < maxUses;
+    }
+    
+    function trackEnhancementUsage(abilityName, maxUses, resetPeriod) {
+        const key = getEnhancementUsageKey(abilityName);
+        if (!gameState.enhancementUsage[key]) {
+            gameState.enhancementUsage[key] = { used: 0, maxUses, resetPeriod };
+        }
+        gameState.enhancementUsage[key].used++;
+    }
+    
+    function trackRegimentAbilityUsage(abilityName, maxUses, resetPeriod) {
+        const key = getRegimentAbilityUsageKey(abilityName);
+        if (!gameState.regimentAbilityUsage[key]) {
+            gameState.regimentAbilityUsage[key] = { used: 0, maxUses, resetPeriod };
+        }
+        gameState.regimentAbilityUsage[key].used++;
+    }
+    
+    function trackArmyRuleUsage(abilityName, maxUses, resetPeriod) {
+        const key = getArmyRuleUsageKey(abilityName);
+        if (!gameState.armyRuleUsage[key]) {
+            gameState.armyRuleUsage[key] = { used: 0, maxUses, resetPeriod };
+        }
+        gameState.armyRuleUsage[key].used++;
+    }
+    
+    function canUsePhaseAbility(phaseAbility) {
+        if (!phaseAbility.usage) return true;
+        
+        const source = phaseAbility.source;
+        const abilityName = phaseAbility.name;
+        const maxUses = phaseAbility.usage.max_uses;
+        
+        if (source === 'Enhancement') {
+            return canUseEnhancementAbility(abilityName, maxUses);
+        } else if (source === 'Regiment Ability') {
+            return canUseRegimentAbility(abilityName, maxUses);
+        } else if (source === 'Army Rule') {
+            return canUseArmyRule(abilityName, maxUses);
+        }
+        return true;
+    }
+    
+    function getUsageText(phaseAbility) {
+        if (!phaseAbility.usage) return '';
+        
+        const source = phaseAbility.source;
+        const abilityName = phaseAbility.name;
+        let usage;
+        
+        if (source === 'Enhancement') {
+            usage = gameState.enhancementUsage[getEnhancementUsageKey(abilityName)];
+        } else if (source === 'Regiment Ability') {
+            usage = gameState.regimentAbilityUsage[getRegimentAbilityUsageKey(abilityName)];
+        } else if (source === 'Army Rule') {
+            usage = gameState.armyRuleUsage[getArmyRuleUsageKey(abilityName)];
+        }
+        
+        if (!usage) return ` (0/${phaseAbility.usage.max_uses})`;
+        return ` (${usage.used}/${usage.maxUses})`;
+    }
+    
+    // --- PHASE ABILITY EVENT LISTENERS ---
+    function attachPhaseAbilityListeners() {
+        document.querySelectorAll('.phase-ability-use-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const abilityName = btn.dataset.abilityName;
+                const source = btn.dataset.abilitySource;
+                
+                // Find the ability data
+                const abilityData = findPhaseAbilityData(abilityName, source);
+                if (!abilityData) {
+                    console.error('Ability data not found:', abilityName);
+                    return;
+                }
+                
+                // Show targeting modal
+                showPhaseAbilityTargetingModal(abilityData, source);
+            });
+        });
+    }
+    
+    function findPhaseAbilityData(abilityName, source) {
+        const factionData = gameState.factionData;
+        if (!factionData) return null;
+        
+        if (source === 'Enhancement') {
+            return factionData.enhancements?.find(e => e.name === abilityName);
+        } else if (source === 'Regiment Ability') {
+            return factionData.regimentAbilities?.find(r => r.name === abilityName);
+        } else if (source === 'Army Rule') {
+            return factionData.armyRules?.find(a => a.name === abilityName);
+        }
+        return null;
+    }
+    
+    // --- PHASE ABILITY TARGETING SYSTEM ---
+    function showPhaseAbilityTargetingModal(abilityData, source) {
+        // Create caster object (use general or first unit)
+        let caster;
+        if (source === 'Enhancement' || source === 'Army Rule') {
+            // Use general as caster
+            caster = gameState.factionData?.units?.find(u => u.keywords?.includes('HERO')) || 
+                     gameState.factionData?.units[0] || 
+                     { name: 'General', keywords: [] };
+        } else {
+            // Regiment ability - use any unit
+            caster = { name: 'Regiment', keywords: [] };
+        }
+        
+        // Create temporary ability object compatible with targeting system
+        const abilityForTargeting = {
+            name: abilityData.name,
+            description: abilityData.description,
+            targeting: abilityData.targeting,
+            effects: abilityData.effects
+        };
+        
+        // Store context for later
+        currentPhaseAbility = { abilityData, source, caster };
+        
+        // Get valid targets
+        const validTargets = targetingSystem.getValidTargets(abilityForTargeting, caster);
+        
+        if (validTargets.length === 0) {
+            alert('No valid targets for this ability');
+            return;
+        }
+        
+        // Show targeting modal (reuse existing)
+        showTargetingModal(abilityForTargeting, caster);
+    }
+    
+    function applyPhaseAbilityEffects(abilityData, target, source, caster) {
+        // Apply effects
+        if (abilityData.effects) {
+            abilityData.effects.forEach(effectData => {
+                if (effectData.duration === 'instant') {
+                    // Instant effect - just log
+                    console.log(`Applied instant effect: ${effectData.description} to ${target.name}`);
+                } else {
+                    // Duration-based effect - use effect manager
+                    const effect = new AbilityEffect(
+                        { name: abilityData.name, effects: abilityData.effects },
+                        target,
+                        caster,
+                        effectData.duration,
+                        effectData.active_phases
+                    );
+                    effectManager.addEffect(effect);
+                }
+            });
+        }
+        
+        // Track usage
+        if (abilityData.usage) {
+            trackPhaseAbilityUsage(abilityData.name, source, abilityData.usage.max_uses, abilityData.usage.reset_period);
+        }
+        
+        // Update display
+        effectManager.updateEffectDisplay();
+        populatePhaseRules(gameState.factionData); // Refresh phase rules to update button states
+        
+        // Close modal
+        closeTargetingModal();
+        
+        console.log(`Applied ${source} ability: ${abilityData.name} to ${target.name}`);
+    }
+    
+    function trackPhaseAbilityUsage(abilityName, source, maxUses, resetPeriod) {
+        let usageStore;
+        let key;
+        
+        if (source === 'Enhancement') {
+            usageStore = gameState.enhancementUsage;
+            key = getEnhancementUsageKey(abilityName);
+        } else if (source === 'Regiment Ability') {
+            usageStore = gameState.regimentAbilityUsage;
+            key = getRegimentAbilityUsageKey(abilityName);
+        } else if (source === 'Army Rule') {
+            usageStore = gameState.armyRuleUsage;
+            key = getArmyRuleUsageKey(abilityName);
+        }
+        
+        if (!usageStore[key]) {
+            usageStore[key] = { used: 0, maxUses, resetPeriod };
+        }
+        usageStore[key].used++;
+        
+        console.log(`Tracked usage for ${abilityName}:`, {
+            key: key,
+            used: usageStore[key].used,
+            maxUses: usageStore[key].maxUses,
+            usageStore: usageStore
+        });
+    }
+    
     // Ability activation function with targeting modal
     function activateAbility(ability, caster) {
         console.log(`Activating ability: ${ability.name} from ${caster.name}`);
@@ -1198,25 +1640,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function applyAbilityEffects(ability, target, caster) {
-        if (!ability.effects) return;
+        if (!ability.effects) {
+            console.warn('Ability has no effects defined:', ability.name);
+            return;
+        }
+        
+        // Validate effect data
+        if (!effectManager.validateEffectData({ ability, target, caster })) {
+            console.error('Invalid effect data, skipping effect application');
+            return;
+        }
         
         // Track ability usage
         useAbility(caster.name, ability.name);
         
         ability.effects.forEach(effectData => {
-            const effect = new AbilityEffect(
-                ability,
-                target,
-                caster,
-                effectData.duration,
-                effectData.active_phases
-            );
-            
-            effectManager.addEffect(effect);
-            console.log(`Applied effect: ${effectData.description} to ${target.name}`);
-            
-            // Update the display immediately
-            effectManager.updateEffectDisplay();
+            try {
+                const effect = new AbilityEffect(
+                    ability,
+                    target,
+                    caster,
+                    effectData.duration,
+                    effectData.active_phases
+                );
+                
+                effectManager.addEffect(effect);
+                console.log(`Applied effect: ${effectData.description} to ${target.name}`);
+                
+                // Update the display immediately
+                effectManager.updateEffectDisplay();
+            } catch (error) {
+                console.error('Error applying effect:', error, { ability, target, caster, effectData });
+            }
         });
     }
     
@@ -1264,6 +1719,113 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`- ${effect.ability.name} on ${effect.target.name} (${effect.duration})`);
         });
     }
+    
+    // Enhanced testing and debugging tools
+    function debugEffects() {
+        console.log('=== Active Effects Debug ===');
+        console.log('Total active effects:', effectManager.activeEffects.length);
+        console.log('Current phase:', gameState.phaseNames[gameState.currentPhase]);
+        console.log('Current turn:', gameState.currentTurn);
+        console.log('Current round:', gameState.currentRound);
+        
+        effectManager.activeEffects.forEach((effect, index) => {
+            console.log(`Effect ${index + 1}:`, {
+                ability: effect.ability.name,
+                target: effect.target.name,
+                caster: effect.caster.name,
+                duration: effect.duration,
+                activePhases: effect.activePhases,
+                isActive: effect.isActive,
+                isExpired: effect.isExpired(),
+                isActiveInCurrentPhase: effect.isActiveInCurrentPhase(),
+                appliedAt: effect.appliedAt
+            });
+        });
+    }
+    
+    function clearAllEffects() {
+        console.log('Clearing all active effects...');
+        const count = effectManager.activeEffects.length;
+        effectManager.activeEffects.forEach(effect => {
+            effectManager.removeEffect(effect.id);
+        });
+        console.log(`Cleared ${count} effects`);
+        effectManager.updateEffectDisplay();
+    }
+    
+    function testEffectPhases() {
+        console.log('=== Testing Effect Phase Visibility ===');
+        const originalPhase = gameState.currentPhase;
+        
+        gameState.phaseNames.forEach((phaseName, phaseIndex) => {
+            gameState.currentPhase = phaseIndex;
+            console.log(`\n--- ${phaseName} ---`);
+            
+            effectManager.activeEffects.forEach(effect => {
+                const isActive = effect.isActiveInCurrentPhase();
+                console.log(`${effect.ability.name} on ${effect.target.name}: ${isActive ? 'ACTIVE' : 'inactive'}`);
+            });
+        });
+        
+        // Restore original phase
+        gameState.currentPhase = originalPhase;
+        effectManager.updateEffectDisplay();
+        console.log('\nRestored to original phase:', gameState.phaseNames[originalPhase]);
+    }
+    
+    function testEffectStacking() {
+        console.log('=== Testing Effect Stacking ===');
+        
+        if (!gameState.factionData) {
+            console.log('No faction data loaded');
+            return;
+        }
+        
+        // Find a unit to test stacking on
+        const target = gameState.factionData.units.find(u => u.name === 'Saurus Warriors');
+        if (!target) {
+            console.log('Saurus Warriors not found');
+            return;
+        }
+        
+        // Apply multiple effects to the same unit
+        const caster1 = gameState.factionData.units.find(u => u.name === 'Saurus Oldblood on Carnosaur');
+        const caster2 = gameState.factionData.units.find(u => u.name === 'Saurus Warriors');
+        
+        if (caster1 && caster2) {
+            console.log('Applying multiple effects to test stacking...');
+            
+            // Create test effects
+            const effect1 = new AbilityEffect(
+                { name: 'Test Effect 1', effects: [{ stat: 'charge_roll', symbol: '⚡' }] },
+                target,
+                caster1,
+                'until_end_of_turn',
+                ['charge_phase']
+            );
+            
+            const effect2 = new AbilityEffect(
+                { name: 'Test Effect 2', effects: [{ stat: 'charge_roll', symbol: '⚡' }] },
+                target,
+                caster2,
+                'until_end_of_turn',
+                ['charge_phase']
+            );
+            
+            effectManager.addEffect(effect1);
+            effectManager.addEffect(effect2);
+            
+            console.log('Applied 2 charge effects to Saurus Warriors');
+            console.log('Check the unit card for stacked effect symbols');
+        }
+    }
+    
+    // Make debug functions available globally
+    window.debugEffects = debugEffects;
+    window.clearAllEffects = clearAllEffects;
+    window.testEffectPhases = testEffectPhases;
+    window.testEffectStacking = testEffectStacking;
+    window.testAbilityTargeting = testAbilityTargeting;
     
     // Test function for Saurus Warriors Battle Cry ability
     function testBattleCry() {
@@ -1419,6 +1981,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentTargetingAbility = null;
     let currentTargetingCaster = null;
     let selectedTarget = null;
+    let currentCommandCard = null; // Track command ability context
+    let currentPhaseAbility = null; // Track phase ability context
     
     function showTargetingModal(ability, caster) {
         currentTargetingAbility = ability;
@@ -1515,11 +2079,25 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('selected');
             selectedTarget = unit;
             
-            // Apply the ability effects
-            applyAbilityEffects(currentTargetingAbility, selectedTarget, currentTargetingCaster);
-            
-            // Close modal
-            closeTargetingModal();
+            // Check context: command, phase ability, or regular ability
+            if (currentCommandCard) {
+                // Apply command effects
+                applyCommandEffects(currentCommandCard, selectedTarget);
+                currentCommandCard = null; // Clear context
+            } else if (currentPhaseAbility) {
+                // Apply phase ability effects
+                applyPhaseAbilityEffects(
+                    currentPhaseAbility.abilityData,
+                    selectedTarget,
+                    currentPhaseAbility.source,
+                    currentPhaseAbility.caster
+                );
+                currentPhaseAbility = null; // Clear context
+            } else {
+                // Apply regular ability effects
+                applyAbilityEffects(currentTargetingAbility, selectedTarget, currentTargetingCaster);
+                closeTargetingModal();
+            }
         });
         
         return card;
@@ -1530,6 +2108,80 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTargetingAbility = null;
         currentTargetingCaster = null;
         selectedTarget = null;
+        currentCommandCard = null; // Clear command context
+        currentPhaseAbility = null; // Clear phase ability context
+    }
+    
+    // --- COMMAND ABILITY TARGETING ---
+    function showCommandTargetingModal(card) {
+        // Store current command context
+        currentCommandCard = card;
+        
+        // Create temporary ability object compatible with targeting system
+        const commandAsAbility = {
+            name: card.command.name,
+            description: card.command.effect,
+            targeting: card.command.targeting,
+            effects: card.command.effects
+        };
+        
+        // Create temporary caster (use general or first unit)
+        const caster = gameState.factionData?.units[0] || { name: 'Command', keywords: [] };
+        
+        // Get valid targets
+        const validTargets = targetingSystem.getValidTargets(commandAsAbility, caster);
+        
+        if (validTargets.length === 0) {
+            alert('No valid targets for this command ability');
+            return;
+        }
+        
+        // Show targeting modal (reuse existing modal)
+        showTargetingModal(commandAsAbility, caster);
+    }
+    
+    function applyCommandEffects(card, target) {
+        // Create caster object
+        const caster = { name: card.command.name, keywords: [] };
+        
+        // Apply effects using existing effect manager
+        card.command.effects.forEach(effectData => {
+            const effect = new AbilityEffect(
+                { name: card.command.name, effects: card.command.effects },
+                target,
+                caster,
+                effectData.duration,
+                effectData.active_phases
+            );
+            
+            effectManager.addEffect(effect);
+            console.log(`Applied command effect: ${effectData.description} to ${target.name}`);
+        });
+        
+        // Mark card as used
+        markCommandAsUsed(card.cardNumber);
+        
+        // Close targeting modal
+        closeTargetingModal();
+        
+        // Close tactic modal
+        tacticModal.style.display = 'none';
+        
+        // Update effect display
+        effectManager.updateEffectDisplay();
+    }
+    
+    function markCommandAsUsed(cardNumber) {
+        setCardStatus(cardNumber, 'Used');
+        useCommandBtn.textContent = 'Command Used';
+        useCommandBtn.disabled = true;
+        
+        // Update card display
+        if (showingAllCards) {
+            displayAllDrawnCards();
+        } else {
+            displayCurrentCards();
+        }
     }
     
     // --- TURN ORDER SELECTION ---
@@ -2161,6 +2813,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.currentRound++;
         gameState.roundTurnsCompleted = 0; // Reset for new round
         
+        // Clean up effects that expire at round change
+        effectManager.cleanupExpiredEffects();
+        effectManager.updateEffectDisplay();
+        
         // Draw new cards for the new round
         if (gameState.currentRound <= 4) {
             drawCardsForRound();
@@ -2565,16 +3221,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const cardNumber = parseInt(tacticModal.dataset.currentCard);
         const currentRoundCards = gameState.cardsByRound[gameState.currentRound] || [];
         if (cardNumber && currentRoundCards.includes(cardNumber) && getCardStatus(cardNumber) === 'Pending') {
-            // Mark card as used using the new status system
-            setCardStatus(cardNumber, 'Used');
-            useCommandBtn.textContent = 'Command Used';
-            useCommandBtn.disabled = true;
+            // Find the card data
+            const card = gameState.battleTactics.find(c => c.cardNumber === cardNumber);
             
-            // Update the card display to show it as used
-            if (showingAllCards) {
-                displayAllDrawnCards();
+            if (!card) return;
+            
+            // Check if command has targeting requirements
+            if (card.command.targeting && card.command.effects) {
+                // Show targeting modal for command ability
+                showCommandTargetingModal(card);
             } else {
-                displayCurrentCards();
+                // Instant command - mark as used immediately
+                markCommandAsUsed(cardNumber);
             }
         }
     });

@@ -1300,6 +1300,27 @@ details.phase-section > summary:hover {
     max-width: 400px;
     width: 90%;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .modal-content h3 {
@@ -1900,6 +1921,7 @@ details.phase-section > summary:hover {
     border: 3px solid #FFD700 !important;
     box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3) !important;
     animation: goldGlow 2s ease-in-out infinite alternate;
+    transition: all 0.3s ease;
 }
 
 @keyframes goldGlow {
@@ -1969,6 +1991,53 @@ details.phase-section > summary:hover {
 
 .effect-symbol {
     position: relative;
+}
+
+/* Effect badges in unit card headers */
+.effect-badges {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: 0.5rem;
+    align-items: center;
+}
+
+.effect-badge {
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border: 2px solid var(--background-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    line-height: 1;
+    text-align: center;
+    animation: effectPulse 0.5s ease-out;
+}
+
+.effect-badge:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes effectPulse {
+    0% { 
+        transform: scale(0.8); 
+        opacity: 0; 
+    }
+    50% { 
+        transform: scale(1.1); 
+    }
+    100% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
 }
 
 /* Ability activation buttons */
@@ -2372,4 +2441,231 @@ details.phase-section > summary:hover {
     background: var(--primary-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Phase ability buttons */
+.phase-ability-use-btn {
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.phase-ability-use-btn:hover:not(.disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+.phase-ability-use-btn.disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.phase-ability-item .ability-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Faction-specific theming for game controls */
+/* Seraphon Theme */
+.seraphon .start-game-btn {
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    border-color: #D2691E;
+    box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.3), 0 2px 4px -1px rgba(139, 69, 19, 0.2);
+}
+
+.seraphon .start-game-btn:hover {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    border-color: #DEB887;
+    box-shadow: 0 10px 15px -3px rgba(139, 69, 19, 0.4), 0 4px 6px -2px rgba(139, 69, 19, 0.3);
+}
+
+.seraphon .next-phase-btn {
+    background: linear-gradient(135deg, #2E8B57 0%, #3CB371 100%);
+    border-color: #228B22;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(46, 139, 87, 0.3);
+}
+
+.seraphon .next-phase-btn:hover {
+    background: linear-gradient(135deg, #3CB371 0%, #32CD32 100%);
+    border-color: #00FF00;
+    box-shadow: 0 4px 6px -1px rgba(46, 139, 87, 0.4), 0 2px 4px -1px rgba(46, 139, 87, 0.3);
+}
+
+.seraphon .end-game-btn {
+    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+    border-color: #B22222;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(139, 0, 0, 0.3);
+}
+
+.seraphon .end-game-btn:hover {
+    background: linear-gradient(135deg, #DC143C 0%, #FF6347 100%);
+    border-color: #FF4500;
+    box-shadow: 0 4px 6px -1px rgba(139, 0, 0, 0.4), 0 2px 4px -1px rgba(139, 0, 0, 0.3);
+}
+
+/* Skaven Theme */
+.skaven .start-game-btn {
+    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
+    border-color: #696969;
+    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.3), 0 2px 4px -1px rgba(47, 47, 47, 0.2);
+}
+
+.skaven .start-game-btn:hover {
+    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
+    border-color: #808080;
+    box-shadow: 0 10px 15px -3px rgba(47, 47, 47, 0.4), 0 4px 6px -2px rgba(47, 47, 47, 0.3);
+}
+
+.skaven .next-phase-btn {
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    border-color: #D2691E;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+}
+
+.skaven .next-phase-btn:hover {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    border-color: #DEB887;
+    box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.4), 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+}
+
+.skaven .end-game-btn {
+    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
+    border-color: #696969;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(47, 47, 47, 0.3);
+}
+
+.skaven .end-game-btn:hover {
+    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
+    border-color: #808080;
+    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.4), 0 2px 4px -1px rgba(47, 47, 47, 0.3);
+}
+
+/* Stormcast Eternals Theme */
+.stormcast-eternals .start-game-btn {
+    background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
+    border-color: #00BFFF;
+    box-shadow: 0 4px 6px -1px rgba(65, 105, 225, 0.3), 0 2px 4px -1px rgba(65, 105, 225, 0.2);
+}
+
+.stormcast-eternals .start-game-btn:hover {
+    background: linear-gradient(135deg, #1E90FF 0%, #00BFFF 100%);
+    border-color: #87CEEB;
+    box-shadow: 0 10px 15px -3px rgba(65, 105, 225, 0.4), 0 4px 6px -2px rgba(65, 105, 225, 0.3);
+}
+
+.stormcast-eternals .next-phase-btn {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-color: #FF8C00;
+    color: #2F2F2F;
+    box-shadow: 0 2px 4px -1px rgba(255, 215, 0, 0.3);
+}
+
+.stormcast-eternals .next-phase-btn:hover {
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    border-color: #FF6347;
+    box-shadow: 0 4px 6px -1px rgba(255, 215, 0, 0.4), 0 2px 4px -1px rgba(255, 215, 0, 0.3);
+}
+
+.stormcast-eternals .end-game-btn {
+    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+    border-color: #B22222;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(139, 0, 0, 0.3);
+}
+
+.stormcast-eternals .end-game-btn:hover {
+    background: linear-gradient(135deg, #DC143C 0%, #FF6347 100%);
+    border-color: #FF4500;
+    box-shadow: 0 4px 6px -1px rgba(139, 0, 0, 0.4), 0 2px 4px -1px rgba(139, 0, 0, 0.3);
+}
+
+/* Ossiarch Bonereapers Theme */
+.ossiarch-bonereapers .start-game-btn {
+    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
+    border-color: #696969;
+    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.3), 0 2px 4px -1px rgba(47, 47, 47, 0.2);
+}
+
+.ossiarch-bonereapers .start-game-btn:hover {
+    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
+    border-color: #808080;
+    box-shadow: 0 10px 15px -3px rgba(47, 47, 47, 0.4), 0 4px 6px -2px rgba(47, 47, 47, 0.3);
+}
+
+.ossiarch-bonereapers .next-phase-btn {
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    border-color: #D2691E;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+}
+
+.ossiarch-bonereapers .next-phase-btn:hover {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    border-color: #DEB887;
+    box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.4), 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+}
+
+.ossiarch-bonereapers .end-game-btn {
+    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
+    border-color: #696969;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(47, 47, 47, 0.3);
+}
+
+.ossiarch-bonereapers .end-game-btn:hover {
+    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
+    border-color: #808080;
+    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.4), 0 2px 4px -1px rgba(47, 47, 47, 0.3);
+}
+
+/* Orruk Warclans Theme */
+.orruk-warclans .start-game-btn {
+    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+    border-color: #B22222;
+    box-shadow: 0 4px 6px -1px rgba(139, 0, 0, 0.3), 0 2px 4px -1px rgba(139, 0, 0, 0.2);
+}
+
+.orruk-warclans .start-game-btn:hover {
+    background: linear-gradient(135deg, #DC143C 0%, #FF6347 100%);
+    border-color: #FF4500;
+    box-shadow: 0 10px 15px -3px rgba(139, 0, 0, 0.4), 0 4px 6px -2px rgba(139, 0, 0, 0.3);
+}
+
+.orruk-warclans .next-phase-btn {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-color: #FF8C00;
+    color: #2F2F2F;
+    box-shadow: 0 2px 4px -1px rgba(255, 215, 0, 0.3);
+}
+
+.orruk-warclans .next-phase-btn:hover {
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    border-color: #FF6347;
+    box-shadow: 0 4px 6px -1px rgba(255, 215, 0, 0.4), 0 2px 4px -1px rgba(255, 215, 0, 0.3);
+}
+
+.orruk-warclans .end-game-btn {
+    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
+    border-color: #696969;
+    color: white;
+    box-shadow: 0 2px 4px -1px rgba(47, 47, 47, 0.3);
+}
+
+.orruk-warclans .end-game-btn:hover {
+    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
+    border-color: #808080;
+    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.4), 0 2px 4px -1px rgba(47, 47, 47, 0.3);
 } 
