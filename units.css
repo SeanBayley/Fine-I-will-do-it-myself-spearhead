@@ -2474,198 +2474,84 @@ details.phase-section > summary:hover {
     gap: 8px;
 }
 
-/* Faction-specific theming for game controls */
-/* Seraphon Theme */
-.seraphon .start-game-btn {
-    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-    border-color: #D2691E;
-    box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.3), 0 2px 4px -1px rgba(139, 69, 19, 0.2);
-}
-
-.seraphon .start-game-btn:hover {
-    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
-    border-color: #DEB887;
-    box-shadow: 0 10px 15px -3px rgba(139, 69, 19, 0.4), 0 4px 6px -2px rgba(139, 69, 19, 0.3);
-}
-
+/* Faction-specific theming for game controls - Clean approach matching faction cards */
+/* Apply faction card styling to game control buttons */
+.seraphon .start-game-btn,
 .seraphon .next-phase-btn {
-    background: linear-gradient(135deg, #2E8B57 0%, #3CB371 100%);
-    border-color: #228B22;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(46, 139, 87, 0.3);
+    background: linear-gradient(135deg, rgba(64, 224, 208, 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(64, 224, 208, 0.35);
+    color: var(--text-color);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
+.seraphon .start-game-btn:hover,
 .seraphon .next-phase-btn:hover {
-    background: linear-gradient(135deg, #3CB371 0%, #32CD32 100%);
-    border-color: #00FF00;
-    box-shadow: 0 4px 6px -1px rgba(46, 139, 87, 0.4), 0 2px 4px -1px rgba(46, 139, 87, 0.3);
+    border-color: rgba(64, 224, 208, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(64, 224, 208, 0.3);
 }
 
-.seraphon .end-game-btn {
-    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
-    border-color: #B22222;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(139, 0, 0, 0.3);
-}
-
-.seraphon .end-game-btn:hover {
-    background: linear-gradient(135deg, #DC143C 0%, #FF6347 100%);
-    border-color: #FF4500;
-    box-shadow: 0 4px 6px -1px rgba(139, 0, 0, 0.4), 0 2px 4px -1px rgba(139, 0, 0, 0.3);
-}
-
-/* Skaven Theme */
-.skaven .start-game-btn {
-    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
-    border-color: #696969;
-    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.3), 0 2px 4px -1px rgba(47, 47, 47, 0.2);
-}
-
-.skaven .start-game-btn:hover {
-    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
-    border-color: #808080;
-    box-shadow: 0 10px 15px -3px rgba(47, 47, 47, 0.4), 0 4px 6px -2px rgba(47, 47, 47, 0.3);
-}
-
+.skaven .start-game-btn,
 .skaven .next-phase-btn {
-    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-    border-color: #D2691E;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+    background: linear-gradient(135deg, rgba(143, 209, 41, 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(143, 209, 41, 0.35);
+    color: var(--text-color);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
+.skaven .start-game-btn:hover,
 .skaven .next-phase-btn:hover {
-    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
-    border-color: #DEB887;
-    box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.4), 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+    border-color: rgba(143, 209, 41, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(143, 209, 41, 0.3);
 }
 
-.skaven .end-game-btn {
-    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
-    border-color: #696969;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(47, 47, 47, 0.3);
-}
-
-.skaven .end-game-btn:hover {
-    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
-    border-color: #808080;
-    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.4), 0 2px 4px -1px rgba(47, 47, 47, 0.3);
-}
-
-/* Stormcast Eternals Theme */
-.stormcast-eternals .start-game-btn {
-    background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
-    border-color: #00BFFF;
-    box-shadow: 0 4px 6px -1px rgba(65, 105, 225, 0.3), 0 2px 4px -1px rgba(65, 105, 225, 0.2);
-}
-
-.stormcast-eternals .start-game-btn:hover {
-    background: linear-gradient(135deg, #1E90FF 0%, #00BFFF 100%);
-    border-color: #87CEEB;
-    box-shadow: 0 10px 15px -3px rgba(65, 105, 225, 0.4), 0 4px 6px -2px rgba(65, 105, 225, 0.3);
-}
-
+.stormcast-eternals .start-game-btn,
 .stormcast-eternals .next-phase-btn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    border-color: #FF8C00;
-    color: #2F2F2F;
-    box-shadow: 0 2px 4px -1px rgba(255, 215, 0, 0.3);
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(13, 110, 253, 0.35);
+    color: var(--text-color);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
+.stormcast-eternals .start-game-btn:hover,
 .stormcast-eternals .next-phase-btn:hover {
-    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
-    border-color: #FF6347;
-    box-shadow: 0 4px 6px -1px rgba(255, 215, 0, 0.4), 0 2px 4px -1px rgba(255, 215, 0, 0.3);
+    border-color: rgba(13, 110, 253, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(13, 110, 253, 0.3);
 }
 
-.stormcast-eternals .end-game-btn {
-    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
-    border-color: #B22222;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(139, 0, 0, 0.3);
-}
-
-.stormcast-eternals .end-game-btn:hover {
-    background: linear-gradient(135deg, #DC143C 0%, #FF6347 100%);
-    border-color: #FF4500;
-    box-shadow: 0 4px 6px -1px rgba(139, 0, 0, 0.4), 0 2px 4px -1px rgba(139, 0, 0, 0.3);
-}
-
-/* Ossiarch Bonereapers Theme */
-.ossiarch-bonereapers .start-game-btn {
-    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
-    border-color: #696969;
-    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.3), 0 2px 4px -1px rgba(47, 47, 47, 0.2);
-}
-
-.ossiarch-bonereapers .start-game-btn:hover {
-    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
-    border-color: #808080;
-    box-shadow: 0 10px 15px -3px rgba(47, 47, 47, 0.4), 0 4px 6px -2px rgba(47, 47, 47, 0.3);
-}
-
+.ossiarch-bonereapers .start-game-btn,
 .ossiarch-bonereapers .next-phase-btn {
-    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-    border-color: #D2691E;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+    background: linear-gradient(135deg, rgba(245, 245, 220, 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(245, 245, 220, 0.35);
+    color: var(--text-color);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
+.ossiarch-bonereapers .start-game-btn:hover,
 .ossiarch-bonereapers .next-phase-btn:hover {
-    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
-    border-color: #DEB887;
-    box-shadow: 0 4px 6px -1px rgba(139, 69, 19, 0.4), 0 2px 4px -1px rgba(139, 69, 19, 0.3);
+    border-color: rgba(245, 245, 220, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(245, 245, 220, 0.3);
 }
 
-.ossiarch-bonereapers .end-game-btn {
-    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
-    border-color: #696969;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(47, 47, 47, 0.3);
-}
-
-.ossiarch-bonereapers .end-game-btn:hover {
-    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
-    border-color: #808080;
-    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.4), 0 2px 4px -1px rgba(47, 47, 47, 0.3);
-}
-
-/* Orruk Warclans Theme */
-.orruk-warclans .start-game-btn {
-    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
-    border-color: #B22222;
-    box-shadow: 0 4px 6px -1px rgba(139, 0, 0, 0.3), 0 2px 4px -1px rgba(139, 0, 0, 0.2);
-}
-
-.orruk-warclans .start-game-btn:hover {
-    background: linear-gradient(135deg, #DC143C 0%, #FF6347 100%);
-    border-color: #FF4500;
-    box-shadow: 0 10px 15px -3px rgba(139, 0, 0, 0.4), 0 4px 6px -2px rgba(139, 0, 0, 0.3);
-}
-
+.orruk-warclans .start-game-btn,
 .orruk-warclans .next-phase-btn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    border-color: #FF8C00;
-    color: #2F2F2F;
-    box-shadow: 0 2px 4px -1px rgba(255, 215, 0, 0.3);
+    background: linear-gradient(135deg, rgba(255, 0, 0, 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255, 0, 0, 0.35);
+    color: var(--text-color);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
+.orruk-warclans .start-game-btn:hover,
 .orruk-warclans .next-phase-btn:hover {
-    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
-    border-color: #FF6347;
-    box-shadow: 0 4px 6px -1px rgba(255, 215, 0, 0.4), 0 2px 4px -1px rgba(255, 215, 0, 0.3);
-}
-
-.orruk-warclans .end-game-btn {
-    background: linear-gradient(135deg, #2F2F2F 0%, #4A4A4A 100%);
-    border-color: #696969;
-    color: white;
-    box-shadow: 0 2px 4px -1px rgba(47, 47, 47, 0.3);
-}
-
-.orruk-warclans .end-game-btn:hover {
-    background: linear-gradient(135deg, #4A4A4A 0%, #696969 100%);
-    border-color: #808080;
-    box-shadow: 0 4px 6px -1px rgba(47, 47, 47, 0.4), 0 2px 4px -1px rgba(47, 47, 47, 0.3);
+    border-color: rgba(255, 0, 0, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(255, 0, 0, 0.3);
 } 
