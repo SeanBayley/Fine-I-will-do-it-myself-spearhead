@@ -7,14 +7,58 @@
       "type": "Battle Trait",
       "timing": "Hero phase",
       "frequency": "Once per turn",
-      "description": "Pick 1 friendly STORMCAST ETERNALS unit. Until the start of your next hero phase, that unit has a ward of 5+."
+      "description": "Pick 1 friendly STORMCAST ETERNALS unit. Until the start of your next hero phase, that unit has a ward of 5+.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": ["STORMCAST ETERNALS"],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "ward",
+          "modifier": "5+",
+          "duration": "until_start_of_next_hero_phase",
+          "active_phases": ["all"],
+          "description": "Ward (5+)"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
     },
     {
       "name": "Storm Charge",
       "type": "Battle Trait",
       "timing": "Charge phase",
       "frequency": "Once per battle",
-      "description": "Pick 1 friendly STORMCAST ETERNALS unit that is not within 3\" of any enemy units. That unit can attempt a charge even if it ran in the same turn."
+      "description": "Pick 1 friendly STORMCAST ETERNALS unit that is not within 3\" of any enemy units. That unit can attempt a charge even if it ran in the same turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": ["STORMCAST ETERNALS"],
+          "not_within_3_of_enemy": true,
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "stat": "charge",
+          "modifier": "can_charge_after_run",
+          "duration": "instant",
+          "description": "Can attempt charge even if ran this turn"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
     }
   ],
   "regimentAbilities": [
@@ -23,14 +67,59 @@
         "type": "Regiment Ability",
         "timing": "Combat phase",
         "frequency": "Once per battle, any combat phase",
-        "description": "Pick a friendly unit in combat and until the end of the phase each time a model from that unit is slain roll a D6. On a 4+ an enemy unit in combat with that unit takes 1 mortal wound."
+        "description": "Pick a friendly unit in combat and until the end of the phase each time a model from that unit is slain roll a D6. On a 4+ an enemy unit in combat with that unit takes 1 mortal wound.",
+        "targeting": {
+            "type": "friendly_unit",
+            "range": "unlimited",
+            "targeting_criteria": {
+                "keywords": [],
+                "in_combat": true,
+                "max_targets": 1
+            }
+        },
+        "effects": [
+            {
+                "type": "modify_stat",
+                "stat": "blaze_of_glory",
+                "modifier": "active",
+                "duration": "until_end_of_phase",
+                "active_phases": ["combat_phase"],
+                "description": "When models slain, roll D6, on 4+ enemy takes 1 mortal wound"
+            }
+        ],
+        "usage": {
+            "max_uses": 1,
+            "reset_period": "per_battle"
+        }
     },
     {
         "name": "Strike Where Needed",
         "type": "Regiment Ability",
         "timing": "Movement phase",
         "frequency": "Once per battle",
-        "description": "Select a unit. For this unit no mortal damage is inflicted when retreating and then can still charge this turn."
+        "description": "Select a unit. For this unit no mortal damage is inflicted when retreating and then can still charge this turn.",
+        "targeting": {
+            "type": "friendly_unit",
+            "range": "unlimited",
+            "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+            }
+        },
+        "effects": [
+            {
+                "type": "modify_stat",
+                "stat": "retreat",
+                "modifier": "no_mortal_damage",
+                "duration": "until_end_of_turn",
+                "active_phases": ["movement_phase", "charge_phase"],
+                "description": "No mortal damage when retreating, can still charge"
+            }
+        ],
+        "usage": {
+            "max_uses": 1,
+            "reset_period": "per_battle"
+        }
     }
   ],
   "enhancements": [

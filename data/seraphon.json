@@ -54,7 +54,29 @@
       "timing": "Enemy Movement Phase", 
       "frequency": "Once Per Battle", 
       "description": "Declare: Pick a friendly unit wholly within 12\" of your general. You cannot pick your general. Effect: That unit can use the 'Normal Move' ability as if it were your movement phase.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "exclude_general": true,
+          "max_targets": 1
+        }
+      },
       "effects": [
+        {
+          "type": "instant_effect",
+          "stat": "movement",
+          "modifier": "normal_move",
+          "duration": "instant",
+          "description": "Can use Normal Move ability"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      },
+      "legacy_effects": [
         {
           "type": "addAbility",
           "target": {
@@ -230,68 +252,6 @@
             "timing": "Combat Phase",
             "frequency": "N/A",
             "description": "Effect: Add 1 to save rolls for this unit while it is contesting an objective you control."
-        },
-        {
-            "name": "Battle Cry",
-            "type": "Ability",
-            "timing": "Your Hero Phase",
-            "frequency": "Once per turn",
-            "description": "Declare: Pick a friendly SERAPHON unit wholly within 6\" of this unit. Effect: Add 1 to wound rolls for the target unit until the end of this phase.",
-            "targeting": {
-                "type": "friendly_unit",
-                "range": "6\"",
-                "targeting_criteria": {
-                    "keywords": ["SERAPHON"],
-                    "exclude_self": true,
-                    "max_targets": 1
-                }
-            },
-            "effects": [
-                {
-                    "type": "modify_stat",
-                    "stat": "wound_roll",
-                    "modifier": "+1",
-                    "duration": "until_end_of_phase",
-                    "active_phases": ["combat_phase"],
-                    "symbol": "💪",
-                    "description": "+1 to wound rolls"
-                }
-            ],
-            "usage": {
-                "max_uses": 1,
-                "reset_period": "per_turn"
-            }
-        },
-        {
-            "name": "Desperate Stand",
-            "type": "Ability",
-            "timing": "Your Hero Phase",
-            "frequency": "Once per game",
-            "description": "Declare: Pick a friendly SERAPHON unit wholly within 6\" of this unit. Effect: Add 1 to save rolls for the target unit until the end of the game.",
-            "targeting": {
-                "type": "friendly_unit",
-                "range": "6\"",
-                "targeting_criteria": {
-                    "keywords": ["SERAPHON"],
-                    "exclude_self": true,
-                    "max_targets": 1
-                }
-            },
-            "effects": [
-                {
-                    "type": "modify_stat",
-                    "stat": "save_roll",
-                    "modifier": "+1",
-                    "duration": "until_end_of_game",
-                    "active_phases": ["all_phases"],
-                    "symbol": "🛡️",
-                    "description": "+1 to save rolls"
-                }
-            ],
-            "usage": {
-                "max_uses": 1,
-                "reset_period": "per_game"
-            }
         }
       ],
       "keywords": ["ORDER", "SERAPHON", "INFANTRY"] 

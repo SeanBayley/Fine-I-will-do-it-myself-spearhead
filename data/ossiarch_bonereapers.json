@@ -31,7 +31,29 @@
       "timing": "Combat Phase",
       "frequency": "Once per battle, any combat phase",
       "description": "Pick a friendly unit to use this ability. Until the end of the phase, add 1 to ward rolls for that unit.",
-      "keywords": "OSSIARCH COMMAND"
+      "keywords": "OSSIARCH COMMAND",
+      "targeting": {
+          "type": "friendly_unit",
+          "range": "unlimited",
+          "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+          }
+      },
+      "effects": [
+          {
+              "type": "modify_stat",
+              "stat": "ward",
+              "modifier": "+1",
+              "duration": "until_end_of_phase",
+              "active_phases": ["combat_phase"],
+              "description": "+1 to ward rolls"
+          }
+      ],
+      "usage": {
+          "max_uses": 1,
+          "reset_period": "per_battle"
+      }
     },
     {
       "name": "Re-form Ranks (OSSIARCH COMMAND)",
@@ -39,7 +61,30 @@
       "timing": "Movement Phase",
       "frequency": "Once per battle, your movement phase",
       "description": "Pick a friendly Mortek Guard unit in combat to use this ability. That unit can use a RETREAT ability this phase without any mortal damage being inflicted on it.",
-      "keywords": "OSSIARCH COMMAND"
+      "keywords": "OSSIARCH COMMAND",
+      "targeting": {
+          "type": "friendly_unit",
+          "range": "unlimited",
+          "targeting_criteria": {
+              "keywords": ["MORTEK GUARD"],
+              "in_combat": true,
+              "max_targets": 1
+          }
+      },
+      "effects": [
+          {
+              "type": "modify_stat",
+              "stat": "retreat",
+              "modifier": "no_mortal_damage",
+              "duration": "until_end_of_phase",
+              "active_phases": ["movement_phase"],
+              "description": "Retreat without mortal damage"
+          }
+      ],
+      "usage": {
+          "max_uses": 1,
+          "reset_period": "per_battle"
+      }
     }
   ],
   "enhancements": [

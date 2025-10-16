@@ -33,7 +33,30 @@
        "type": "Regiment Ability",
        "timing": "Shooting Phase",
        "frequency": "Once per battle",
-       "description": "Declare: Pick a ranged weapon a friendly unit is armed with. Effect: That weapon has Crit (Mortal) this phase."
+       "description": "Declare: Pick a ranged weapon a friendly unit is armed with. Effect: That weapon has Crit (Mortal) this phase.",
+       "targeting": {
+           "type": "friendly_unit",
+           "range": "unlimited",
+           "targeting_criteria": {
+               "keywords": [],
+               "has_ranged_weapon": true,
+               "max_targets": 1
+           }
+       },
+       "effects": [
+           {
+               "type": "modify_stat",
+               "stat": "ranged_weapon",
+               "modifier": "crit_mortal",
+               "duration": "until_end_of_phase",
+               "active_phases": ["shooting_phase"],
+               "description": "Ranged weapon has Crit (Mortal)"
+           }
+       ],
+       "usage": {
+           "max_uses": 1,
+           "reset_period": "per_battle"
+       }
      }
   ],
   "enhancements": [

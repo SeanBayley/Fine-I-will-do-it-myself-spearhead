@@ -1,0 +1,112 @@
+{
+  "twists": {
+    "aqshy_twists": [
+      {
+        "name": "LET THE BLOOD FLOW",
+        "description": "Khorne's presence is felt in this battle, and he demands blood be spilled in his name!",
+        "rules": [
+          "Each player scores 1 extra victory point at the end of their turn for each enemy unit destroyed in that turn.",
+          "In addition, if one of the players is the underdog, that player picks 1 friendly unit on the battlefield to be frenzied. Add 1 to hit rolls for combat attacks made by that unit this battle round."
+        ]
+      },
+      {
+        "name": "WREATHED IN SMOKE",
+        "description": "Plumes of thick black smoke erupt from the scarred land, obscuring the warriors in battle.",
+        "rules": [
+          "The underdog picks 1 objective on the battlefield. If there is no underdog, the players roll off and the winner picks the objective.",
+          "That objective is wreathed in smoke. Until the end of the battle round, only unmodified hit rolls of 6 successfully hit for attacks that target a unit contesting that objective."
+        ]
+      },
+      {
+        "name": "MOUNT THE ATTACK",
+        "description": "A fire is stoked in the hearts of the embattled warriors, giving them the courage to push deep into enemy lines.",
+        "rules": [
+          "Each player scores 1 extra victory point at the end of their turn for each objective they control that was controlled by their opponent at the start of their turn.",
+          "In addition, the underdog picks 1 friendly unit to be the spearhead. That unit's melee weapons have Charge (+1 Damage) this battle round."
+        ]
+      },
+      {
+        "name": "RECLAIM AQSHY",
+        "description": "Blood is spilled relentlessly in the pursuit of conquering this battle-scarred realm.",
+        "rules": [
+          "The underdog picks 2 objectives on the battlefield. If there is no underdog, each player picks 1 objective on the battlefield, starting with the active player.",
+          "Each player scores 1 extra victory point at the end of their turn for each of those objectives that they control."
+        ]
+      },
+      {
+        "name": "BLOODMARKED",
+        "description": "These warriors have been marked for death, a curse that cannot be lifted.",
+        "rules": [
+          "The underdog picks 1 unit in each player's army that is on the battlefield to be bloodmarked.",
+          "If there is no underdog, each player picks 1 enemy unit on the battlefield to be bloodmarked, starting with the active player.",
+          "Each player scores 1 extra victory point at the end of the battle round if the enemy bloodmarked unit is destroyed this battle round."
+        ]
+      },
+      {
+        "name": "RING OF FIRE",
+        "description": "A raging inferno encircles the dais of this ancient place of power.",
+        "rules": [
+          "The underdog picks 1 objective on the battlefield. If there is no underdog, the players roll off and the winner picks the objective.",
+          "That objective is no longer controlled by either player and cannot be contested or controlled in this battle round.",
+          "In addition, at the end of each turn in this battle round, after victory points have been scored, inflict D3 mortal damage on each unit that has any models on it (roll for each unit)."
+        ]
+      }
+    ],
+    "ghyran_twists": [
+      {
+        "name": "GRASPING VINES",
+        "description": "Twisting vines burst from the undergrowth to ensnare hapless warriors.",
+        "rules": [
+          "The underdog picks an enemy unit on the battlefield. If there is no underdog, the players roll off and the winner picks an enemy unit on the battlefield.",
+          "That unit is ensnared. Until the end of the battle round, halve its Move characteristic and roll 1 fewer dice when making a charge roll for that unit."
+        ]
+      },
+      {
+        "name": "TAKE THE LAND",
+        "description": "The verdant land of Ghyran is rich in natural resources waiting to be claimed.",
+        "rules": [
+          "Each player scores 1 extra victory point at the end of their turn if there are more friendly models contesting the large terrain feature in enemy territory than there are enemy models contesting it.",
+          "In addition, the underdog adds 1 to wound rolls for attacks made by friendly units that target a unit contesting a large terrain feature."
+        ]
+      },
+      {
+        "name": "ALARIELLE'S BLESSING",
+        "description": "The goddess of life commands the seasons and cycles of Ghyran.",
+        "rules": [
+          "The underdog can pick one of the effects below. If there is no underdog, the players roll off and the winner can pick the effect.",
+          "Shield of Thorns: Pick a friendly unit on the battlefield. That unit has WARD (6+) this battle round. If that unit already has a ward save, add 1 to ward rolls for that unit this battle round instead.",
+          "Rain of Jade: Pick up to 3 different friendly units on the battlefield. Heal (D3) each of those units (roll for each)."
+        ]
+      },
+      {
+        "name": "RECLAIM GHYRAN",
+        "description": "To gain a foothold in the realm of life, one must plant the seeds of victory for future generations.",
+        "rules": [
+          "The underdog picks 2 objectives on the battlefield.",
+          "If there is no underdog, each player picks 1 objective on the battlefield, starting with the active player.",
+          "Each player scores 1 extra victory point at the end of their turn for each of those objectives that they control."
+        ]
+      },
+      {
+        "name": "LIFESPRING",
+        "description": "It is said that bathing in the lifesprings of Ghyran can cure disease and increase one's vitality.",
+        "rules": [
+          "The underdog picks 1 objective on the battlefield. If there is no underdog, the players roll off and the winner picks the objective.",
+          "That objective becomes a lifespring this battle round. Each player scores 1 extra victory point at the end of their turn if they control that objective.",
+          "In additiona, at the end of each turn this battle round, after victory points have been scored, Heal (1) each unit that is contesting that objective."
+        ]
+      },
+      {
+        "name": "THE GRANDFATHER'S BLESSING",
+        "description": "The Realm of Life is tainted by the touch of Nurgle, whose virulent 'gifts' are transmitted by sputum, slime and spore.",
+        "rules": [
+          "The underdog can pick one of the effects below. If there is no underdog, the players roll off and the winner can pick the effect.",
+          "Nurgle's Rot: Pick an enemy unit on the battlefield. Subtract 1 from save rolls for that unit this battle round.",
+          "Eroding Miasma: Pick an enemy unit on the battlefield. Ward rolls cannot be made for that unit this battle round."
+        ]
+      }
+    ],
+    "other_twists": []
+  }
+}
+ 
