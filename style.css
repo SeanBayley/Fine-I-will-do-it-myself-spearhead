@@ -675,4 +675,167 @@ main#rules-content section {
     --primary-color-rgb: 143, 209, 41; 
     --primary-hover-color: #6EA723; 
 }
-/* --- END Per-card Theme Overrides --- */ 
+/* --- END Per-card Theme Overrides --- */
+
+/* --- Lore Button and Modal Styles --- */
+.faction-rules-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.lore-button {
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(var(--primary-color-rgb), 0.35);
+    color: var(--text-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+}
+
+.lore-button:hover {
+    border-color: rgba(var(--primary-color-rgb), 0.7);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3), 0 0 8px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.lore-button .material-symbols-outlined {
+    font-size: 1.2em;
+}
+
+/* Lore Modal */
+.lore-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.lore-modal-content {
+    background: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    max-width: 600px;
+    max-height: 80vh;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.lore-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, rgba(var(--primary-color-rgb), 0.1), rgba(255,255,255,0.02));
+}
+
+.lore-modal-header h2 {
+    margin: 0;
+    color: var(--heading-color);
+    font-size: 1.5rem;
+}
+
+.lore-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lore-modal-close:hover {
+    background: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-color);
+}
+
+.lore-modal-close .material-symbols-outlined {
+    font-size: 1.5em;
+}
+
+.lore-modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.lore-modal-body h1,
+.lore-modal-body h2,
+.lore-modal-body h3,
+.lore-modal-body h4,
+.lore-modal-body h5,
+.lore-modal-body h6 {
+    color: var(--heading-color);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.lore-modal-body h1:first-child,
+.lore-modal-body h2:first-child,
+.lore-modal-body h3:first-child {
+    margin-top: 0;
+}
+
+.lore-modal-body p {
+    margin-bottom: 1rem;
+}
+
+.lore-modal-body ul,
+.lore-modal-body ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.lore-modal-body li {
+    margin-bottom: 0.5rem;
+}
+
+.lore-modal-body strong {
+    color: var(--primary-color);
+}
+
+.lore-modal-body em {
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Custom scrollbar for modal body */
+.lore-modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.lore-modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.lore-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(var(--primary-color-rgb), 0.3);
+    border-radius: 4px;
+}
+
+.lore-modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--primary-color-rgb), 0.5);
+} 

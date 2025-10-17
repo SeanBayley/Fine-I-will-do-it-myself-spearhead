@@ -284,6 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(factionData => {
                 console.log('Fetched faction data:', factionData);
 
+                // *** STORE CURRENT FACTION DATA FOR LORE ACCESS ***
+                currentFactionData = factionData;
+                // ********************************
+
                 // *** ADD FACTION CLASS TO BODY ***
                 if (factionData.factionId) {
                     document.body.classList.add(factionData.factionId);
@@ -443,4 +447,50 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error("Could not find the main continue button (#faction-rules-continue) to attach listener.");
     }
+
+    // --- Lore Modal Functionality ---
+    const loreButton = document.getElementById('lore-button');
+    const loreModal = document.getElementById('lore-modal');
+    const loreModalClose = document.getElementById('lore-modal-close');
+    const loreModalTitle = document.getElementById('lore-modal-title');
+    const loreModalBody = document.getElementById('lore-modal-body');
+
+    // Store current faction data for lore access
+    let currentFactionData = null;
+
+    // Open lore modal
+    if (loreButton) {
+        loreButton.addEventListener('click', () => {
+            if (currentFactionData && currentFactionData.lore) {
+                loreModalTitle.textContent = `${currentFactionData.factionName} Lore`;
+                loreModalBody.innerHTML = currentFactionData.lore;
+                loreModal.style.display = 'flex';
+            } else {
+                alert('No lore available for this faction.');
+            }
+        });
+    }
+
+    // Close lore modal
+    if (loreModalClose) {
+        loreModalClose.addEventListener('click', () => {
+            loreModal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside
+    if (loreModal) {
+        loreModal.addEventListener('click', (e) => {
+            if (e.target === loreModal) {
+                loreModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && loreModal.style.display === 'flex') {
+            loreModal.style.display = 'none';
+        }
+    });
 }); 

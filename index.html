@@ -26,7 +26,12 @@
 
             <div id="rules-content">
                 <section id="faction-rules" style="display: none;">
-                    <h2>Faction Rules</h2>
+                    <div class="faction-rules-header">
+                        <h2>Faction Rules</h2>
+                        <button id="lore-button" class="lore-button" title="View Faction Lore">
+                            <span class="material-symbols-outlined">menu_book</span>
+                        </button>
+                    </div>
                     <div id="army-rules">
                         <h3>Army Rules</h3>
                         <!-- Army rules will be loaded here -->
@@ -47,6 +52,21 @@
                 </section>
             </div>
         </main>
+    </div>
+
+    <!-- Lore Modal -->
+    <div id="lore-modal" class="lore-modal" style="display: none;">
+        <div class="lore-modal-content">
+            <div class="lore-modal-header">
+                <h2 id="lore-modal-title">Faction Lore</h2>
+                <button id="lore-modal-close" class="lore-modal-close" title="Close">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div id="lore-modal-body" class="lore-modal-body">
+                <!-- Lore content will be loaded here -->
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
