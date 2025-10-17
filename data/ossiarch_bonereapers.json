@@ -185,6 +185,7 @@
       "name": "Mortisan Soulreaper",
       "imageUrl": "images/ossiarch_bonereapers/mortisan_soulreaper.png",
       "backgroundPosition": 75,
+      "keywords": ["WARD (6+)"],
       "stats": {
         "move": "6\"",
         "health": 5,
@@ -222,6 +223,7 @@
       "name": "Mortek Guard",
       "imageUrl": "images/ossiarch_bonereapers/mortek_guard.png",
       "backgroundPosition": 60,
+      "keywords": ["WARD (6+)"],
       "stats": {
         "move": "5\"",
         "health": 10,
@@ -263,6 +265,7 @@
       "name": "Kavalos Deathriders",
       "imageUrl": "images/ossiarch_bonereapers/kavalos_deathriders.png",
       "backgroundPosition": 70,
+      "keywords": ["WARD (6+)"],
       "stats": {
         "move": "10\"",
         "health": 3,
@@ -304,6 +307,7 @@
       "name": "Gothizzar Harvester",
       "imageUrl": "images/ossiarch_bonereapers/gothizzar_harvester.png",
       "backgroundPosition": 50,
+      "keywords": ["WARD (6+)"],
       "stats": {
         "move": "6\"",
         "health": 10,
