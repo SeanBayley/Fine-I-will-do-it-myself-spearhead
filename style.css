@@ -208,15 +208,18 @@ main#rules-content section#faction-rules #army-rules {
 .rule-box label {
     display: block; /* Make label take up the box space */
     cursor: pointer;
+    text-align: center;
 }
 
 .rule-box label h4 {
     margin-top: 0;
     color: var(--primary-color);
+    text-align: center;
 }
 
 .rule-box label p {
     margin: 0.3em 0;
+    text-align: center;
 }
 
 /* Continue Button Styles */
@@ -318,6 +321,16 @@ body.ossiarch-bonereapers {
     --primary-700: #DCDCC0;
 }
 
+/* Sylvaneth Theme (Forest green) */
+body.sylvaneth {
+    --primary-color: #22c55e;
+    --primary-color-rgb: 34, 197, 94;
+    --primary-hover-color: #16a34a;
+    --primary-500: #22c55e;
+    --primary-600: #16a34a;
+    --primary-700: #15803d;
+}
+
 .rule-box.selected {
     border-color: var(--primary-color);
     background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
@@ -417,6 +430,48 @@ header {
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.mode-link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.1rem;
+    border-radius: 10px;
+    background: linear-gradient(180deg, var(--primary-400, #3b82f6), var(--primary-600, #2563eb));
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.mode-link-btn:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.mode-link-btn:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.solo-mode-hint {
+    text-align: center;
+    color: var(--text-muted, #9ca3af);
+    font-size: 0.95rem;
+    margin: -0.5rem 0 1.25rem;
+}
+
+.solo-mode-hint a {
+    color: var(--primary-400, #60a5fa);
 }
 
 .header-logo {
@@ -675,6 +730,12 @@ main#rules-content section {
     --primary-color-rgb: 143, 209, 41; 
     --primary-hover-color: #6EA723; 
 }
+
+.faction-card.theme-sylvaneth {
+    --primary-color: #22c55e;
+    --primary-color-rgb: 34, 197, 94;
+    --primary-hover-color: #16a34a;
+}
 /* --- END Per-card Theme Overrides --- */
 
 /* --- Lore Button and Modal Styles --- */
@@ -838,4 +899,105 @@ main#rules-content section {
 
 .lore-modal-body::-webkit-scrollbar-thumb:hover {
     background: rgba(var(--primary-color-rgb), 0.5);
-} 
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE STYLES — index / style.css
+   ========================================================================== */
+
+/* Prevent 300ms tap delay on interactive elements */
+button,
+.faction-card,
+.rule-box,
+.continue-button,
+.lore-button {
+    touch-action: manipulation;
+}
+
+/* --- Phone landscape / small tablet: 600px --- */
+@media (max-width: 600px) {
+    /* Rule selection: stack boxes vertically */
+    .rule-selection-area {
+        flex-direction: column;
+    }
+
+    .rule-box {
+        flex: 1 1 100%;
+    }
+}
+
+/* --- Phone: 480px and below --- */
+@media (max-width: 480px) {
+    /* Hero title: smaller font so it fits on one line */
+    .faction-selection-section .app-title {
+        font-size: 1.6rem;
+    }
+
+    /* Header: tighter on phones */
+    header {
+        padding: 0.75rem 1rem;
+    }
+
+    /* Main content padding */
+    main {
+        padding: 1.25rem 0.75rem;
+    }
+
+    /* Lore modal: tighten header + body padding */
+    .lore-modal-header {
+        padding: 1rem;
+    }
+
+    .lore-modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .lore-modal-body {
+        padding: 1rem;
+    }
+
+    /* Continue button: full width on phones */
+    .continue-button {
+        display: block;
+        width: calc(100% - 2rem);
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    /* Faction grid: minimum card size tighter on very small screens */
+    #faction-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+    }
+
+    /* Rule box padding: tighter on phones */
+    .rule-box {
+        padding: 1rem;
+    }
+
+    /* Faction rules header: allow lore button to wrap below title on small screens */
+    .faction-rules-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* Touch targets: help button and lore modal close — minimum 44px */
+    .help-button {
+        width: 2.75rem;
+        height: 2.75rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .lore-modal-close {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 10px;
+    }
+
+    /* Lore button: make it easier to tap */
+    .lore-button {
+        padding: 10px 14px;
+    }
+}

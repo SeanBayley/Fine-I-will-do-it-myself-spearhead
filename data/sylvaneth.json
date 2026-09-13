@@ -1,0 +1,335 @@
+{
+  "factionName": "Sylvaneth",
+  "factionId": "sylvaneth",
+  "lore": "<h2>Children of the Everqueen</h2><p>The <strong>Sylvaneth</strong> are living embodiments of nature's wrath and renewal — spirit-bound forest folk who walk the realmroots in defence of Alarielle's sacred places.</p><h3>Realmroots and Spirit Paths</h3><p>Where ancient terrain stands, the Sylvaneth draw power from <em>ley lines</em> and slip along hidden paths, striking before fading back into the green dark.</p><h3>Spearhead Forces</h3><p>A typical Sylvaneth Spearhead is led by a <strong>Branchwych</strong>, supported by a towering <strong>Treelord</strong>, elite <strong>Kurnoth Hunters</strong>, and swift <strong>Tree-Revenants</strong> who carry the memories of those who came before.</p>",
+  "armyRules": [
+    {
+      "name": "LEY LINES",
+      "type": "Battle Trait",
+      "timing": "End of Any Turn",
+      "frequency": "Once Per Turn",
+      "description": "The Sylvaneth draw strength from natural sites of mystical power. Effect: Heal (1) each friendly unit that is within 3\" of any terrain features."
+    },
+    {
+      "name": "STRIKE AND FADE",
+      "type": "Battle Trait",
+      "timing": "End of Any Turn",
+      "frequency": "Once Per Turn",
+      "description": "These warriors use the spirit paths to ambush the enemy before retreating back into the shadows. Declare: Pick a friendly unit that used a FIGHT ability this turn and is within 3\" of any terrain features, then roll a dice. Effect: On a 2+, remove that unit from the battlefield and set it up again so that each model in the unit is within 3\" of any terrain features and more than 6\" from all enemy units."
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "VENGEFUL SPIRITS OF THE LAND",
+      "type": "Regiment Ability",
+      "timing": "End of Any Turn",
+      "frequency": "Once Per Turn",
+      "description": "The realm-spirits lingering around the ancient sites are roused to wrath and unleashed upon the Sylvaneth's enemies. Declare: Pick an enemy unit that is contesting an objective and roll a dice. Effect: On a 4+, inflict D3 mortal damage on that enemy unit.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "instant",
+          "description": "On a 4+, inflict D3 mortal damage on that enemy unit"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    },
+    {
+      "name": "WALKERS OF THE HIDDEN PATHS",
+      "type": "Regiment Ability",
+      "timing": "Your Movement Phase",
+      "frequency": "Once Per Turn",
+      "description": "These mysterious warriors walk the realmroots. Declare: Pick a friendly unit that is within 3\" of any terrain features and not in combat. Effect: Remove that unit from the battlefield and set it up again more than 6\" from all enemy units. That unit cannot use MOVE abilities for the rest of the phase.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "instant",
+          "description": "Remove and set up more than 6\" from enemies; cannot MOVE for the rest of the phase"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "REGROWTH",
+      "type": "Artefact of Power",
+      "timing": "Your Hero Phase",
+      "frequency": "N/A",
+      "description": "Your general channels an invigorating bloom of magic. Declare: Pick a visible friendly unit wholly within 18\" of your general to be the target, then make a casting roll of 2D6. Effect: On a 5+, Heal (D6) the target."
+    },
+    {
+      "name": "GNARLED WARRIOR",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "This Sylvaneth's battle-scarred hide has turned aside countless blades. Effect: Ignore negative modifiers to save rolls for your general.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Branchwych"
+          },
+          "ability": {
+            "name": "GNARLED WARRIOR",
+            "description": "Ignore negative modifiers to save rolls for your general.",
+            "timing": "Passive",
+            "frequency": "N/A"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TREESONG",
+      "type": "Artefact of Power",
+      "timing": "Your Hero Phase",
+      "frequency": "N/A",
+      "description": "Your general implores the spirits of the wyldwoods to guide the blades of their allies. Declare: Pick a visible friendly unit wholly within 12\" of your general to be the target, then make a casting roll of 2D6. Effect: On a 7+, add 1 to the Rend characteristic of the target unit's melee weapons until the start of your next turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "rend",
+          "modifier": "+1",
+          "duration": "until_start_of_next_hero_phase",
+          "active_phases": ["all"],
+          "symbol": "🗡️",
+          "description": "+1 Rend to melee weapons until the start of your next turn"
+        }
+      ]
+    },
+    {
+      "name": "SEED OF REBIRTH",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "Once Per Battle",
+      "description": "Should its bearer ever fall, the seed will grant them new life. Effect: If your general would be destroyed, before removing them from play, roll a dice. On a 3+, your general is not destroyed and any remaining damage points inflicted on them have no effect. Then, Heal (1) your general. This unit cannot use this ability again for the rest of the battle."
+    }
+  ],
+  "spearheadComposition": [
+    "General: 1 Branchwych",
+    "Units:",
+    "1 Treelord",
+    "3 Kurnoth Hunters",
+    "5 Tree-Revenants"
+  ],
+  "units": [
+    {
+      "name": "Branchwych",
+      "imageUrl": "images/sylvaneth/Branchwych.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "6\"",
+        "health": 5,
+        "save": "5+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Greenwood Scythe and Bittergrub",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": "D3"
+        }
+      ],
+      "abilities": [
+        {
+          "name": "VERDUROUS HARMONY",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "The wizard plucks reviving motes of magic from the air and uses them to renew the broken forms of fallen warriors. Declare: Pick a visible friendly unit wholly within 18\" of this unit to be the target, then make a casting roll of 2D6. Effect: On a 7+, you can return 1 slain model to the target unit. If you picked a Tree-Revenants unit, you can return D3 slain models instead of 1."
+        }
+      ],
+      "keywords": ["ORDER", "SYLVANETH", "HERO", "WIZARD", "INFANTRY"]
+    },
+    {
+      "name": "Treelord",
+      "imageUrl": "images/sylvaneth/Treelord.png",
+      "backgroundPosition": 35,
+      "stats": {
+        "move": "5\"",
+        "health": 14,
+        "save": "3+",
+        "control": 5
+      },
+      "rangedWeapons": [
+        {
+          "name": "Strangleroots",
+          "range": "10\"",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "2+",
+          "rend": 1,
+          "damage": 2,
+          "abilities": [
+            {
+              "name": "Shoot in Combat",
+              "description": "This weapon can be used to shoot even while this unit is in combat."
+            }
+          ]
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Sweeping Blows",
+          "attacks": 5,
+          "hit": "4+",
+          "wound": "2+",
+          "rend": 1,
+          "damage": 2
+        },
+        {
+          "name": "Massive Impaling Talons",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "2+",
+          "rend": 2,
+          "damage": 3
+        }
+      ],
+      "abilities": [
+        {
+          "name": "GROUNDSHAKER",
+          "type": "Ability",
+          "timing": "Any Combat Phase",
+          "frequency": "N/A",
+          "description": "The earth quakes as the Treelord stamps down hard, shaking the enemy's wits. Declare: Pick an enemy unit in combat with this unit to be the target, then roll a dice. Effect: On a 4+, the target has STRIKE-LAST this phase.",
+          "targeting": {
+            "type": "enemy_unit",
+            "range": "combat",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          },
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "strike_order",
+              "modifier": "STRIKE-LAST",
+              "duration": "until_end_of_phase",
+              "active_phases": ["combat_phase"],
+              "symbol": "⏰",
+              "description": "On a 4+, target has STRIKE-LAST this phase"
+            }
+          ]
+        },
+        {
+          "name": "BATTLE DAMAGED",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "While this unit has 10 or more damage points, the Attacks characteristic of its Massive Impaling Talons is 1."
+        }
+      ],
+      "keywords": ["ORDER", "SYLVANETH", "MONSTER"]
+    },
+    {
+      "name": "Kurnoth Hunters",
+      "imageUrl": "images/sylvaneth/Kurnoth Hunters.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "5\"",
+        "health": 5,
+        "save": "4+",
+        "control": 2
+      },
+      "rangedWeapons": [
+        {
+          "name": "Kurnoth Greatbow",
+          "range": "18\"",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Vicious Claws",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "ENVOYS OF THE EVERQUEEN",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "While this unit is contesting an objective, friendly units contesting that objective have WARD (6+)."
+        }
+      ],
+      "keywords": ["ORDER", "SYLVANETH", "INFANTRY"]
+    },
+    {
+      "name": "Tree-Revenants",
+      "imageUrl": "images/sylvaneth/Tree Revenants.png",
+      "backgroundPosition": 50,
+      "stats": {
+        "move": "6\"",
+        "health": 2,
+        "save": "5+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Enchanted Blade",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "MARTIAL MEMORIES",
+          "type": "Ability",
+          "timing": "Any Combat Phase",
+          "frequency": "N/A",
+          "description": "Pick 1 of the following effects to apply to this unit this phase: Memories of War — Add 1 to hit rolls for attacks made by this unit. Memories of Peace — Add 1 to save rolls for this unit."
+        }
+      ],
+      "keywords": ["ORDER", "SYLVANETH", "INFANTRY", "REINFORCEMENTS"]
+    }
+  ]
+}

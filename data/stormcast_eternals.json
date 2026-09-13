@@ -6,7 +6,7 @@
     {
       "name": "Shield of Azyr",
       "type": "Battle Trait",
-      "timing": "Hero phase",
+      "timing": "Your Hero phase",
       "frequency": "Once per turn",
       "description": "Pick 1 friendly STORMCAST ETERNALS unit. Until the start of your next hero phase, that unit has a ward of 5+.",
       "targeting": {
@@ -218,7 +218,7 @@
     {
       "name": "Lord-Vigilant on Gryph-stalker",
       "imageUrl": "images/stormcast_eternals/Lord Vigilant.png",
-      "backgroundPosition": 70,
+      "backgroundPosition": 50,
       "stats": {
         "move": "12\"",
         "health": 8,
@@ -268,7 +268,7 @@
     {
       "name": "Lord-Veritant",
       "imageUrl": "images/stormcast_eternals/Lord Veritant.png",
-      "backgroundPosition": 80,
+      "backgroundPosition": 50,
       "stats": {
         "move": "5\"",
         "health": 6,
@@ -319,7 +319,7 @@
     {
       "name": "Liberators",
       "imageUrl": "images/stormcast_eternals/liberators.png",
-      "backgroundPosition": 60,
+      "backgroundPosition": 55,
       "stats": {
         "move": "5\"",
         "health": 2,

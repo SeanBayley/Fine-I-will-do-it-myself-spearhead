@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local 2-Player Match — Spearhead</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="units.css">
+    <link rel="stylesheet" href="match.css">
+</head>
+<body class="match-page">
+    <div class="app-container match-app">
+        <header>
+            <div class="header-left">
+                <a class="header-logo" href="index.html">
+                    <span class="material-symbols-outlined">shield</span>
+                    <h1>Spearhead</h1>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="match-setup.html" class="mode-link-btn mode-link-btn--secondary">Reselect Armies</a>
+                <a href="index.html" class="mode-link-btn mode-link-btn--secondary">Solo Mode</a>
+            </div>
+        </header>
+
+        <div id="match-missing-setup" class="match-missing-setup" style="display: none;">
+            <h2>No match setup found</h2>
+            <p>Configure both armies first.</p>
+            <a class="continue-button" href="match-setup.html">Go to Local 2-Player Setup</a>
+        </div>
+
+        <div id="match-board" class="match-board" style="display: none;">
+            <!-- Shared clock / controls -->
+            <section class="match-shared-bar">
+                <div id="match-setup-panel" class="match-setup-panel">
+                    <button id="start-match-btn" class="start-game-btn">Start Match</button>
+                </div>
+
+                <div id="match-turn-order" class="turn-order-selection match-turn-order" style="display: none;">
+                    <div class="turn-order-prompt">
+                        <h3>Round <span id="match-round-number">1</span> — Who goes first?</h3>
+                    </div>
+                    <div class="turn-order-buttons">
+                        <button id="side-a-first-btn" class="turn-order-btn">Side A First</button>
+                        <button id="side-b-first-btn" class="turn-order-btn">Side B First</button>
+                    </div>
+                </div>
+
+                <div id="match-in-progress" class="match-in-progress" style="display: none;">
+                    <div class="match-clock">
+                        <div class="turn-indicator" id="match-turn-indicator">
+                            <span id="match-current-turn">Side A</span>
+                        </div>
+                        <div class="round-phase-info">
+                            Round <span id="match-current-round">1</span>/4 —
+                            <span id="match-current-phase">Hero Phase</span>
+                        </div>
+                    </div>
+                    <div class="match-shared-scores">
+                        <div class="match-score-pill" data-side="A">
+                            <span class="pill-label" id="score-label-A">Side A</span>
+                            <strong id="score-total-A">0</strong>
+                        </div>
+                        <div class="match-score-pill" data-side="B">
+                            <span class="pill-label" id="score-label-B">Side B</span>
+                            <strong id="score-total-B">0</strong>
+                        </div>
+                    </div>
+                    <div class="match-shared-actions">
+                        <button id="match-next-phase-btn" class="next-phase-btn">Next Phase</button>
+                        <button id="match-end-game-btn" class="end-game-btn">End Game</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Active cards: 3 above each army column -->
+            <div class="match-cards-row" id="match-cards-row">
+                <div class="match-cards-lane" data-side="A">
+                    <div class="match-cards-lane-label" id="cards-lane-label-A">Side A Cards</div>
+                    <div id="side-cards-A" class="match-tactic-slots">
+                        <div class="no-cards-message">No cards drawn yet</div>
+                    </div>
+                </div>
+                <div class="match-cards-lane" data-side="B">
+                    <div class="match-cards-lane-label" id="cards-lane-label-B">Side B Cards</div>
+                    <div id="side-cards-B" class="match-tactic-slots">
+                        <div class="no-cards-message">No cards drawn yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <aside id="match-unified-phases" class="match-unified-phases">
+                <div class="match-unified-phases-header">
+                    <h2>Phase Rules</h2>
+                    <p class="match-unified-phases-hint">Core rules plus both armies’ abilities. Use buttons only enable on the active side’s turn.</p>
+                </div>
+                <details class="phase-section" data-phase="hero"><summary>Hero Phase</summary></details>
+                <details class="phase-section" data-phase="movement"><summary>Movement Phase</summary></details>
+                <details class="phase-section" data-phase="shooting"><summary>Shooting Phase</summary></details>
+                <details class="phase-section" data-phase="charge"><summary>Charge Phase</summary></details>
+                <details class="phase-section" data-phase="combat"><summary>Combat Phase</summary></details>
+                <details class="phase-section" data-phase="taking-damage"><summary>Taking Damage</summary></details>
+                <details class="phase-section" data-phase="end"><summary>End of Turn</summary></details>
+            </aside>
+
+            <div class="match-columns">
+                <section class="match-side" id="side-panel-A" data-side="A">
+                    <div class="match-side-header">
+                        <h2 id="side-name-A">Side A</h2>
+                        <span class="side-badge">A</span>
+                    </div>
+                    <div class="match-side-meta">
+                        <div>Ability: <span id="side-ability-A">—</span></div>
+                        <div>Enhancement: <span id="side-enhancement-A">—</span></div>
+                        <div class="side-score-breakdown">
+                            Primary <span id="side-primary-A">0</span> · Tactics <span id="side-tactics-A">0</span>
+                        </div>
+                    </div>
+                    <div id="side-units-A" class="match-side-units"></div>
+                </section>
+
+                <section class="match-side" id="side-panel-B" data-side="B">
+                    <div class="match-side-header">
+                        <h2 id="side-name-B">Side B</h2>
+                        <span class="side-badge">B</span>
+                    </div>
+                    <div class="match-side-meta">
+                        <div>Ability: <span id="side-ability-B">—</span></div>
+                        <div>Enhancement: <span id="side-enhancement-B">—</span></div>
+                        <div class="side-score-breakdown">
+                            Primary <span id="side-primary-B">0</span> · Tactics <span id="side-tactics-B">0</span>
+                        </div>
+                    </div>
+                    <div id="side-units-B" class="match-side-units"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tactic detail modal -->
+    <div id="match-tactic-modal" class="modal" style="display: none;">
+        <div class="modal-content tactic-modal-content">
+            <h3 id="match-tactic-title">Battle Tactic</h3>
+            <div class="tactic-section">
+                <h4>Battle Tactic</h4>
+                <p class="match-tactic-status-line">Status: <strong id="match-tactic-status">Pending</strong></p>
+                <p id="match-tactic-description"></p>
+                <div class="requirement-section">
+                    <h5>Requirement</h5>
+                    <p id="match-tactic-requirement"></p>
+                </div>
+            </div>
+            <div class="command-section">
+                <h4>Command Ability</h4>
+                <div class="command-details">
+                    <div class="command-row"><strong>Name:</strong> <span id="match-command-name"></span></div>
+                    <div class="command-row"><strong>Timing:</strong> <span id="match-command-timing"></span></div>
+                    <div class="command-row"><strong>Declare:</strong> <span id="match-command-declare"></span></div>
+                    <div class="command-row"><strong>Effect:</strong> <span id="match-command-effect"></span></div>
+                </div>
+            </div>
+            <div class="tactic-buttons">
+                <button id="match-use-command-btn" class="use-command-btn">Use Command</button>
+                <button id="match-close-tactic-btn" class="close-tactic-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoring modal (active side only) -->
+    <div id="match-scoring-modal" class="modal" style="display: none;">
+        <div class="modal-content scoring-modal-content">
+            <h3 id="match-scoring-title">End of Turn Scoring</h3>
+            <div class="scoring-section">
+                <h4>Primary Objectives</h4>
+                <div class="primary-objectives">
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-primary-1">
+                        <span class="checkmark"></span>
+                        You hold one objective
+                    </label>
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-primary-2">
+                        <span class="checkmark"></span>
+                        You hold two objectives
+                    </label>
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-primary-3">
+                        <span class="checkmark"></span>
+                        You hold more objectives than your opponent
+                    </label>
+                </div>
+            </div>
+            <div class="scoring-section">
+                <h4>Battle Tactics</h4>
+                <div id="match-battle-tactics-scoring" class="battle-tactics-scoring"></div>
+            </div>
+            <div class="score-summary">
+                <div class="score-row"><span>Primary Score:</span><span id="match-primary-score">0</span></div>
+                <div class="score-row"><span>Battle Tactic Score:</span><span id="match-tactic-score">0</span></div>
+                <div class="score-row total"><span>Round Total:</span><span id="match-round-total">0</span></div>
+                <div class="score-row game-total"><span>Side Total:</span><span id="match-side-game-total">0</span></div>
+            </div>
+            <div class="scoring-buttons">
+                <button id="match-confirm-scoring-btn" class="confirm-scoring-btn">Confirm Scoring</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- End of round: manage both sides' cards -->
+    <div id="match-card-modal" class="modal" style="display: none;">
+        <div class="modal-content card-drawing-modal-content match-card-modal-content">
+            <h3>End of Round — Card Management</h3>
+            <p>Keep or discard pending tactics for each side before the next round.</p>
+            <div class="match-card-manage-grid">
+                <div>
+                    <h4 id="card-manage-title-A">Side A</h4>
+                    <div id="card-manage-A" class="card-management-cards"></div>
+                </div>
+                <div>
+                    <h4 id="card-manage-title-B">Side B</h4>
+                    <div id="card-manage-B" class="card-management-cards"></div>
+                </div>
+            </div>
+            <div class="card-drawing-buttons">
+                <button id="match-confirm-cards-btn" class="confirm-card-drawing-btn">Continue to Next Round</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game over -->
+    <div id="match-game-over-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Match Over</h3>
+            <p id="match-game-over-message">All 4 rounds have been completed.</p>
+            <div class="match-final-scores">
+                <div><span id="final-label-A">Side A</span>: <strong id="final-score-A">0</strong></div>
+                <div><span id="final-label-B">Side B</span>: <strong id="final-score-B">0</strong></div>
+                <p id="match-winner-line"></p>
+            </div>
+            <button id="match-new-game-btn" class="new-game-btn">New Match Setup</button>
+            <button id="match-close-game-btn" class="close-game-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- Ability Targeting Modal -->
+    <div id="match-targeting-modal" class="modal" style="display: none;">
+        <div class="modal-content targeting-modal-content">
+            <div class="modal-header">
+                <h2 id="match-targeting-modal-title">Select Target</h2>
+                <button type="button" class="modal-close" id="match-targeting-close-x" title="Close">&times;</button>
+            </div>
+            <div class="targeting-info">
+                <div class="ability-info">
+                    <h3 id="match-targeting-ability-name">Ability Name</h3>
+                    <p id="match-targeting-ability-description">Ability description</p>
+                    <div class="targeting-criteria">
+                        <span id="match-targeting-range">Range: 12"</span>
+                        <span id="match-targeting-keywords">Keywords: —</span>
+                    </div>
+                </div>
+            </div>
+            <div class="targeting-instructions">
+                <p>Click a unit card below to select it as your target:</p>
+            </div>
+            <div id="match-targeting-units-grid" class="targeting-units-grid"></div>
+            <div class="targeting-actions">
+                <button type="button" id="match-cancel-targeting-btn" class="cancel-targeting-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="match-abilities.js"></script>
+    <script src="match.js"></script>
+</body>
+</html>

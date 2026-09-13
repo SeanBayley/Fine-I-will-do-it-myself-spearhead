@@ -1,0 +1,357 @@
+// Local 2-player setup: Side A then Side B → match.html
+// Intentionally separate from script.js so solo index flow stays untouched.
+
+document.addEventListener('DOMContentLoaded', () => {
+    const factionGridContainer = document.getElementById('faction-grid');
+    const factionRulesSection = document.getElementById('faction-rules');
+    const armyRulesContainer = document.getElementById('army-rules');
+    const regimentAbilityContainer = document.getElementById('regiment-ability-selection');
+    const enhancementSelectionContainer = document.getElementById('enhancement-selection');
+    const compositionContainer = document.getElementById('spearhead-composition');
+    const mainContinueButton = document.getElementById('faction-rules-continue');
+    const setupSideTitle = document.getElementById('setup-side-title');
+    const factionRulesHeading = document.getElementById('faction-rules-heading');
+    const stepIndicator = document.getElementById('setup-step-indicator');
+
+    const MATCH_SETUP_KEY = 'spearheadMatchSetup';
+
+    let currentSide = 'A';
+    let pendingSelection = { faction: null, ability: null, enhancement: null };
+    let matchSetup = loadMatchSetup();
+
+    function loadMatchSetup() {
+        try {
+            const raw = sessionStorage.getItem(MATCH_SETUP_KEY);
+            if (raw) return JSON.parse(raw);
+        } catch (err) {
+            console.warn('Could not parse match setup from sessionStorage', err);
+        }
+        return { sideA: null, sideB: null };
+    }
+
+    function saveMatchSetup() {
+        sessionStorage.setItem(MATCH_SETUP_KEY, JSON.stringify(matchSetup));
+        console.log('Saved match setup', matchSetup);
+    }
+
+    function updateStepChrome() {
+        const sideLabel = currentSide === 'A' ? 'Side A' : 'Side B';
+        setupSideTitle.textContent = `${sideLabel} — Select Faction`;
+        factionRulesHeading.textContent = `${sideLabel} — Faction Rules`;
+        mainContinueButton.textContent = currentSide === 'A'
+            ? 'Continue to Side B'
+            : 'Start Local Match';
+
+        stepIndicator.querySelectorAll('.setup-step').forEach((el) => {
+            el.classList.toggle('active', el.dataset.step === currentSide);
+            el.classList.toggle('done', currentSide === 'B' && el.dataset.step === 'A');
+        });
+    }
+
+    function applyReveal(target, selector, baseDelay = 0, stepMs = 60) {
+        let elements;
+        if (selector && target && typeof target.querySelectorAll === 'function') {
+            elements = target.querySelectorAll(selector);
+        } else if (target && typeof target.forEach === 'function') {
+            elements = target;
+        } else {
+            elements = [];
+        }
+        elements.forEach((el, idx) => {
+            el.classList.add('reveal-in');
+            el.style.animationDelay = `${baseDelay + idx * stepMs}ms`;
+        });
+    }
+
+    function checkSelectionsComplete() {
+        const selectedAbility = regimentAbilityContainer.querySelector('input[name="regiment-ability-selection"]:checked');
+        const selectedEnhancement = enhancementSelectionContainer.querySelector('input[name="enhancement-selection"]:checked');
+
+        if (selectedAbility && selectedEnhancement && pendingSelection.faction) {
+            pendingSelection.ability = selectedAbility.value;
+            pendingSelection.enhancement = selectedEnhancement.value;
+            mainContinueButton.style.display = 'block';
+            mainContinueButton.disabled = false;
+        } else {
+            mainContinueButton.style.display = 'none';
+            mainContinueButton.disabled = true;
+        }
+    }
+
+    function displayArmyRules(rules, container) {
+        container.innerHTML = '<h3>Army Rules</h3>';
+        if (!rules || rules.length === 0) {
+            container.innerHTML += '<p>No army rules found for this faction.</p>';
+            return;
+        }
+        const list = document.createElement('ul');
+        rules.forEach((rule) => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <h4>${rule.name} ${rule.type ? `(${rule.type})` : ''}</h4>
+                ${rule.timing ? `<p><strong>Timing:</strong> ${rule.timing}</p>` : ''}
+                ${rule.frequency ? `<p><strong>Frequency:</strong> ${rule.frequency}</p>` : ''}
+                <p>${rule.description}</p>
+            `;
+            list.appendChild(listItem);
+        });
+        container.appendChild(list);
+    }
+
+    function displayComposition(composition, container) {
+        container.innerHTML = '<h3>Spearhead Composition</h3>';
+        if (!composition || composition.length === 0) {
+            container.innerHTML += '<p>Composition not specified for this faction.</p>';
+            return;
+        }
+        const list = document.createElement('ul');
+        composition.forEach((item) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = item;
+            list.appendChild(listItem);
+        });
+        container.appendChild(list);
+    }
+
+    function displayRegimentAbilitySelection(abilities, container) {
+        const title = container.querySelector('h3');
+        let selectionArea = container.querySelector('.rule-selection-area');
+        if (selectionArea) {
+            selectionArea.innerHTML = '';
+        } else {
+            selectionArea = document.createElement('div');
+            selectionArea.className = 'rule-selection-area';
+            container.appendChild(selectionArea);
+        }
+
+        if (!abilities || abilities.length === 0) {
+            selectionArea.innerHTML = '<p>No regiment abilities found.</p>';
+            title.textContent = 'Regiment Ability';
+            return;
+        }
+        title.textContent = 'Regiment Ability (Select One)';
+
+        abilities.forEach((ability, index) => {
+            const ruleBox = document.createElement('div');
+            ruleBox.className = 'rule-box';
+
+            const inputId = `reg-ability-${currentSide}-${index}`;
+            const radioInput = document.createElement('input');
+            radioInput.type = 'radio';
+            radioInput.id = inputId;
+            radioInput.name = 'regiment-ability-selection';
+            radioInput.value = ability.name;
+
+            const label = document.createElement('label');
+            label.htmlFor = inputId;
+            label.innerHTML = `
+                <h4>${ability.name}</h4>
+                ${ability.timing ? `<p><strong>Timing:</strong> ${ability.timing}</p>` : ''}
+                ${ability.frequency ? `<p><strong>Frequency:</strong> ${ability.frequency}</p>` : ''}
+                <p>${ability.description}</p>
+            `;
+
+            radioInput.addEventListener('change', () => {
+                if (radioInput.checked) {
+                    container.querySelectorAll('.rule-box').forEach((box) => box.classList.remove('selected'));
+                    ruleBox.classList.add('selected');
+                    pendingSelection.ability = radioInput.value;
+                    checkSelectionsComplete();
+                }
+            });
+
+            ruleBox.addEventListener('click', () => {
+                if (!radioInput.checked) {
+                    radioInput.checked = true;
+                    radioInput.dispatchEvent(new Event('change'));
+                }
+            });
+
+            ruleBox.appendChild(radioInput);
+            ruleBox.appendChild(label);
+            selectionArea.appendChild(ruleBox);
+        });
+
+        applyReveal(selectionArea, '.rule-box', 0, 80);
+    }
+
+    function displayEnhancementSelection(enhancements, container) {
+        const title = container.querySelector('h3');
+        let selectionArea = container.querySelector('.rule-selection-area');
+        if (selectionArea) {
+            selectionArea.innerHTML = '';
+        } else {
+            selectionArea = document.createElement('div');
+            selectionArea.className = 'rule-selection-area';
+            container.appendChild(selectionArea);
+        }
+
+        if (!enhancements || enhancements.length === 0) {
+            selectionArea.innerHTML = '<p>No enhancements found.</p>';
+            title.textContent = 'Enhancement';
+            return;
+        }
+        title.textContent = 'Enhancement (Select One Artefact of Power)';
+
+        enhancements.forEach((enhancement, index) => {
+            const ruleBox = document.createElement('div');
+            ruleBox.className = 'rule-box';
+
+            const inputId = `enhancement-${currentSide}-${index}`;
+            const radioInput = document.createElement('input');
+            radioInput.type = 'radio';
+            radioInput.id = inputId;
+            radioInput.name = 'enhancement-selection';
+            radioInput.value = enhancement.name;
+
+            const label = document.createElement('label');
+            label.htmlFor = inputId;
+            label.innerHTML = `
+                <h4>${enhancement.name} ${enhancement.type ? `(${enhancement.type})` : ''}</h4>
+                ${enhancement.timing ? `<p><strong>Timing:</strong> ${enhancement.timing}</p>` : ''}
+                ${enhancement.frequency && enhancement.frequency !== 'N/A' ? `<p><strong>Frequency:</strong> ${enhancement.frequency}</p>` : ''}
+                <p>${enhancement.description}</p>
+            `;
+
+            radioInput.addEventListener('change', () => {
+                if (radioInput.checked) {
+                    container.querySelectorAll('.rule-box').forEach((box) => box.classList.remove('selected'));
+                    ruleBox.classList.add('selected');
+                    pendingSelection.enhancement = radioInput.value;
+                    checkSelectionsComplete();
+                }
+            });
+
+            ruleBox.addEventListener('click', () => {
+                if (!radioInput.checked) {
+                    radioInput.checked = true;
+                    radioInput.dispatchEvent(new Event('change'));
+                }
+            });
+
+            ruleBox.appendChild(radioInput);
+            ruleBox.appendChild(label);
+            selectionArea.appendChild(ruleBox);
+        });
+
+        applyReveal(selectionArea, '.rule-box', 0, 80);
+    }
+
+    function loadAndDisplayFaction(selectedDataFile) {
+        document.body.className = '';
+        pendingSelection = { faction: selectedDataFile || null, ability: null, enhancement: null };
+
+        factionGridContainer.querySelectorAll('.faction-card').forEach((card) => card.classList.remove('selected'));
+        if (selectedDataFile) {
+            const selectedCard = factionGridContainer.querySelector(
+                `.faction-card[data-file="${CSS.escape(selectedDataFile)}"]`
+            );
+            if (selectedCard) selectedCard.classList.add('selected');
+        }
+
+        displayArmyRules([], armyRulesContainer);
+        displayComposition([], compositionContainer);
+        displayRegimentAbilitySelection([], regimentAbilityContainer);
+        displayEnhancementSelection([], enhancementSelectionContainer);
+        factionRulesSection.style.display = 'none';
+        mainContinueButton.style.display = 'none';
+        mainContinueButton.disabled = true;
+
+        if (!selectedDataFile) return;
+
+        console.log(`Match setup Side ${currentSide}: loading ${selectedDataFile}`);
+        fetch(selectedDataFile)
+            .then((response) => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then((factionData) => {
+                if (factionData.factionId) {
+                    document.body.classList.add(factionData.factionId);
+                }
+                factionRulesSection.style.display = 'block';
+                displayArmyRules(factionData.armyRules, armyRulesContainer);
+                displayComposition(factionData.spearheadComposition, compositionContainer);
+                displayRegimentAbilitySelection(factionData.regimentAbilities, regimentAbilityContainer);
+                displayEnhancementSelection(factionData.enhancements, enhancementSelectionContainer);
+                checkSelectionsComplete();
+            })
+            .catch((error) => {
+                console.error('Error loading faction data for match setup:', error);
+                armyRulesContainer.innerHTML = '<h3>Army Rules</h3><p>Error loading data.</p>';
+                factionRulesSection.style.display = 'block';
+            });
+    }
+
+    function populateFactionGrid() {
+        fetch('data/manifest.json')
+            .then((response) => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then((manifest) => {
+                factionGridContainer.innerHTML = '';
+                manifest.factions.forEach((faction) => {
+                    const factionCard = document.createElement('div');
+                    factionCard.className = 'faction-card';
+                    factionCard.textContent = faction.name;
+                    factionCard.dataset.file = faction.dataFile;
+
+                    const idFromFile = (faction.dataFile || '')
+                        .replace(/^.*\/(.*)\.json$/, '$1')
+                        .replace(/_/g, '-');
+                    if (idFromFile) {
+                        factionCard.classList.add(`theme-${idFromFile}`);
+                    }
+
+                    factionCard.addEventListener('click', () => {
+                        loadAndDisplayFaction(faction.dataFile);
+                    });
+
+                    factionGridContainer.appendChild(factionCard);
+                });
+                applyReveal(factionGridContainer, '.faction-card', 0, 70);
+            })
+            .catch((error) => {
+                console.error('Error loading faction list:', error);
+                factionGridContainer.innerHTML =
+                    '<p class="error-message">Error loading factions. Please try refreshing.</p>';
+            });
+    }
+
+    function commitCurrentSide() {
+        const payload = {
+            faction: pendingSelection.faction,
+            ability: pendingSelection.ability,
+            enhancement: pendingSelection.enhancement
+        };
+
+        if (currentSide === 'A') {
+            matchSetup.sideA = payload;
+            saveMatchSetup();
+            currentSide = 'B';
+            pendingSelection = { faction: null, ability: null, enhancement: null };
+            updateStepChrome();
+            loadAndDisplayFaction(null);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('Side A committed; configuring Side B');
+            return;
+        }
+
+        matchSetup.sideB = payload;
+        saveMatchSetup();
+        console.log('Both sides ready — opening match board');
+        window.location.href = 'match.html';
+    }
+
+    mainContinueButton.addEventListener('click', () => {
+        if (!pendingSelection.faction || !pendingSelection.ability || !pendingSelection.enhancement) {
+            alert('Please select a Faction, Regiment Ability, and Enhancement.');
+            return;
+        }
+        commitCurrentSide();
+    });
+
+    updateStepChrome();
+    populateFactionGrid();
+});

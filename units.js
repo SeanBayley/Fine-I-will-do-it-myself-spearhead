@@ -20,10 +20,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Function to get URL parameters ---
+    // --- Read query params, then sessionStorage (same keys as script.js) ---
+    // Fallback covers stripped query strings (some browsers/extensions/servers) while index flow still sets storage.
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
+        const fromUrl = urlParams.get(param);
+        if (fromUrl !== null && fromUrl !== '') {
+            return fromUrl;
+        }
+        const sessionKeys = {
+            faction: 'selectedFaction',
+            ability: 'selectedAbility',
+            enhancement: 'selectedEnhancement'
+        };
+        const storageKey = sessionKeys[param];
+        if (storageKey) {
+            const stored = sessionStorage.getItem(storageKey);
+            if (stored) return stored;
+        }
+        return null;
     }
 
     // Function to apply enhancement effects systematically
@@ -178,8 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (unit.rangedWeapons && unit.rangedWeapons.length > 0) {
             cardHTML += '<details class="weapon-section">'; // Wrap in details
             cardHTML += '<summary><h4 class="card-section-header">Ranged Weapons</h4></summary>'; // Use h4 as summary
-            // ADDED Abilities Header
-            cardHTML += '<table class="weapons-table ranged-weapons-table"><thead><tr><th>Name</th><th>Range</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
+            // ADDED Abilities Header — wrapped in scroll container for mobile
+            cardHTML += '<div class="table-scroll-wrapper"><table class="weapons-table ranged-weapons-table"><thead><tr><th>Name</th><th>Range</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
             unit.rangedWeapons.forEach(w => {
                 // ADDED Abilities rendering logic
                 let abilitiesHTML = '';
@@ -195,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // ADDED abilities cell
                 cardHTML += `<tr><td>${w.name}</td><td>${w.range}</td><td>${w.attacks}</td><td>${w.hit}</td><td>${w.wound}</td><td>${w.rend}</td><td>${w.damage}</td><td>${abilitiesHTML || '-'}</td></tr>`;
             });
-            cardHTML += '</tbody></table>';
+            cardHTML += '</tbody></table></div>'; // Close table + scroll wrapper
             cardHTML += '</details>'; // Close details
         }
         
@@ -203,8 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (unit.meleeWeapons && unit.meleeWeapons.length > 0) {
             cardHTML += '<details class="weapon-section">'; // Wrap in details
             cardHTML += '<summary><h4 class="card-section-header">Melee Weapons</h4></summary>'; // Use h4 as summary
-            // CORRECTED THEAD: Removed Range header
-            cardHTML += '<table class="weapons-table melee-weapons-table"><thead><tr><th>Name</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
+            // CORRECTED THEAD: Removed Range header — wrapped in scroll container for mobile
+            cardHTML += '<div class="table-scroll-wrapper"><table class="weapons-table melee-weapons-table"><thead><tr><th>Name</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
             unit.meleeWeapons.forEach(w => {
                 let abilitiesHTML = '';
                 if (w.abilities && w.abilities.length > 0) {
@@ -220,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Corrected TR: Removed range cell
                 cardHTML += `<tr><td>${w.name}</td><td>${w.attacks}</td><td>${w.hit}</td><td>${w.wound}</td><td>${w.rend}</td><td>${w.damage}</td><td>${abilitiesHTML || '-'}</td></tr>`;
             });
-            cardHTML += '</tbody></table>';
+            cardHTML += '</tbody></table></div>'; // Close table + scroll wrapper
             cardHTML += '</details>'; // Close details
         }
 
@@ -955,8 +970,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'until_end_of_round':
                     return currentRound !== this.appliedAt.round;
                 case 'until_start_of_next_phase':
-                    // This will be handled by phase change logic
-                    return false;
+                    // Expire as soon as the phase index changes (same turn/round)
+                    return currentPhase !== this.appliedAt.phase ||
+                           currentTurn !== this.appliedAt.turn ||
+                           currentRound !== this.appliedAt.round;
+                case 'until_start_of_next_hero_phase': {
+                    // "Until the start of your next hero phase" (Shield of Azyr, etc.)
+                    const heroPhaseIndex = 0;
+                    if (currentPhase !== heroPhaseIndex) return false;
+                    // Only expires at the start of the casting side's hero phase
+                    if (currentTurn !== this.appliedAt.turn) return false;
+                    // Still in the hero phase it was cast in — keep it
+                    if (currentRound === this.appliedAt.round && this.appliedAt.phase === heroPhaseIndex) {
+                        return false;
+                    }
+                    // Later hero phase for that side
+                    return currentRound > this.appliedAt.round ||
+                           (currentRound === this.appliedAt.round && this.appliedAt.phase > heroPhaseIndex);
+                }
                 default:
                     return false;
             }
@@ -997,7 +1028,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             return this.activePhases.some(phase => {
                 if (!phase) return false;
-                const mappedPhase = phaseMapping[phase.toLowerCase()] || phase.toLowerCase();
+                const key = phase.toLowerCase();
+                if (key === 'all') return true;
+                const mappedPhase = phaseMapping[key] || key;
                 return currentPhaseLower.includes(mappedPhase);
             });
         }
@@ -2854,6 +2887,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function nextPhase() {
+        // Blocking modals must be confirmed — advancing while they are open desyncs turn state
+        if (scoringModal.style.display === 'flex' || cardDrawingModal.style.display === 'flex') {
+            console.warn('Cannot advance phase while scoring or card management modal is open');
+            return;
+        }
+
         console.log('nextPhase called');
         console.log('Current phase before increment:', gameState.currentPhase);
         gameState.currentPhase++;
@@ -3061,7 +3100,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function endGame() {
         gameState.isGameActive = false;
+
+        // Ensure game total is up to date for the final screen
+        gameState.scores.gameTotal = Object.values(gameState.scores.rounds)
+            .reduce((sum, round) => sum + (round.total || 0), 0);
+
+        const gameOverMessage = document.getElementById('game-over-message');
+        const gameOverFinalScore = document.getElementById('game-over-final-score');
+        if (gameOverMessage) {
+            gameOverMessage.textContent = gameState.currentRound > 4
+                ? 'All 4 rounds have been completed.'
+                : 'Game ended early.';
+        }
+        if (gameOverFinalScore) {
+            gameOverFinalScore.textContent = String(gameState.scores.gameTotal);
+        }
+
+        // Close other blocking modals so Game Over is the only overlay
+        scoringModal.style.display = 'none';
+        cardDrawingModal.style.display = 'none';
+        tacticModal.style.display = 'none';
+
         gameOverModal.style.display = 'flex';
+        console.log('Game over. Final score:', gameState.scores.gameTotal);
     }
 
     	function resetGame() {
@@ -3162,34 +3223,6 @@ document.addEventListener('DOMContentLoaded', () => {
             turnIndicator.className = 'turn-indicator enemy-turn';
         }
     }
-    
-    
-    function endGame() {
-        gameState.isGameActive = false;
-        gameSetup.style.display = 'block';
-        gameInProgress.style.display = 'none';
-        turnOrderSelection.style.display = 'none';
-        
-        // Reset game state
-        gameState.currentRound = 1;
-        gameState.currentPhase = 0;
-        gameState.currentTurn = 'player';
-        gameState.startingPlayer = null;
-        gameState.roundTurnsCompleted = 0;
-        
-        // Reset cards
-        gameState.drawnCards = [];
-        gameState.currentRoundCards = [];
-        gameState.cardsByRound = {};
-        gameState.usedCards = [];
-        gameState.keptCards = [];
-        gameState.scoredCards = [];
-        gameState.cardStates = {};
-        
-        // Reset display
-        currentRoundSpan.textContent = '1';
-        updateTurnDisplay();
-    }
 
     // --- EVENT LISTENERS ---
     startGameBtn.addEventListener('click', () => {
@@ -3272,7 +3305,9 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverModal.style.display = 'none';
     });
 
-    // Close modals when clicking outside
+    // Close non-blocking modals when clicking outside.
+    // Scoring and card-management modals must NOT dismiss on backdrop —
+    // that left phase/round state advanced with no confirm and desynced play.
     window.addEventListener('click', (event) => {
         if (event.target === turnModal) {
             turnModal.style.display = 'none';
@@ -3287,12 +3322,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 previousModal.style.display = 'flex';
                 previousModal = null;
             }
-        }
-        if (event.target === scoringModal) {
-            scoringModal.style.display = 'none';
-        }
-        if (event.target === cardDrawingModal) {
-            cardDrawingModal.style.display = 'none';
         }
     });
     

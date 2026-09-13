@@ -431,8 +431,12 @@ document.addEventListener('DOMContentLoaded', () => {
                  console.log(`Selected Enhancement: ${selectedEnhancement}`);
                  console.log(`Navigating to units page for: ${selectedFactionDataFile}`);
 
-                 // Navigate to units.html, passing the data file path
-                 window.location.href = `units.html?faction=${encodeURIComponent(selectedFactionDataFile)}&ability=${encodeURIComponent(selectedAbility)}&enhancement=${encodeURIComponent(selectedEnhancement)}`;
+                 // Build URL with searchParams so encoding is correct for any ability/enhancement text
+                 const unitsUrl = new URL('units.html', window.location.href);
+                 unitsUrl.searchParams.set('faction', selectedFactionDataFile);
+                 unitsUrl.searchParams.set('ability', selectedAbility);
+                 unitsUrl.searchParams.set('enhancement', selectedEnhancement);
+                 window.location.assign(unitsUrl.href);
 
             } else {
                 console.error('Error: Continue button clicked but selections not complete or faction not selected.');
