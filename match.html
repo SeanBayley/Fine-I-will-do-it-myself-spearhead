@@ -137,6 +137,49 @@
         </div>
     </div>
 
+    <!-- Versus intro screen (shown once when Start Match is pressed) -->
+    <div id="match-versus-screen" class="versus-screen" style="display: none;" aria-hidden="true">
+        <div class="versus-stage">
+            <div class="versus-panel versus-panel--left" id="versus-panel-A" data-side="A">
+                <div class="versus-panel-glow" aria-hidden="true"></div>
+                <div class="versus-art-frame">
+                    <img id="versus-art-A" class="versus-art" alt="" hidden>
+                    <div class="versus-art-placeholder" id="versus-placeholder-A">
+                        <span class="versus-art-hint">Faction art</span>
+                        <span class="versus-art-path" id="versus-art-path-A"></span>
+                    </div>
+                </div>
+                <div class="versus-meta">
+                    <span class="versus-side-tag">Side A</span>
+                    <h2 class="versus-faction-name" id="versus-name-A">Side A</h2>
+                </div>
+            </div>
+
+            <div class="versus-divider" aria-hidden="true">
+                <span class="versus-letter versus-letter--v">V</span>
+                <span class="versus-letter versus-letter--s">S</span>
+            </div>
+
+            <div class="versus-panel versus-panel--right" id="versus-panel-B" data-side="B">
+                <div class="versus-panel-glow" aria-hidden="true"></div>
+                <div class="versus-art-frame">
+                    <img id="versus-art-B" class="versus-art" alt="" hidden>
+                    <div class="versus-art-placeholder" id="versus-placeholder-B">
+                        <span class="versus-art-hint">Faction art</span>
+                        <span class="versus-art-path" id="versus-art-path-B"></span>
+                    </div>
+                </div>
+                <div class="versus-meta">
+                    <span class="versus-side-tag">Side B</span>
+                    <h2 class="versus-faction-name" id="versus-name-B">Side B</h2>
+                </div>
+            </div>
+        </div>
+        <div class="versus-actions">
+            <button type="button" id="versus-continue-btn" class="versus-continue-btn">Continue</button>
+        </div>
+    </div>
+
     <!-- Tactic detail modal -->
     <div id="match-tactic-modal" class="modal" style="display: none;">
         <div class="modal-content tactic-modal-content">

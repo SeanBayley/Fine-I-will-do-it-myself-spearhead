@@ -43,10 +43,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverModal = document.getElementById('match-game-over-modal');
     const newGameBtn = document.getElementById('match-new-game-btn');
     const closeGameBtn = document.getElementById('match-close-game-btn');
+    const versusScreen = document.getElementById('match-versus-screen');
+    const versusContinueBtn = document.getElementById('versus-continue-btn');
 
     let battleTactics = [];
     let openTacticContext = null; // { sideId, cardNumber }
     let abilities = null;
+    let versusShownThisMatch = false;
+
+    // Neon colours for the VS screen — keep in sync with faction themes in style.css
+    const FACTION_VS_COLORS = {
+        'stormcast-eternals': { color: '#0d6efd', rgb: '13, 110, 253' },
+        skaven: { color: '#8FD129', rgb: '143, 209, 41' },
+        seraphon: { color: '#40E0D0', rgb: '64, 224, 208' },
+        'ossiarch-bonereapers': { color: '#F5F5DC', rgb: '245, 245, 220' },
+        sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
+        'orruk-warclans': { color: '#84cc16', rgb: '132, 204, 22' }
+    };
+
+    // Image folder names under /images (underscore style used by existing assets)
+    const FACTION_IMAGE_FOLDERS = {
+        'stormcast-eternals': 'stormcast_eternals',
+        skaven: 'skaven',
+        seraphon: 'seraphon',
+        'ossiarch-bonereapers': 'ossiarch_bonereapers',
+        sylvaneth: 'sylvaneth',
+        'orruk-warclans': 'orruk_warclans'
+    };
 
     const match = {
         isActive: false,
@@ -532,6 +555,125 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSharedDisplay();
     }
 
+    function getVersusArtCandidates(side) {
+        const data = side.factionData || {};
+        const factionId = data.factionId || '';
+        const folder = FACTION_IMAGE_FOLDERS[factionId] || factionId.replace(/-/g, '_');
+        const candidates = [];
+
+        // Prefer explicit JSON, then drop-in versus art, then any faction banner
+        if (data.versusArtUrl) candidates.push(data.versusArtUrl);
+        if (folder) {
+            candidates.push(`images/${folder}/versus.png`);
+            candidates.push(`images/${folder}/versus.jpg`);
+            candidates.push(`images/${folder}/versus.webp`);
+        }
+        if (data.factionImageUrl) candidates.push(data.factionImageUrl);
+
+        return [...new Set(candidates.filter(Boolean))];
+    }
+
+    function applyVersusPanelTheme(sideId, side) {
+        const panel = document.getElementById(`versus-panel-${sideId}`);
+        const nameEl = document.getElementById(`versus-name-${sideId}`);
+        const pathHint = document.getElementById(`versus-art-path-${sideId}`);
+        const img = document.getElementById(`versus-art-${sideId}`);
+        const placeholder = document.getElementById(`versus-placeholder-${sideId}`);
+        if (!panel || !side) return;
+
+        const factionId = side.factionData?.factionId || '';
+        const folder = FACTION_IMAGE_FOLDERS[factionId] || factionId.replace(/-/g, '_');
+        const theme = FACTION_VS_COLORS[factionId] || { color: '#60a5fa', rgb: '96, 165, 250' };
+        panel.style.setProperty('--vs-color', theme.color);
+        panel.style.setProperty('--vs-color-rgb', theme.rgb);
+
+        if (nameEl) nameEl.textContent = side.displayName || `Side ${sideId}`;
+
+        const candidates = getVersusArtCandidates(side);
+        // Always show the conventional drop path so art uploads are obvious
+        if (pathHint) pathHint.textContent = `images/${folder || 'faction'}/versus.png`;
+
+        if (img) {
+            img.hidden = true;
+            img.removeAttribute('src');
+            img.alt = side.displayName || '';
+        }
+        panel.classList.remove('has-versus-art');
+        if (placeholder) {
+            placeholder.hidden = false;
+            placeholder.style.display = '';
+        }
+
+        if (!candidates.length || !img) return;
+
+        // Try candidates in order until one loads
+        let attempt = 0;
+        const tryNext = () => {
+            if (attempt >= candidates.length) {
+                img.hidden = true;
+                panel.classList.remove('has-versus-art');
+                if (placeholder) {
+                    placeholder.hidden = false;
+                    placeholder.style.display = '';
+                }
+                console.log(`Versus art missing for Side ${sideId}; tried`, candidates);
+                return;
+            }
+            const url = candidates[attempt++];
+            img.onload = () => {
+                img.hidden = false;
+                if (placeholder) {
+                    placeholder.hidden = true;
+                    placeholder.style.display = 'none';
+                }
+                panel.classList.add('has-versus-art');
+                console.log(`Versus art loaded for Side ${sideId}:`, url);
+            };
+            img.onerror = tryNext;
+            img.src = url;
+        };
+        tryNext();
+    }
+
+    function showVersusScreen() {
+        if (!versusScreen) {
+            showTurnOrderSelection();
+            return;
+        }
+
+        applyVersusPanelTheme('A', match.sides.A);
+        applyVersusPanelTheme('B', match.sides.B);
+
+        // Restart crash / VS animations every time the splash opens
+        versusScreen.classList.remove('is-animating');
+        versusScreen.style.display = 'flex';
+        versusScreen.classList.add('is-visible');
+        versusScreen.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('versus-open');
+        // Force reflow so removing/adding is-animating retriggers keyframes
+        void versusScreen.offsetWidth;
+        versusScreen.classList.add('is-animating');
+
+        versusShownThisMatch = true;
+        console.log('Versus screen shown', {
+            A: match.sides.A?.displayName,
+            B: match.sides.B?.displayName
+        });
+    }
+
+    function hideVersusScreen() {
+        if (!versusScreen) return;
+        versusScreen.classList.remove('is-visible', 'is-animating');
+        versusScreen.style.display = 'none';
+        versusScreen.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('versus-open');
+    }
+
+    function dismissVersusAndContinue() {
+        hideVersusScreen();
+        showTurnOrderSelection();
+    }
+
     function showTurnOrderSelection() {
         setupPanel.style.display = 'none';
         inProgressPanel.style.display = 'none';
@@ -648,8 +790,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Events ---
     startMatchBtn.addEventListener('click', () => {
-        showTurnOrderSelection();
+        // Intro splash once per board load, then turn-order selection
+        if (!versusShownThisMatch) {
+            showVersusScreen();
+        } else {
+            showTurnOrderSelection();
+        }
     });
+
+    if (versusContinueBtn) {
+        versusContinueBtn.addEventListener('click', dismissVersusAndContinue);
+    }
 
     sideAFirstBtn.addEventListener('click', () => beginRoundWithStartingSide('A'));
     sideBFirstBtn.addEventListener('click', () => beginRoundWithStartingSide('B'));
