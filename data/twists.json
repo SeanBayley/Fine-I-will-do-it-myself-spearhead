@@ -36,7 +36,8 @@
                 "If there is no underdog, each player picks 1 enemy unit on the battlefield to be bloodmarked, starting with the active player.",
                 "Each player scores 1 extra victory point at the end of the battle round if the enemy bloodmarked unit is destroyed this battle round."
               ],
-              "maxPoints": 1
+              "maxPoints": 1,
+              "scoringTiming": "end_of_battle_round"
             },
             {
               "id": "reclaim-aqshy",
