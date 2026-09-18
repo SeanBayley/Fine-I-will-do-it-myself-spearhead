@@ -1,4 +1,4 @@
-// Local 2-player setup: Side A then Side B → match.html
+// Local 2-player setup: Ruleset → Side A → Side B → match.html
 // Intentionally separate from script.js so solo index flow stays untouched.
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,21 +12,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupSideTitle = document.getElementById('setup-side-title');
     const factionRulesHeading = document.getElementById('faction-rules-heading');
     const stepIndicator = document.getElementById('setup-step-indicator');
+    const rulesetSection = document.getElementById('ruleset-selection');
+    const armySetupSection = document.getElementById('army-setup-section');
+    const rulesetContinueBtn = document.getElementById('ruleset-continue-btn');
 
     const MATCH_SETUP_KEY = 'spearheadMatchSetup';
+    const RULESET_LABELS = {
+        'fire-and-jade': 'Fire and Jade',
+        'city-of-ash': 'City of Ash',
+        custom: 'Custom'
+    };
 
-    let currentSide = 'A';
+    let currentStep = 'ruleset'; // ruleset | A | B
     let pendingSelection = { faction: null, ability: null, enhancement: null };
     let matchSetup = loadMatchSetup();
 
     function loadMatchSetup() {
         try {
             const raw = sessionStorage.getItem(MATCH_SETUP_KEY);
-            if (raw) return JSON.parse(raw);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                return {
+                    ruleset: parsed.ruleset || null,
+                    sideA: parsed.sideA || null,
+                    sideB: parsed.sideB || null
+                };
+            }
         } catch (err) {
             console.warn('Could not parse match setup from sessionStorage', err);
         }
-        return { sideA: null, sideB: null };
+        return { ruleset: null, sideA: null, sideB: null };
     }
 
     function saveMatchSetup() {
@@ -34,17 +49,34 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Saved match setup', matchSetup);
     }
 
+    function getSelectedRuleset() {
+        const checked = document.querySelector('input[name="ruleset"]:checked');
+        return checked ? checked.value : null;
+    }
+
     function updateStepChrome() {
-        const sideLabel = currentSide === 'A' ? 'Side A' : 'Side B';
-        setupSideTitle.textContent = `${sideLabel} — Select Faction`;
-        factionRulesHeading.textContent = `${sideLabel} — Faction Rules`;
-        mainContinueButton.textContent = currentSide === 'A'
-            ? 'Continue to Side B'
-            : 'Start Local Match';
+        if (currentStep === 'ruleset') {
+            rulesetSection.style.display = 'block';
+            armySetupSection.style.display = 'none';
+        } else {
+            rulesetSection.style.display = 'none';
+            armySetupSection.style.display = 'block';
+            const sideLabel = currentStep === 'A' ? 'Side A' : 'Side B';
+            setupSideTitle.textContent = `${sideLabel} — Select Faction`;
+            factionRulesHeading.textContent = `${sideLabel} — Faction Rules`;
+            mainContinueButton.textContent = currentStep === 'A'
+                ? 'Continue to Side B'
+                : 'Start Local Match';
+        }
 
         stepIndicator.querySelectorAll('.setup-step').forEach((el) => {
-            el.classList.toggle('active', el.dataset.step === currentSide);
-            el.classList.toggle('done', currentSide === 'B' && el.dataset.step === 'A');
+            const step = el.dataset.step;
+            const isActive = step === currentStep;
+            const isDone =
+                (currentStep === 'A' && step === 'ruleset') ||
+                (currentStep === 'B' && (step === 'ruleset' || step === 'A'));
+            el.classList.toggle('active', isActive);
+            el.classList.toggle('done', isDone && !isActive);
         });
     }
 
@@ -135,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ruleBox = document.createElement('div');
             ruleBox.className = 'rule-box';
 
-            const inputId = `reg-ability-${currentSide}-${index}`;
+            const inputId = `reg-ability-${currentStep}-${index}`;
             const radioInput = document.createElement('input');
             radioInput.type = 'radio';
             radioInput.id = inputId;
@@ -197,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ruleBox = document.createElement('div');
             ruleBox.className = 'rule-box';
 
-            const inputId = `enhancement-${currentSide}-${index}`;
+            const inputId = `enhancement-${currentStep}-${index}`;
             const radioInput = document.createElement('input');
             radioInput.type = 'radio';
             radioInput.id = inputId;
@@ -259,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!selectedDataFile) return;
 
-        console.log(`Match setup Side ${currentSide}: loading ${selectedDataFile}`);
+        console.log(`Match setup Side ${currentStep}: loading ${selectedDataFile}`);
         fetch(selectedDataFile)
             .then((response) => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -319,6 +351,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    function syncRulesetContinueState() {
+        const ruleset = getSelectedRuleset();
+        rulesetContinueBtn.disabled = !ruleset;
+        document.querySelectorAll('.ruleset-option').forEach((label) => {
+            const input = label.querySelector('input[name="ruleset"]');
+            label.classList.toggle('selected', Boolean(input && input.checked));
+        });
+    }
+
+    function commitRulesetAndContinue() {
+        const ruleset = getSelectedRuleset();
+        if (!ruleset) {
+            alert('Please select a ruleset.');
+            return;
+        }
+        matchSetup.ruleset = ruleset;
+        matchSetup.sideA = null;
+        matchSetup.sideB = null;
+        saveMatchSetup();
+        currentStep = 'A';
+        pendingSelection = { faction: null, ability: null, enhancement: null };
+        updateStepChrome();
+        loadAndDisplayFaction(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        console.log('Ruleset selected:', RULESET_LABELS[ruleset] || ruleset);
+    }
+
     function commitCurrentSide() {
         const payload = {
             faction: pendingSelection.faction,
@@ -326,10 +385,10 @@ document.addEventListener('DOMContentLoaded', () => {
             enhancement: pendingSelection.enhancement
         };
 
-        if (currentSide === 'A') {
+        if (currentStep === 'A') {
             matchSetup.sideA = payload;
             saveMatchSetup();
-            currentSide = 'B';
+            currentStep = 'B';
             pendingSelection = { faction: null, ability: null, enhancement: null };
             updateStepChrome();
             loadAndDisplayFaction(null);
@@ -339,10 +398,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         matchSetup.sideB = payload;
+        if (!matchSetup.ruleset) {
+            alert('Ruleset missing. Please start setup again and pick a ruleset.');
+            currentStep = 'ruleset';
+            updateStepChrome();
+            return;
+        }
         saveMatchSetup();
-        console.log('Both sides ready — opening match board');
+        console.log('Both sides ready — opening match board', {
+            ruleset: matchSetup.ruleset
+        });
         window.location.href = 'match.html';
     }
+
+    document.querySelectorAll('input[name="ruleset"]').forEach((input) => {
+        input.addEventListener('change', syncRulesetContinueState);
+    });
+
+    rulesetContinueBtn.addEventListener('click', commitRulesetAndContinue);
 
     mainContinueButton.addEventListener('click', () => {
         if (!pendingSelection.faction || !pendingSelection.ability || !pendingSelection.enhancement) {
@@ -352,6 +425,12 @@ document.addEventListener('DOMContentLoaded', () => {
         commitCurrentSide();
     });
 
+    // Restore previously chosen ruleset radio if returning mid-setup
+    if (matchSetup.ruleset) {
+        const radio = document.querySelector(`input[name="ruleset"][value="${CSS.escape(matchSetup.ruleset)}"]`);
+        if (radio) radio.checked = true;
+    }
+    syncRulesetContinueState();
     updateStepChrome();
     populateFactionGrid();
 });

@@ -1,0 +1,148 @@
+{
+  "battleTactics": [
+    {
+      "cardNumber": 1,
+      "name": "Ashfall Ambush",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 1.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Hero Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 1."
+      }
+    },
+    {
+      "cardNumber": 2,
+      "name": "Cinder Path",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 2.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Movement Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 2."
+      }
+    },
+    {
+      "cardNumber": 3,
+      "name": "Ember Hold",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 3.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Charge Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 3."
+      }
+    },
+    {
+      "cardNumber": 4,
+      "name": "Smoke Screen",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 4.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Shooting Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 4."
+      }
+    },
+    {
+      "cardNumber": 5,
+      "name": "Molten Advance",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 5.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 5."
+      }
+    },
+    {
+      "cardNumber": 6,
+      "name": "Ruined Spire",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 6.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "End of Turn",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 6."
+      }
+    },
+    {
+      "cardNumber": 7,
+      "name": "Charred Banner",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 7.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Hero Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 7."
+      }
+    },
+    {
+      "cardNumber": 8,
+      "name": "Scorched Earth",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 8.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Movement Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 8."
+      }
+    },
+    {
+      "cardNumber": 9,
+      "name": "Volcanic Pulse",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 9.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Shooting Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 9."
+      }
+    },
+    {
+      "cardNumber": 10,
+      "name": "Glass Wastes",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 10.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Charge Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 10."
+      }
+    },
+    {
+      "cardNumber": 11,
+      "name": "Forge Breaker",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 11.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "Combat Phase",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 11."
+      }
+    },
+    {
+      "cardNumber": 12,
+      "name": "Last Ember",
+      "description": "Placeholder City of Ash tactic — replace with final card text.",
+      "requirement": "Placeholder requirement for Battle Tactic 12.",
+      "command": {
+        "name": "Placeholder Command",
+        "timing": "End of Turn",
+        "declare": "Pick a friendly unit to use this ability",
+        "effect": "Placeholder effect for City of Ash card 12."
+      }
+    }
+  ]
+}

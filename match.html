@@ -33,7 +33,46 @@
             <!-- Shared clock / controls -->
             <section class="match-shared-bar">
                 <div id="match-setup-panel" class="match-setup-panel">
-                    <button id="start-match-btn" class="start-game-btn">Start Match</button>
+                    <div class="match-ruleset-badge" id="match-ruleset-badge">Ruleset: —</div>
+
+                    <section id="pre-battle-steps" class="pre-battle-steps" aria-labelledby="pre-battle-heading">
+                        <h3 id="pre-battle-heading">Pre-Battle Steps</h3>
+                        <ol class="pre-battle-list">
+                            <li>
+                                <strong>Roll off.</strong> The winner chooses who is the attacker and who is the defender.
+                            </li>
+                            <li>
+                                The attacker picks their regiment ability and their enhancement. Then the defender does the same.
+                            </li>
+                            <li>
+                                The defender chooses which side of the realm battlefield the players will fight on: Aqshy or Ghyran.
+                            </li>
+                            <li>
+                                The defender picks 1 of the deployment maps on the right and chooses which territory belongs to which player.
+                            </li>
+                            <li>
+                                The defender sets up their terrain features, followed by the attacker. Each terrain feature must be set up wholly within friendly territory, more than 6&quot; from all other terrain features and more than 3&quot; from both long battlefield edges and enemy territory. Terrain features cannot be set up on top of the objectives (either wholly or partially).
+                            </li>
+                        </ol>
+                        <div class="pre-battle-deployment">
+                            <h4>Deployment</h4>
+                            <p>
+                                Do not deploy armies as described in the Core Rules. Instead, the attacker sets up all the units in their army first, followed by the defender. Each unit must be set up wholly within friendly territory and more than 6&quot; from enemy territory.
+                            </p>
+                            <p>
+                                If it is the first battle round, the attacker chooses who will take the first turn. In any other battle round, the players roll off and the winner decides who takes the first turn of that battle round.
+                            </p>
+                        </div>
+
+                        <div id="twist-deck-picker" class="twist-deck-picker" style="display: none;">
+                            <h4>Twist Deck</h4>
+                            <p class="twist-deck-intro">Pick which twist deck to use for this match. One twist is drawn at the start of each battle round.</p>
+                            <div id="twist-deck-options" class="twist-deck-options" role="radiogroup" aria-label="Twist deck"></div>
+                        </div>
+                    </section>
+
+                    <button id="start-match-btn" class="start-game-btn" disabled>Start Match</button>
+                    <p id="start-match-hint" class="start-match-hint" style="display: none;">Select a twist deck to continue.</p>
                 </div>
 
                 <div id="match-turn-order" class="turn-order-selection match-turn-order" style="display: none;">
@@ -72,6 +111,14 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Shared twist (one per round) + active battle tactic cards -->
+            <div id="match-twist-row" class="match-twist-row" style="display: none;">
+                <div class="match-twist-lane-label">Battle Round Twist</div>
+                <div id="match-twist-slot" class="match-twist-slot is-empty" title="No twist drawn yet">
+                    <div class="card-placeholder">No twist yet</div>
+                </div>
+            </div>
 
             <!-- Active cards: 3 above each army column -->
             <div class="match-cards-row" id="match-cards-row">
@@ -113,7 +160,7 @@
                         <div>Ability: <span id="side-ability-A">—</span></div>
                         <div>Enhancement: <span id="side-enhancement-A">—</span></div>
                         <div class="side-score-breakdown">
-                            Primary <span id="side-primary-A">0</span> · Tactics <span id="side-tactics-A">0</span>
+                            Primary <span id="side-primary-A">0</span> · Tactics <span id="side-tactics-A">0</span> · Twist <span id="side-twist-A">0</span>
                         </div>
                     </div>
                     <div id="side-units-A" class="match-side-units"></div>
@@ -128,7 +175,7 @@
                         <div>Ability: <span id="side-ability-B">—</span></div>
                         <div>Enhancement: <span id="side-enhancement-B">—</span></div>
                         <div class="side-score-breakdown">
-                            Primary <span id="side-primary-B">0</span> · Tactics <span id="side-tactics-B">0</span>
+                            Primary <span id="side-primary-B">0</span> · Tactics <span id="side-tactics-B">0</span> · Twist <span id="side-twist-B">0</span>
                         </div>
                     </div>
                     <div id="side-units-B" class="match-side-units"></div>
@@ -177,6 +224,23 @@
         </div>
         <div class="versus-actions">
             <button type="button" id="versus-continue-btn" class="versus-continue-btn">Continue</button>
+        </div>
+    </div>
+
+    <!-- Twist detail modal (shared for both players) -->
+    <div id="match-twist-modal" class="modal" style="display: none;">
+        <div class="modal-content tactic-modal-content twist-modal-content">
+            <h3 id="match-twist-modal-title">Twist</h3>
+            <p class="twist-modal-deck" id="match-twist-modal-deck"></p>
+            <p id="match-twist-modal-flavor" class="twist-modal-flavor"></p>
+            <div class="tactic-section">
+                <h4>Rules</h4>
+                <div id="match-twist-modal-rules" class="twist-modal-rules"></div>
+            </div>
+            <p class="twist-modal-max">Max points this round: <strong id="match-twist-modal-max">0</strong></p>
+            <div class="tactic-buttons">
+                <button id="match-close-twist-btn" class="close-tactic-btn" type="button">Close</button>
+            </div>
         </div>
     </div>
 
@@ -234,12 +298,46 @@
                 </div>
             </div>
             <div class="scoring-section">
-                <h4>Battle Tactics</h4>
+                <h4 id="match-tactics-scoring-heading">Battle Tactics</h4>
                 <div id="match-battle-tactics-scoring" class="battle-tactics-scoring"></div>
+                <div id="match-custom-tactics-scoring" class="custom-tactics-scoring" style="display: none;">
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-custom-tactic-1">
+                        <span class="checkmark"></span>
+                        Battle Tactic 1
+                    </label>
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-custom-tactic-2">
+                        <span class="checkmark"></span>
+                        Battle Tactic 2
+                    </label>
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-custom-tactic-3">
+                        <span class="checkmark"></span>
+                        Battle Tactic 3
+                    </label>
+                </div>
+            </div>
+            <div class="scoring-section" id="match-twist-scoring-section" style="display: none;">
+                <h4>Twist</h4>
+                <div class="twist-scoring-panel">
+                    <div class="twist-scoring-header">
+                        <strong id="match-twist-scoring-name">—</strong>
+                        <button type="button" id="match-twist-scoring-view-btn" class="twist-view-btn">View Twist</button>
+                    </div>
+                    <p id="match-twist-scoring-hint" class="twist-scoring-hint">Add up to the maximum twist points for this card. Scoring does not discard the twist.</p>
+                    <div class="twist-points-controls">
+                        <button type="button" id="match-twist-points-minus" class="twist-points-btn" aria-label="Decrease twist points">−</button>
+                        <input type="number" id="match-twist-points-input" class="twist-points-input" min="0" value="0" readonly>
+                        <button type="button" id="match-twist-points-plus" class="twist-points-btn" aria-label="Increase twist points">+</button>
+                        <span class="twist-points-max">/ <span id="match-twist-points-max">0</span> max</span>
+                    </div>
+                </div>
             </div>
             <div class="score-summary">
                 <div class="score-row"><span>Primary Score:</span><span id="match-primary-score">0</span></div>
                 <div class="score-row"><span>Battle Tactic Score:</span><span id="match-tactic-score">0</span></div>
+                <div class="score-row"><span>Twist Score:</span><span id="match-twist-score">0</span></div>
                 <div class="score-row total"><span>Round Total:</span><span id="match-round-total">0</span></div>
                 <div class="score-row game-total"><span>Side Total:</span><span id="match-side-game-total">0</span></div>
             </div>
