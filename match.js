@@ -45,11 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeGameBtn = document.getElementById('match-close-game-btn');
     const versusScreen = document.getElementById('match-versus-screen');
     const versusContinueBtn = document.getElementById('versus-continue-btn');
+    const twistModal = document.getElementById('match-twist-modal');
+    const closeTwistBtn = document.getElementById('match-close-twist-btn');
+    const startMatchHint = document.getElementById('start-match-hint');
 
     let battleTactics = [];
     let openTacticContext = null; // { sideId, cardNumber }
     let abilities = null;
     let versusShownThisMatch = false;
+    let twistsData = null; // full twists.json payload
+    let activeTwistDeck = null; // { id, name, twists: [] }
+    let pendingTwistPoints = 0; // scoring-modal draft for current side
 
     const RULESET_FILES = {
         'fire-and-jade': 'data/battle_tactics.json',
@@ -85,6 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const match = {
         isActive: false,
         ruleset: 'fire-and-jade',
+        twistDeckId: null,
+        currentTwist: null,
+        twistByRound: {},
+        drawnTwistIds: [],
         currentRound: 1,
         currentPhase: 0,
         activeSide: 'A',
@@ -104,6 +114,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function usesBattleTacticCards() {
         return !isCustomRuleset();
+    }
+
+    function usesTwists() {
+        return !isCustomRuleset();
+    }
+
+    function getAvailableTwistDecks() {
+        const pack = twistsData?.rulesets?.[match.ruleset];
+        return pack?.decks || [];
+    }
+
+    function getCurrentTwistMaxPoints() {
+        const max = Number(match.currentTwist?.maxPoints);
+        return Number.isFinite(max) && max > 0 ? max : 0;
+    }
+
+    function persistTwistDeckSelection(deckId) {
+        try {
+            const raw = sessionStorage.getItem(MATCH_SETUP_KEY);
+            const data = raw ? JSON.parse(raw) : {};
+            data.twistDeck = deckId || null;
+            sessionStorage.setItem(MATCH_SETUP_KEY, JSON.stringify(data));
+            console.log('Persisted twist deck selection', deckId);
+        } catch (err) {
+            console.warn('Could not persist twist deck selection', err);
+        }
+    }
+
+    function updateStartMatchGate() {
+        if (!startMatchBtn) return;
+        if (!usesTwists()) {
+            startMatchBtn.disabled = false;
+            if (startMatchHint) startMatchHint.style.display = 'none';
+            return;
+        }
+        const ready = Boolean(match.twistDeckId && activeTwistDeck);
+        startMatchBtn.disabled = !ready;
+        if (startMatchHint) {
+            startMatchHint.style.display = ready ? 'none' : 'block';
+        }
     }
 
     function createSideState(setup, label) {
@@ -151,18 +201,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyRulesetChrome() {
         const badge = document.getElementById('match-ruleset-badge');
         if (badge) {
-            badge.textContent = `Ruleset: ${RULESET_LABELS[match.ruleset] || match.ruleset}`;
+            const twistLabel = activeTwistDeck ? ` · Twist: ${activeTwistDeck.name}` : '';
+            badge.textContent = `Ruleset: ${RULESET_LABELS[match.ruleset] || match.ruleset}${
+                usesTwists() ? twistLabel : ''
+            }`;
         }
         if (matchBoardEl) {
             matchBoardEl.classList.toggle('ruleset-custom', isCustomRuleset());
             matchBoardEl.classList.toggle('ruleset-city-of-ash', match.ruleset === 'city-of-ash');
             matchBoardEl.classList.toggle('ruleset-fire-and-jade', match.ruleset === 'fire-and-jade');
+            matchBoardEl.classList.toggle('has-twists', usesTwists());
         }
         const cardsRow = document.getElementById('match-cards-row');
         if (cardsRow) {
             cardsRow.style.display = usesBattleTacticCards() ? '' : 'none';
         }
-        console.log('Applied ruleset chrome', match.ruleset);
+        const twistRow = document.getElementById('match-twist-row');
+        if (twistRow) {
+            twistRow.style.display = usesTwists() ? '' : 'none';
+        }
+        console.log('Applied ruleset chrome', match.ruleset, match.twistDeckId);
     }
 
     function escapeHtml(unsafe) {
@@ -298,13 +356,16 @@ document.addEventListener('DOMContentLoaded', () => {
             renderSideCards(match.sides.A);
             renderSideCards(match.sides.B);
         }
+        renderCurrentTwistSlot();
         abilities.onPhaseOrTurnChange(match.sides);
     }
 
     function calcSideTotals(side) {
         let primary = 0;
+        let twist = 0;
         Object.values(side.scores.rounds).forEach((round) => {
             primary += round.primary || 0;
+            twist += round.twist || 0;
         });
         // Prefer stored round tactics (required for custom ruleset checkbox scoring)
         const storedTactics = Object.values(side.scores.rounds).reduce(
@@ -316,9 +377,9 @@ document.addEventListener('DOMContentLoaded', () => {
             tactics = side.scoredCards.length;
         }
 
-        const total = primary + tactics;
+        const total = primary + tactics + twist;
         side.scores.gameTotal = total;
-        return { primary, tactics, total };
+        return { primary, tactics, twist, total };
     }
 
     function updateScoreDisplays() {
@@ -328,6 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(`score-total-${id}`).textContent = totals.total;
             document.getElementById(`side-primary-${id}`).textContent = totals.primary;
             document.getElementById(`side-tactics-${id}`).textContent = totals.tactics;
+            const twistEl = document.getElementById(`side-twist-${id}`);
+            if (twistEl) twistEl.textContent = totals.twist;
             document.getElementById(`score-label-${id}`).textContent = side.displayName;
             document.getElementById(`final-label-${id}`).textContent = side.displayName;
             document.getElementById(`final-score-${id}`).textContent = totals.total;
@@ -374,6 +437,134 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSideCards(match.sides.B);
     }
 
+    function renderCurrentTwistSlot() {
+        const slot = document.getElementById('match-twist-slot');
+        const row = document.getElementById('match-twist-row');
+        if (!slot || !row) return;
+
+        if (!usesTwists()) {
+            row.style.display = 'none';
+            return;
+        }
+        row.style.display = '';
+
+        const twist = match.currentTwist;
+        if (!twist) {
+            slot.className = 'match-twist-slot is-empty';
+            slot.title = 'No twist drawn yet';
+            slot.innerHTML = '<div class="card-placeholder">No twist yet</div>';
+            slot.onclick = null;
+            return;
+        }
+
+        const maxPts = getCurrentTwistMaxPoints();
+        slot.className = 'match-twist-slot is-active';
+        slot.title = `${twist.name} (click for details)`;
+        slot.innerHTML = `
+            <div class="twist-slot-deck">${escapeHtml(activeTwistDeck?.name || 'Twist')}</div>
+            <div class="twist-slot-name">${escapeHtml(twist.name)}</div>
+            <div class="twist-slot-meta">${maxPts > 0 ? `Up to ${maxPts} VP` : 'No VP'}</div>
+        `;
+        slot.onclick = () => openTwistModal(twist);
+    }
+
+    function openTwistModal(twist) {
+        if (!twist || !twistModal) return;
+        document.getElementById('match-twist-modal-title').textContent = twist.name || 'Twist';
+        const deckEl = document.getElementById('match-twist-modal-deck');
+        if (deckEl) {
+            deckEl.textContent = activeTwistDeck
+                ? `${activeTwistDeck.name} Twist · Round ${match.currentRound}`
+                : `Round ${match.currentRound}`;
+        }
+        document.getElementById('match-twist-modal-flavor').textContent = twist.flavor || '';
+        const rulesEl = document.getElementById('match-twist-modal-rules');
+        if (rulesEl) {
+            const rules = Array.isArray(twist.rules) ? twist.rules : [];
+            rulesEl.innerHTML = rules.length
+                ? `<ul>${rules.map((r) => `<li>${escapeHtml(r)}</li>`).join('')}</ul>`
+                : '<p>No rules listed.</p>';
+        }
+        document.getElementById('match-twist-modal-max').textContent = String(
+            Number(twist.maxPoints) || 0
+        );
+        twistModal.style.display = 'flex';
+        console.log('Opened twist modal', twist.id || twist.name);
+    }
+
+    function closeTwistModal() {
+        if (twistModal) twistModal.style.display = 'none';
+    }
+
+    function drawTwistForRound() {
+        if (!usesTwists() || !activeTwistDeck) {
+            match.currentTwist = null;
+            renderCurrentTwistSlot();
+            return;
+        }
+
+        // One twist per battle round — keep existing if already drawn
+        if (match.twistByRound[match.currentRound]) {
+            match.currentTwist = match.twistByRound[match.currentRound];
+            renderCurrentTwistSlot();
+            console.log('Reusing twist for round', match.currentRound, match.currentTwist?.name);
+            return;
+        }
+
+        const pool = (activeTwistDeck.twists || []).filter(
+            (t) => !match.drawnTwistIds.includes(t.id)
+        );
+        const source = pool.length ? pool : [...(activeTwistDeck.twists || [])];
+        if (!source.length) {
+            console.warn('Twist deck is empty; no card drawn');
+            match.currentTwist = null;
+            renderCurrentTwistSlot();
+            return;
+        }
+
+        const idx = Math.floor(Math.random() * source.length);
+        const drawn = source[idx];
+        match.currentTwist = drawn;
+        match.twistByRound[match.currentRound] = drawn;
+        if (drawn.id && !match.drawnTwistIds.includes(drawn.id)) {
+            match.drawnTwistIds.push(drawn.id);
+        }
+        renderCurrentTwistSlot();
+        console.log(`Drew twist for round ${match.currentRound}:`, drawn.name, {
+            maxPoints: drawn.maxPoints
+        });
+    }
+
+    function setPendingTwistPoints(value) {
+        const max = getCurrentTwistMaxPoints();
+        const clamped = Math.max(0, Math.min(max, Number(value) || 0));
+        pendingTwistPoints = clamped;
+        const input = document.getElementById('match-twist-points-input');
+        if (input) input.value = String(pendingTwistPoints);
+    }
+
+    function setupTwistScoringControls() {
+        const section = document.getElementById('match-twist-scoring-section');
+        const maxPts = getCurrentTwistMaxPoints();
+        if (!section) return;
+
+        if (!usesTwists() || !match.currentTwist || maxPts <= 0) {
+            section.style.display = 'none';
+            pendingTwistPoints = 0;
+            return;
+        }
+
+        section.style.display = 'block';
+        const nameEl = document.getElementById('match-twist-scoring-name');
+        const maxEl = document.getElementById('match-twist-points-max');
+        if (nameEl) nameEl.textContent = match.currentTwist.name || 'Twist';
+        if (maxEl) maxEl.textContent = String(maxPts);
+
+        const side = match.sides[match.activeSide];
+        const existing = side?.scores?.rounds?.[match.currentRound]?.twist;
+        setPendingTwistPoints(typeof existing === 'number' ? existing : 0);
+    }
+
     function getCustomTacticScoreFromModal() {
         let score = 0;
         if (document.getElementById('match-custom-tactic-1')?.checked) score++;
@@ -385,6 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function advanceAfterBothTurns() {
         match.currentRound += 1;
         match.roundTurnsCompleted = 0;
+        match.currentTwist = null;
 
         if (match.currentRound > 4) {
             endMatch('All 4 rounds have been completed.');
@@ -394,6 +586,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (usesBattleTacticCards()) {
             drawCardsForRound();
         }
+        // Twist is drawn when the round actually starts (after first-player pick)
+        renderCurrentTwistSlot();
         showTurnOrderSelection();
     }
 
@@ -440,10 +634,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Ensure round score bucket exists before scoring interactions
         if (!side.scores.rounds[match.currentRound]) {
-            side.scores.rounds[match.currentRound] = { primary: 0, tactics: 0, total: 0 };
+            side.scores.rounds[match.currentRound] = { primary: 0, tactics: 0, twist: 0, total: 0 };
         } else if (isCustomRuleset()) {
             // Custom uses checkboxes each open; card mode keeps any in-modal Score taps
             side.scores.rounds[match.currentRound].tactics = 0;
+        }
+        if (typeof side.scores.rounds[match.currentRound].twist !== 'number') {
+            side.scores.rounds[match.currentRound].twist = 0;
         }
 
         const customTacticsEl = document.getElementById('match-custom-tactics-scoring');
@@ -490,7 +687,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.querySelector('.score-btn').addEventListener('click', () => {
                     setCardStatus(side, cardNumber, 'Scored');
                     if (!side.scores.rounds[match.currentRound]) {
-                        side.scores.rounds[match.currentRound] = { primary: 0, tactics: 0, total: 0 };
+                        side.scores.rounds[match.currentRound] = {
+                            primary: 0,
+                            tactics: 0,
+                            twist: 0,
+                            total: 0
+                        };
                     }
                     side.scores.rounds[match.currentRound].tactics += 1;
                     card.remove();
@@ -500,6 +702,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 tacticsScoringEl.appendChild(card);
             });
         }
+
+        setupTwistScoringControls();
 
         ['match-primary-1', 'match-primary-2', 'match-primary-3'].forEach((id) => {
             document.getElementById(id).onchange = updateModalScorePreview;
@@ -519,7 +723,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const tacticScore = isCustomRuleset()
             ? getCustomTacticScoreFromModal()
             : (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
-        const roundTotal = primary + tacticScore;
+        const twistScore = getCurrentTwistMaxPoints() > 0 ? pendingTwistPoints : 0;
+        const roundTotal = primary + tacticScore + twistScore;
 
         let gameTotal = 0;
         Object.entries(side.scores.rounds).forEach(([roundNumber, roundScore]) => {
@@ -531,6 +736,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('match-primary-score').textContent = primary;
         document.getElementById('match-tactic-score').textContent = tacticScore;
+        const twistScoreEl = document.getElementById('match-twist-score');
+        if (twistScoreEl) {
+            twistScoreEl.textContent = twistScore;
+            const twistRow = twistScoreEl.closest('.score-row');
+            if (twistRow) {
+                twistRow.style.display = usesTwists() ? '' : 'none';
+            }
+        }
         document.getElementById('match-round-total').textContent = roundTotal;
         document.getElementById('match-side-game-total').textContent = gameTotal;
     }
@@ -545,10 +758,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const tacticScore = isCustomRuleset()
             ? getCustomTacticScoreFromModal()
             : (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
-        const roundTotal = primary + tacticScore;
+        const twistScore = getCurrentTwistMaxPoints() > 0 ? pendingTwistPoints : 0;
+        const roundTotal = primary + tacticScore + twistScore;
         side.scores.rounds[match.currentRound] = {
             primary,
             tactics: tacticScore,
+            twist: twistScore,
             total: roundTotal
         };
 
@@ -806,8 +1021,13 @@ document.addEventListener('DOMContentLoaded', () => {
             drawCardsForRound();
         }
 
+        // Draw (or reuse) this battle round's shared twist once the round starts
+        drawTwistForRound();
+
         updateSharedDisplay();
-        console.log(`Round ${match.currentRound} starting with Side ${sideId}`);
+        console.log(`Round ${match.currentRound} starting with Side ${sideId}`, {
+            twist: match.currentTwist?.name || null
+        });
     }
 
     function endMatch(message) {
@@ -898,12 +1118,103 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Loaded ${battleTactics.length} tactics for ruleset ${ruleset} from ${file}`);
     }
 
+    async function loadTwistsData() {
+        const res = await fetch('data/twists.json');
+        if (!res.ok) throw new Error('Failed to load twists.json');
+        twistsData = await res.json();
+        console.log('Loaded twists data for rulesets', Object.keys(twistsData.rulesets || {}));
+    }
+
+    function selectTwistDeck(deckId) {
+        const decks = getAvailableTwistDecks();
+        const deck = decks.find((d) => d.id === deckId) || null;
+        match.twistDeckId = deck ? deck.id : null;
+        activeTwistDeck = deck;
+        persistTwistDeckSelection(match.twistDeckId);
+        applyRulesetChrome();
+        updateStartMatchGate();
+        console.log('Twist deck selected', match.twistDeckId, activeTwistDeck?.name);
+    }
+
+    function renderTwistDeckPicker(preferredDeckId) {
+        const picker = document.getElementById('twist-deck-picker');
+        const optionsEl = document.getElementById('twist-deck-options');
+        if (!picker || !optionsEl) return;
+
+        if (!usesTwists()) {
+            picker.style.display = 'none';
+            optionsEl.innerHTML = '';
+            match.twistDeckId = null;
+            activeTwistDeck = null;
+            updateStartMatchGate();
+            return;
+        }
+
+        const decks = getAvailableTwistDecks();
+        picker.style.display = 'block';
+        optionsEl.innerHTML = '';
+
+        if (!decks.length) {
+            optionsEl.innerHTML = '<p class="twist-deck-empty">No twist decks found for this ruleset.</p>';
+            updateStartMatchGate();
+            return;
+        }
+
+        decks.forEach((deck) => {
+            const label = document.createElement('label');
+            label.className = 'twist-deck-option';
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'twist-deck';
+            input.value = deck.id;
+            if (preferredDeckId && preferredDeckId === deck.id) {
+                input.checked = true;
+            }
+            const body = document.createElement('span');
+            body.className = 'twist-deck-option-body';
+            body.innerHTML = `
+                <span class="twist-deck-option-title">${escapeHtml(deck.name)}</span>
+                <span class="twist-deck-option-desc">${(deck.twists || []).length} twist cards</span>
+            `;
+            input.addEventListener('change', () => {
+                if (input.checked) {
+                    optionsEl.querySelectorAll('.twist-deck-option').forEach((el) => {
+                        el.classList.remove('selected');
+                    });
+                    label.classList.add('selected');
+                    selectTwistDeck(deck.id);
+                }
+            });
+            label.appendChild(input);
+            label.appendChild(body);
+            optionsEl.appendChild(label);
+            if (input.checked) {
+                label.classList.add('selected');
+            }
+        });
+
+        if (preferredDeckId && decks.some((d) => d.id === preferredDeckId)) {
+            selectTwistDeck(preferredDeckId);
+        } else {
+            match.twistDeckId = null;
+            activeTwistDeck = null;
+            updateStartMatchGate();
+        }
+    }
+
     async function initMatchBoard(setup) {
         match.ruleset = setup.ruleset || 'fire-and-jade';
+        match.twistDeckId = null;
+        match.currentTwist = null;
+        match.twistByRound = {};
+        match.drawnTwistIds = [];
+        activeTwistDeck = null;
+
         match.sides.A = createSideState(setup.sideA, 'A');
         match.sides.B = createSideState(setup.sideB, 'B');
 
         await loadBattleTacticsForRuleset(match.ruleset);
+        await loadTwistsData();
 
         await Promise.all([loadFactionForSide(match.sides.A), loadFactionForSide(match.sides.B)]);
         abilities.populateUnifiedPhaseRules(match.sides);
@@ -912,6 +1223,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sideBFirstBtn.textContent = `${match.sides.B.displayName} Goes First`;
         updateScoreDisplays();
         applyRulesetChrome();
+        renderTwistDeckPicker(setup.twistDeck || null);
+        renderCurrentTwistSlot();
 
         // Keep page chrome neutral so each column owns its faction colours
         document.body.className = 'match-page';
@@ -923,11 +1236,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (preBattle) preBattle.style.display = '';
         if (setupPanel) setupPanel.style.display = '';
 
-        console.log('Match board ready', { ruleset: match.ruleset, sides: match.sides });
+        console.log('Match board ready', {
+            ruleset: match.ruleset,
+            twistDeck: match.twistDeckId,
+            sides: match.sides
+        });
     }
 
     // --- Events ---
     startMatchBtn.addEventListener('click', () => {
+        if (usesTwists() && !activeTwistDeck) {
+            alert('Please select a twist deck before starting the match.');
+            return;
+        }
         // Intro splash once per board load, then turn-order selection
         if (!versusShownThisMatch) {
             showVersusScreen();
@@ -957,6 +1278,32 @@ document.addEventListener('DOMContentLoaded', () => {
         openTacticContext = null;
     });
 
+    if (closeTwistBtn) {
+        closeTwistBtn.addEventListener('click', closeTwistModal);
+    }
+
+    const twistViewBtn = document.getElementById('match-twist-scoring-view-btn');
+    if (twistViewBtn) {
+        twistViewBtn.addEventListener('click', () => {
+            if (match.currentTwist) openTwistModal(match.currentTwist);
+        });
+    }
+
+    const twistMinusBtn = document.getElementById('match-twist-points-minus');
+    const twistPlusBtn = document.getElementById('match-twist-points-plus');
+    if (twistMinusBtn) {
+        twistMinusBtn.addEventListener('click', () => {
+            setPendingTwistPoints(pendingTwistPoints - 1);
+            updateModalScorePreview();
+        });
+    }
+    if (twistPlusBtn) {
+        twistPlusBtn.addEventListener('click', () => {
+            setPendingTwistPoints(pendingTwistPoints + 1);
+            updateModalScorePreview();
+        });
+    }
+
     useCommandBtn.addEventListener('click', () => {
         if (!openTacticContext) return;
         const side = match.sides[openTacticContext.sideId];
@@ -981,6 +1328,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target === tacticModal) {
             tacticModal.style.display = 'none';
             openTacticContext = null;
+        }
+        if (event.target === twistModal) {
+            closeTwistModal();
         }
         if (event.target === gameOverModal) {
             gameOverModal.style.display = 'none';
