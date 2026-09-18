@@ -33,6 +33,38 @@
             <!-- Shared clock / controls -->
             <section class="match-shared-bar">
                 <div id="match-setup-panel" class="match-setup-panel">
+                    <div class="match-ruleset-badge" id="match-ruleset-badge">Ruleset: —</div>
+
+                    <section id="pre-battle-steps" class="pre-battle-steps" aria-labelledby="pre-battle-heading">
+                        <h3 id="pre-battle-heading">Pre-Battle Steps</h3>
+                        <ol class="pre-battle-list">
+                            <li>
+                                <strong>Roll off.</strong> The winner chooses who is the attacker and who is the defender.
+                            </li>
+                            <li>
+                                The attacker picks their regiment ability and their enhancement. Then the defender does the same.
+                            </li>
+                            <li>
+                                The defender chooses which side of the realm battlefield the players will fight on: Aqshy or Ghyran.
+                            </li>
+                            <li>
+                                The defender picks 1 of the deployment maps on the right and chooses which territory belongs to which player.
+                            </li>
+                            <li>
+                                The defender sets up their terrain features, followed by the attacker. Each terrain feature must be set up wholly within friendly territory, more than 6&quot; from all other terrain features and more than 3&quot; from both long battlefield edges and enemy territory. Terrain features cannot be set up on top of the objectives (either wholly or partially).
+                            </li>
+                        </ol>
+                        <div class="pre-battle-deployment">
+                            <h4>Deployment</h4>
+                            <p>
+                                Do not deploy armies as described in the Core Rules. Instead, the attacker sets up all the units in their army first, followed by the defender. Each unit must be set up wholly within friendly territory and more than 6&quot; from enemy territory.
+                            </p>
+                            <p>
+                                If it is the first battle round, the attacker chooses who will take the first turn. In any other battle round, the players roll off and the winner decides who takes the first turn of that battle round.
+                            </p>
+                        </div>
+                    </section>
+
                     <button id="start-match-btn" class="start-game-btn">Start Match</button>
                 </div>
 
@@ -234,8 +266,25 @@
                 </div>
             </div>
             <div class="scoring-section">
-                <h4>Battle Tactics</h4>
+                <h4 id="match-tactics-scoring-heading">Battle Tactics</h4>
                 <div id="match-battle-tactics-scoring" class="battle-tactics-scoring"></div>
+                <div id="match-custom-tactics-scoring" class="custom-tactics-scoring" style="display: none;">
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-custom-tactic-1">
+                        <span class="checkmark"></span>
+                        Battle Tactic 1
+                    </label>
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-custom-tactic-2">
+                        <span class="checkmark"></span>
+                        Battle Tactic 2
+                    </label>
+                    <label class="objective-checkbox">
+                        <input type="checkbox" id="match-custom-tactic-3">
+                        <span class="checkmark"></span>
+                        Battle Tactic 3
+                    </label>
+                </div>
             </div>
             <div class="score-summary">
                 <div class="score-row"><span>Primary Score:</span><span id="match-primary-score">0</span></div>

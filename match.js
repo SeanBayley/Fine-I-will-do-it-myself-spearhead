@@ -51,6 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let abilities = null;
     let versusShownThisMatch = false;
 
+    const RULESET_FILES = {
+        'fire-and-jade': 'data/battle_tactics.json',
+        'city-of-ash': 'data/city_of_ash_battle_tactics.json',
+        custom: null
+    };
+    const RULESET_LABELS = {
+        'fire-and-jade': 'Fire and Jade',
+        'city-of-ash': 'City of Ash',
+        custom: 'Custom'
+    };
+
     // Neon colours for the VS screen — keep in sync with faction themes in style.css
     const FACTION_VS_COLORS = {
         'stormcast-eternals': { color: '#0d6efd', rgb: '13, 110, 253' },
@@ -73,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const match = {
         isActive: false,
+        ruleset: 'fire-and-jade',
         currentRound: 1,
         currentPhase: 0,
         activeSide: 'A',
@@ -86,7 +98,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    function isCustomRuleset() {
+        return match.ruleset === 'custom';
+    }
+
+    function usesBattleTacticCards() {
+        return !isCustomRuleset();
+    }
+
     function createSideState(setup, label) {
+        const deck = usesBattleTacticCards()
+            ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            : [];
         return {
             id: label,
             factionFile: setup.faction,
@@ -94,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             enhancement: setup.enhancement,
             factionData: null,
             displayName: label === 'A' ? 'Side A' : 'Side B',
-            allCards: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            allCards: deck,
             drawnCards: [],
             currentRoundCards: [],
             cardsByRound: {},
@@ -114,11 +137,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!raw) return null;
             const data = JSON.parse(raw);
             if (!data?.sideA?.faction || !data?.sideB?.faction) return null;
+            if (!data.ruleset || !Object.prototype.hasOwnProperty.call(RULESET_FILES, data.ruleset)) {
+                console.warn('Match setup missing or unknown ruleset; defaulting to fire-and-jade');
+                data.ruleset = 'fire-and-jade';
+            }
             return data;
         } catch (err) {
             console.error('Failed to load match setup', err);
             return null;
         }
+    }
+
+    function applyRulesetChrome() {
+        const badge = document.getElementById('match-ruleset-badge');
+        if (badge) {
+            badge.textContent = `Ruleset: ${RULESET_LABELS[match.ruleset] || match.ruleset}`;
+        }
+        if (matchBoardEl) {
+            matchBoardEl.classList.toggle('ruleset-custom', isCustomRuleset());
+            matchBoardEl.classList.toggle('ruleset-city-of-ash', match.ruleset === 'city-of-ash');
+            matchBoardEl.classList.toggle('ruleset-fire-and-jade', match.ruleset === 'fire-and-jade');
+        }
+        const cardsRow = document.getElementById('match-cards-row');
+        if (cardsRow) {
+            cardsRow.style.display = usesBattleTacticCards() ? '' : 'none';
+        }
+        console.log('Applied ruleset chrome', match.ruleset);
     }
 
     function escapeHtml(unsafe) {
@@ -250,23 +294,27 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActiveSideHighlight();
         applyActiveArmyChrome();
         updateScoreDisplays();
-        renderSideCards(match.sides.A);
-        renderSideCards(match.sides.B);
+        if (usesBattleTacticCards()) {
+            renderSideCards(match.sides.A);
+            renderSideCards(match.sides.B);
+        }
         abilities.onPhaseOrTurnChange(match.sides);
     }
 
     function calcSideTotals(side) {
         let primary = 0;
-        let tactics = side.scoredCards.length;
         Object.values(side.scores.rounds).forEach((round) => {
             primary += round.primary || 0;
         });
-        // Prefer stored round tactics when present (avoids double-count quirks)
+        // Prefer stored round tactics (required for custom ruleset checkbox scoring)
         const storedTactics = Object.values(side.scores.rounds).reduce(
             (sum, round) => sum + (round.tactics || 0),
             0
         );
-        if (storedTactics > 0) tactics = storedTactics;
+        let tactics = storedTactics;
+        if (!isCustomRuleset() && storedTactics === 0) {
+            tactics = side.scoredCards.length;
+        }
 
         const total = primary + tactics;
         side.scores.gameTotal = total;
@@ -316,10 +364,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawCardsForRound() {
+        if (!usesBattleTacticCards()) {
+            console.log('Custom ruleset — skipping card draw');
+            return;
+        }
         drawCardsForSide(match.sides.A);
         drawCardsForSide(match.sides.B);
         renderSideCards(match.sides.A);
         renderSideCards(match.sides.B);
+    }
+
+    function getCustomTacticScoreFromModal() {
+        let score = 0;
+        if (document.getElementById('match-custom-tactic-1')?.checked) score++;
+        if (document.getElementById('match-custom-tactic-2')?.checked) score++;
+        if (document.getElementById('match-custom-tactic-3')?.checked) score++;
+        return score;
+    }
+
+    function advanceAfterBothTurns() {
+        match.currentRound += 1;
+        match.roundTurnsCompleted = 0;
+
+        if (match.currentRound > 4) {
+            endMatch('All 4 rounds have been completed.');
+            return;
+        }
+
+        if (usesBattleTacticCards()) {
+            drawCardsForRound();
+        }
+        showTurnOrderSelection();
     }
 
     function openTacticModal(sideId, cardNumber) {
@@ -363,38 +438,68 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('match-primary-2').checked = false;
         document.getElementById('match-primary-3').checked = false;
 
-        tacticsScoringEl.innerHTML = '';
-        const pending = (side.cardsByRound[match.currentRound] || []).filter(
-            (n) => getCardStatus(side, n) === 'Pending'
-        );
+        // Ensure round score bucket exists before scoring interactions
+        if (!side.scores.rounds[match.currentRound]) {
+            side.scores.rounds[match.currentRound] = { primary: 0, tactics: 0, total: 0 };
+        } else if (isCustomRuleset()) {
+            // Custom uses checkboxes each open; card mode keeps any in-modal Score taps
+            side.scores.rounds[match.currentRound].tactics = 0;
+        }
 
-        pending.forEach((cardNumber) => {
-            const tactic = battleTactics.find((t) => t.cardNumber === cardNumber);
-            if (!tactic) return;
-            const card = document.createElement('div');
-            card.className = 'tactic-scoring-card';
-            card.dataset.cardNumber = cardNumber;
-            card.innerHTML = `
-                <div class="tactic-card-info">
-                    <div class="tactic-card-name">${escapeHtml(tactic.name)}</div>
-                    <div class="tactic-card-requirement">${escapeHtml(tactic.requirement || '')}</div>
-                </div>
-                <div class="tactic-card-actions">
-                    <button class="tactic-action-btn score-btn" type="button">Score</button>
-                </div>
-            `;
-            card.querySelector('.score-btn').addEventListener('click', () => {
-                setCardStatus(side, cardNumber, 'Scored');
-                if (!side.scores.rounds[match.currentRound]) {
-                    side.scores.rounds[match.currentRound] = { primary: 0, tactics: 0, total: 0 };
-                }
-                side.scores.rounds[match.currentRound].tactics += 1;
-                card.remove();
-                updateModalScorePreview();
-                renderSideCards(side);
+        const customTacticsEl = document.getElementById('match-custom-tactics-scoring');
+        const heading = document.getElementById('match-tactics-scoring-heading');
+
+        if (isCustomRuleset()) {
+            if (heading) heading.textContent = 'Battle Tactics (tick up to three)';
+            tacticsScoringEl.innerHTML = '';
+            tacticsScoringEl.style.display = 'none';
+            if (customTacticsEl) {
+                customTacticsEl.style.display = 'flex';
+                ['match-custom-tactic-1', 'match-custom-tactic-2', 'match-custom-tactic-3'].forEach((id) => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        input.checked = false;
+                        input.onchange = updateModalScorePreview;
+                    }
+                });
+            }
+        } else {
+            if (heading) heading.textContent = 'Battle Tactics';
+            if (customTacticsEl) customTacticsEl.style.display = 'none';
+            tacticsScoringEl.style.display = '';
+            tacticsScoringEl.innerHTML = '';
+            const pending = (side.cardsByRound[match.currentRound] || []).filter(
+                (n) => getCardStatus(side, n) === 'Pending'
+            );
+
+            pending.forEach((cardNumber) => {
+                const tactic = battleTactics.find((t) => t.cardNumber === cardNumber);
+                if (!tactic) return;
+                const card = document.createElement('div');
+                card.className = 'tactic-scoring-card';
+                card.dataset.cardNumber = cardNumber;
+                card.innerHTML = `
+                    <div class="tactic-card-info">
+                        <div class="tactic-card-name">${escapeHtml(tactic.name)}</div>
+                        <div class="tactic-card-requirement">${escapeHtml(tactic.requirement || '')}</div>
+                    </div>
+                    <div class="tactic-card-actions">
+                        <button class="tactic-action-btn score-btn" type="button">Score</button>
+                    </div>
+                `;
+                card.querySelector('.score-btn').addEventListener('click', () => {
+                    setCardStatus(side, cardNumber, 'Scored');
+                    if (!side.scores.rounds[match.currentRound]) {
+                        side.scores.rounds[match.currentRound] = { primary: 0, tactics: 0, total: 0 };
+                    }
+                    side.scores.rounds[match.currentRound].tactics += 1;
+                    card.remove();
+                    updateModalScorePreview();
+                    renderSideCards(side);
+                });
+                tacticsScoringEl.appendChild(card);
             });
-            tacticsScoringEl.appendChild(card);
-        });
+        }
 
         ['match-primary-1', 'match-primary-2', 'match-primary-3'].forEach((id) => {
             document.getElementById(id).onchange = updateModalScorePreview;
@@ -411,7 +516,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('match-primary-2').checked) primary++;
         if (document.getElementById('match-primary-3').checked) primary++;
 
-        const tacticScore = (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
+        const tacticScore = isCustomRuleset()
+            ? getCustomTacticScoreFromModal()
+            : (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
         const roundTotal = primary + tacticScore;
 
         let gameTotal = 0;
@@ -435,7 +542,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('match-primary-2').checked) primary++;
         if (document.getElementById('match-primary-3').checked) primary++;
 
-        const tacticScore = (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
+        const tacticScore = isCustomRuleset()
+            ? getCustomTacticScoreFromModal()
+            : (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
         const roundTotal = primary + tacticScore;
         side.scores.rounds[match.currentRound] = {
             primary,
@@ -508,16 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         cardModal.style.display = 'none';
-        match.currentRound += 1;
-        match.roundTurnsCompleted = 0;
-
-        if (match.currentRound > 4) {
-            endMatch('All 4 rounds have been completed.');
-            return;
-        }
-
-        drawCardsForRound();
-        showTurnOrderSelection();
+        advanceAfterBothTurns();
     }
 
     function continueToNextTurn() {
@@ -533,7 +633,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (match.roundTurnsCompleted >= 2) {
             abilities.onPhaseOrTurnChange(match.sides);
-            showCardManagementModal();
+            if (usesBattleTacticCards()) {
+                showCardManagementModal();
+            } else {
+                console.log('Custom ruleset — skipping end-of-round card management');
+                advanceAfterBothTurns();
+            }
             return;
         }
 
@@ -680,6 +785,10 @@ document.addEventListener('DOMContentLoaded', () => {
         turnOrderPanel.style.display = 'block';
         roundNumberEl.textContent = match.currentRound;
 
+        // Pre-battle checklist is only for the pre-start panel
+        const preBattle = document.getElementById('pre-battle-steps');
+        if (preBattle) preBattle.style.display = 'none';
+
         sideAFirstBtn.textContent = `${match.sides.A.displayName} Goes First`;
         sideBFirstBtn.textContent = `${match.sides.B.displayName} Goes First`;
     }
@@ -764,14 +873,37 @@ document.addEventListener('DOMContentLoaded', () => {
         abilities.renderSideUnits(side);
     }
 
+    async function loadBattleTacticsForRuleset(ruleset) {
+        if (ruleset === 'custom') {
+            battleTactics = [];
+            console.log('Custom ruleset — no battle tactic cards loaded');
+            return;
+        }
+
+        const file = RULESET_FILES[ruleset] || RULESET_FILES['fire-and-jade'];
+        const tacticsRes = await fetch(file);
+        if (!tacticsRes.ok) throw new Error(`Failed to load battle tactics from ${file}`);
+        const tacticsData = await tacticsRes.json();
+        battleTactics = tacticsData.battleTactics || [];
+
+        // Keep deck in sync with whatever pack was loaded
+        const cardNumbers = battleTactics.map((t) => t.cardNumber).filter(Boolean);
+        ['A', 'B'].forEach((id) => {
+            if (match.sides[id]) {
+                match.sides[id].allCards = cardNumbers.length
+                    ? [...cardNumbers]
+                    : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+            }
+        });
+        console.log(`Loaded ${battleTactics.length} tactics for ruleset ${ruleset} from ${file}`);
+    }
+
     async function initMatchBoard(setup) {
+        match.ruleset = setup.ruleset || 'fire-and-jade';
         match.sides.A = createSideState(setup.sideA, 'A');
         match.sides.B = createSideState(setup.sideB, 'B');
 
-        const tacticsRes = await fetch('data/battle_tactics.json');
-        if (!tacticsRes.ok) throw new Error('Failed to load battle tactics');
-        const tacticsData = await tacticsRes.json();
-        battleTactics = tacticsData.battleTactics || [];
+        await loadBattleTacticsForRuleset(match.ruleset);
 
         await Promise.all([loadFactionForSide(match.sides.A), loadFactionForSide(match.sides.B)]);
         abilities.populateUnifiedPhaseRules(match.sides);
@@ -779,13 +911,19 @@ document.addEventListener('DOMContentLoaded', () => {
         sideAFirstBtn.textContent = `${match.sides.A.displayName} Goes First`;
         sideBFirstBtn.textContent = `${match.sides.B.displayName} Goes First`;
         updateScoreDisplays();
+        applyRulesetChrome();
 
         // Keep page chrome neutral so each column owns its faction colours
         document.body.className = 'match-page';
 
         missingSetupEl.style.display = 'none';
         matchBoardEl.style.display = 'block';
-        console.log('Match board ready', match.sides);
+
+        const preBattle = document.getElementById('pre-battle-steps');
+        if (preBattle) preBattle.style.display = '';
+        if (setupPanel) setupPanel.style.display = '';
+
+        console.log('Match board ready', { ruleset: match.ruleset, sides: match.sides });
     }
 
     // --- Events ---

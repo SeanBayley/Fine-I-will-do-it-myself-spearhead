@@ -26,35 +26,67 @@
                 <h2 class="app-title">Local 2-Player Setup</h2>
                 <p>Configure both armies on this laptop. Solo tracking is unchanged on the home page.</p>
                 <div class="setup-step-indicator" id="setup-step-indicator">
-                    <span class="setup-step active" data-step="A">1. Side A</span>
-                    <span class="setup-step" data-step="B">2. Side B</span>
+                    <span class="setup-step active" data-step="ruleset">1. Ruleset</span>
+                    <span class="setup-step" data-step="A">2. Side A</span>
+                    <span class="setup-step" data-step="B">3. Side B</span>
                 </div>
             </div>
 
-            <div class="faction-selection-section">
-                <h2 class="app-title" id="setup-side-title">Side A — Select Faction</h2>
-                <div id="faction-grid"></div>
-            </div>
+            <section id="ruleset-selection" class="ruleset-selection-section">
+                <h2 class="app-title">Select Ruleset</h2>
+                <p class="ruleset-intro">Choose how battle tactics work for this match. Fire and Jade uses the current cards; City of Ash uses a separate pack; Custom skips cards and scores up to three battle tactics each turn.</p>
+                <div class="ruleset-options" role="radiogroup" aria-label="Ruleset">
+                    <label class="ruleset-option">
+                        <input type="radio" name="ruleset" value="fire-and-jade">
+                        <span class="ruleset-option-body">
+                            <span class="ruleset-option-title">Fire and Jade</span>
+                            <span class="ruleset-option-desc">Current battle tactic cards and scoring rules.</span>
+                        </span>
+                    </label>
+                    <label class="ruleset-option">
+                        <input type="radio" name="ruleset" value="city-of-ash">
+                        <span class="ruleset-option-body">
+                            <span class="ruleset-option-title">City of Ash</span>
+                            <span class="ruleset-option-desc">Card-based scoring with a separate City of Ash pack (placeholders for now).</span>
+                        </span>
+                    </label>
+                    <label class="ruleset-option">
+                        <input type="radio" name="ruleset" value="custom">
+                        <span class="ruleset-option-body">
+                            <span class="ruleset-option-title">Custom</span>
+                            <span class="ruleset-option-desc">No cards. At scoring, tick off up to three battle tactics (Battle Tactic 1–3).</span>
+                        </span>
+                    </label>
+                </div>
+                <button id="ruleset-continue-btn" class="continue-button" type="button" disabled>Continue to Side A</button>
+            </section>
 
-            <div id="rules-content">
-                <section id="faction-rules" style="display: none;">
-                    <div class="faction-rules-header">
-                        <h2 id="faction-rules-heading">Side A — Faction Rules</h2>
-                    </div>
-                    <div id="army-rules">
-                        <h3>Army Rules</h3>
-                    </div>
-                    <div id="spearhead-composition">
-                        <h3>Spearhead Composition</h3>
-                    </div>
-                    <div id="regiment-ability-selection">
-                        <h3>Regiment Ability (Select One)</h3>
-                    </div>
-                    <div id="enhancement-selection">
-                        <h3>Enhancement (Select One Artefact of Power)</h3>
-                    </div>
-                    <button id="faction-rules-continue" class="continue-button" style="display: none;" disabled>Continue to Side B</button>
-                </section>
+            <div id="army-setup-section" class="army-setup-section" style="display: none;">
+                <div class="faction-selection-section">
+                    <h2 class="app-title" id="setup-side-title">Side A — Select Faction</h2>
+                    <div id="faction-grid"></div>
+                </div>
+
+                <div id="rules-content">
+                    <section id="faction-rules" style="display: none;">
+                        <div class="faction-rules-header">
+                            <h2 id="faction-rules-heading">Side A — Faction Rules</h2>
+                        </div>
+                        <div id="army-rules">
+                            <h3>Army Rules</h3>
+                        </div>
+                        <div id="spearhead-composition">
+                            <h3>Spearhead Composition</h3>
+                        </div>
+                        <div id="regiment-ability-selection">
+                            <h3>Regiment Ability (Select One)</h3>
+                        </div>
+                        <div id="enhancement-selection">
+                            <h3>Enhancement (Select One Artefact of Power)</h3>
+                        </div>
+                        <button id="faction-rules-continue" class="continue-button" style="display: none;" disabled>Continue to Side B</button>
+                    </section>
+                </div>
             </div>
         </main>
     </div>
