@@ -2,146 +2,146 @@
   "battleTactics": [
     {
       "cardNumber": 1,
-      "name": "Ashfall Ambush",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 1.",
+      "name": "Take What's Theirs",
+      "description": "They don't own it; they're merely holding onto it until you run them through.",
+      "requirement": "You complete this battle tactic at the end of the turn if you control a relic that is within enemy territory.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Hero Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 1."
+        "name": "Prepared Riposte",
+        "timing": "Enemy Movement Phase",
+        "declare": "Pick a friendly unit to be the target.",
+        "effect": "For the rest of the turn, the target has STRIKE-FIRST while it is in combat with an enemy unit that charged in the same turn."
       }
     },
     {
       "cardNumber": 2,
-      "name": "Cinder Path",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 2.",
+      "name": "Pitiless Murder",
+      "description": "There is no honour in Embergard, and many meet their end surrounded and set upon in some dismal alley.",
+      "requirement": "You complete this battle tactic at the end of your turn if an enemy unit was picked to be the target of all the combat attacks made by 2 or more different friendly units this turn.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Movement Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 2."
+        "name": "Motivated by Greed",
+        "timing": "Any Hero Phase",
+        "declare": "Pick a friendly unit within 6\" of a relic to be the target.",
+        "effect": "Add D6 to the target's control score until the start of your next turn."
       }
     },
     {
       "cardNumber": 3,
-      "name": "Ember Hold",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 3.",
+      "name": "Take the Flanks",
+      "description": "Surround the enemy before you close in for the kill.",
+      "requirement": "You complete this battle tactic at the end of your turn if there are any friendly units within 3\" of each short battlefield edge.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Charge Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 3."
+        "name": "Rigged Explosions",
+        "timing": "End of Any Turn",
+        "declare": "Pick a relic. Then, pick each unit (friendly and enemy) within 3\" of that relic to be the targets.",
+        "effect": "Roll a D3 for each target. Inflict an amount of mortal damage on the target equal to the roll."
       }
     },
     {
       "cardNumber": 4,
-      "name": "Smoke Screen",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 4.",
+      "name": "Cut Off the Head",
+      "description": "Claim the head of the enemy's general to shatter their morale.",
+      "requirement": "You complete this battle tactic at the end of your turn if the enemy general was slain this turn OR the enemy general was slain in an earlier turn and any enemy units were destroyed this turn.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Shooting Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 4."
+        "name": "Counter-Charge",
+        "timing": "Enemy Charge Phase",
+        "declare": "Pick a friendly unit that is not in combat to use this ability.",
+        "effect": "That unit can use a CHARGE ability as if it were your charge phase."
       }
     },
     {
       "cardNumber": 5,
-      "name": "Molten Advance",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 5.",
+      "name": "Raid",
+      "description": "Drive deep into enemy territory and wreak havoc!",
+      "requirement": "You complete this battle tactic at the end of your turn if any friendly units are wholly within enemy territory and not in combat.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Combat Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 5."
+        "name": "Race for the Loot",
+        "timing": "Any Charge Phase",
+        "declare": "Pick a relic on the battlefield to be the target.",
+        "effect": "For the rest of the turn, friendly units can finish charge moves within ½\" of the target as if it were an enemy unit."
       }
     },
     {
       "cardNumber": 6,
-      "name": "Ruined Spire",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 6.",
+      "name": "Protect the Loot",
+      "description": "What good is treasure if you can't hang onto it?",
+      "requirement": "You complete this battle tactic at the end of your turn if an enemy unit was destroyed by a friendly unit while that friendly unit was within 3\" of a relic.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "End of Turn",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 6."
+        "name": "Last-Ditch Effort",
+        "timing": "Your Hero Phase",
+        "declare": "Pick a friendly unit that has been destroyed and has not already been replaced.",
+        "effect": "Set up either a replacement unit with a combined Health characteristic of up to 4 or a single-model replacement unit with X damage points already allocated to it, where X is its Health characteristic minus 4. The unit must be set up more than 6\" from all enemy units."
       }
     },
     {
       "cardNumber": 7,
-      "name": "Charred Banner",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 7.",
+      "name": "Hold the Centre",
+      "description": "Take the middle ground, and be the rock upon which the enemy shatters.",
+      "requirement": "You complete this battle tactic at the end of your turn if there are 2 or more friendly units within 3\" of the centre of the battlefield.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Hero Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 7."
+        "name": "Slip Away",
+        "timing": "Any Combat Phase",
+        "declare": "Pick a friendly unit that is in combat to be the target.",
+        "effect": "The target can move 5\". It can move through the combat ranges of enemy units but it cannot end that move in combat."
       }
     },
     {
       "cardNumber": 8,
-      "name": "Scorched Earth",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 8.",
+      "name": "Raze",
+      "description": "Break through enemy lines so you can plunge into the city beyond.",
+      "requirement": "You complete this battle tactic at the end of your turn if there are any friendly units within 3\" of the long battlefield edge in enemy territory.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Movement Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 8."
+        "name": "Covetous Frenzy",
+        "timing": "Any Combat Phase",
+        "declare": "Pick a relic to be the target.",
+        "effect": "For the rest of the turn, add 1 to hit rolls for attacks made by friendly units while they are within 3\" of the target."
       }
     },
     {
       "cardNumber": 9,
-      "name": "Volcanic Pulse",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 9.",
+      "name": "Dais of the Comet",
+      "description": "The Twin-Tailed Comet is an omen of great significance.",
+      "requirement": "You complete this battle tactic at the end of your turn if you control the Twin-Tailed Comet objective.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Shooting Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 9."
+        "name": "Go Down Fighting",
+        "timing": "Any Hero Phase",
+        "declare": "Pick a friendly unit to be the target.",
+        "effect": "For the rest of the turn, each time you make an unmodified save roll of 5+ for a combat attack that targets this unit, inflict 1 mortal damage on the attacking unit after the FIGHT ability has been resolved."
       }
     },
     {
       "cardNumber": 10,
-      "name": "Glass Wastes",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 10.",
+      "name": "Dais of the Hammer",
+      "description": "Sigmar's sacred hammer is a potent symbol of might.",
+      "requirement": "You complete this battle tactic at the end of your turn if you control the Ghal Maraz objective.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Charge Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 10."
+        "name": "Fool's Gold",
+        "timing": "End of Any Turn",
+        "declare": "Pick a relic on the battlefield to be the target.",
+        "effect": "Remove the target from the battlefield, then set it up again more than 3\" from all enemy units and more than 6\" away from all other relics."
       }
     },
     {
       "cardNumber": 11,
-      "name": "Forge Breaker",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 11.",
+      "name": "Comb the Area",
+      "description": "It has been impressed on all of your warriors that returning empty-handed is not an option.",
+      "requirement": "You complete this battle tactic at the end of your turn if all friendly units are within 3\" of a relic (it does not need to be the same relic).",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "Combat Phase",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 11."
+        "name": "Redeploy",
+        "timing": "Enemy Movement Phase",
+        "declare": "Pick a friendly unit that is not in combat to use this ability.",
+        "effect": "That unit can move D6\". That move cannot pass through or end within the combat range of an enemy unit."
       }
     },
     {
       "cardNumber": 12,
-      "name": "Last Ember",
-      "description": "Placeholder City of Ash tactic — replace with final card text.",
-      "requirement": "Placeholder requirement for Battle Tactic 12.",
+      "name": "Material Gains",
+      "description": "Valuable resources lie scattered about this quarter of Embergard. Secure them before the enemy can do the same.",
+      "requirement": "You complete this battle tactic at the end of your turn if you control more relics than your opponent.",
       "command": {
-        "name": "Placeholder Command",
-        "timing": "End of Turn",
-        "declare": "Pick a friendly unit to use this ability",
-        "effect": "Placeholder effect for City of Ash card 12."
+        "name": "Grind Them to Dust",
+        "timing": "Any Combat Phase",
+        "declare": "Pick a friendly unit to use this ability.",
+        "effect": "That unit can use 2 FIGHT abilities this phase. After the first is used, however, inflict D3 mortal damage on that unit and it has STRIKE-LAST for the rest of the turn."
       }
     }
   ]

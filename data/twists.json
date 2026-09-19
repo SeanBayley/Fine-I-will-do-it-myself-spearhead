@@ -147,68 +147,136 @@
     "city-of-ash": {
       "decks": [
         {
-          "id": "ashfall",
-          "name": "Ashfall",
+          "id": "ashen-bastion",
+          "name": "Ashen Bastion",
           "twists": [
             {
-              "id": "coa-ashfall-1",
-              "name": "Ashfall Placeholder 1",
-              "flavor": "Placeholder City of Ash twist — replace with final card text.",
+              "id": "staging-posts",
+              "name": "Staging Posts",
+              "flavor": "This battle has another purpose – to establish redoubts from which to strike deeper into Embergard.",
               "rules": [
-                "Placeholder scoring rule for Ashfall twist 1."
+                "Starting with the active player, each player picks an objective on the battlefield. Each player scores 1 extra victory point at the end of their turn for each of those objectives they control.",
+                "The underdog can roll a dice. On a 3+, they can force their opponent to pick a different objective."
               ],
-              "maxPoints": 1
+              "maxPoints": 2
             },
             {
-              "id": "coa-ashfall-2",
-              "name": "Ashfall Placeholder 2",
-              "flavor": "Placeholder City of Ash twist — replace with final card text.",
+              "id": "cursed-treasure",
+              "name": "Cursed Treasure",
+              "flavor": "Perhaps this artefact is surrounded by an ominous whispering that instils paranoia in those nearby, or perhaps it simply smells worse than an ogor midden at high noon. Either way, proximity to it is highly distracting.",
               "rules": [
-                "Placeholder effect for Ashfall twist 2 (no victory points)."
+                "Starting with the active player, each player picks an enemy unit within 3\" of a relic. For the rest of the battle round, that unit has a maximum control score of 1.",
+                "The underdog must place the Ulguan Steel Caltrops. If there is no underdog, the players roll off and the winner must place them."
               ],
               "maxPoints": 0
             },
             {
-              "id": "coa-ashfall-3",
-              "name": "Ashfall Placeholder 3",
-              "flavor": "Placeholder City of Ash twist — replace with final card text.",
+              "id": "equivalent-escalades",
+              "name": "Equivalent Escalades",
+              "flavor": "By a twist of fate, both forces receive the order to besiege their enemy's defences at the same moment.",
               "rules": [
-                "Placeholder scoring rule for Ashfall twist 3."
+                "Each player scores 1 extra victory point at the end of their turn if they control the large terrain feature in enemy territory.",
+                "The underdog must place the Barrel of Emberstone. If there is no underdog, the players roll off and the winner must place it."
               ],
-              "maxPoints": 2
+              "maxPoints": 1
+            },
+            {
+              "id": "a-timely-exit",
+              "name": "A Timely Exit",
+              "flavor": "The thought occurs – you have your smouldering prizes, but do you have a way out?",
+              "rules": [
+                "The underdog can pick a battlefield edge to be obstructed.",
+                "Each player scores 1 extra victory point at the end of their turn for each battlefield edge that is not obstructed and has no enemy units within 3\" of it."
+              ],
+              "maxPoints": 4
+            },
+            {
+              "id": "got-your-back",
+              "name": "Got Your Back",
+              "flavor": "Friends or flunkies, comrades or cronies – it's all the same: safety in numbers.",
+              "rules": [
+                "For the rest of the battle round, add 1 to save rolls for friendly units while they are within 3\" of any other friendly units.",
+                "The underdog must place the Crate of Aqua Ghyranis. If there is no underdog, the players roll off and the winner must place it."
+              ],
+              "maxPoints": 0
+            },
+            {
+              "id": "well-have-that",
+              "name": "We'll Have That!",
+              "flavor": "That your opponent covets a thing is enough reason to go and seize it.",
+              "rules": [
+                "Each player receives 1 extra victory point at the end of their turn if they control the relic that was placed in enemy territory at the start of the battle.",
+                "The underdog can pick a friendly unit to be the assault force. For the rest of the battle round, add 2 to charge rolls for the assault force."
+              ],
+              "maxPoints": 1
             }
           ]
         },
         {
-          "id": "cinder",
-          "name": "Cinder",
+          "id": "shattered-crossroads",
+          "name": "Shattered Crossroads",
           "twists": [
             {
-              "id": "coa-cinder-1",
-              "name": "Cinder Placeholder 1",
-              "flavor": "Placeholder City of Ash twist — replace with final card text.",
+              "id": "assassinate",
+              "name": "Assassinate",
+              "flavor": "The timely elimination of a chosen foe can all but ensure victory.",
               "rules": [
-                "Placeholder scoring rule for Cinder twist 1."
+                "Starting with the active player, each player picks an enemy unit to be the mark. Each player receives 1 extra victory point at the end of the battle round if the enemy mark is destroyed this battle round.",
+                "The underdog must place the Inconspicuous Manhole. If there is no underdog, the players roll off and the winner must place it."
+              ],
+              "maxPoints": 1,
+              "scoringTiming": "end_of_battle_round"
+            },
+            {
+              "id": "aggressive-valuation",
+              "name": "Aggressive Valuation",
+              "flavor": "A group of foes is guarding a particular item of loot with greater zeal than their other gains. Seize it to see what all the fuss is about...",
+              "rules": [
+                "Starting with the active player, each player picks a friendly unit to have the guarded loot. Each player receives 1 extra victory point at the end of the battle round if the enemy unit that has the guarded loot is destroyed this battle round.",
+                "The underdog can roll a dice. On a 3+, they can force their opponent to pick a different unit to have the guarded loot."
+              ],
+              "maxPoints": 1,
+              "scoringTiming": "end_of_battle_round"
+            },
+            {
+              "id": "stockpiling-drive",
+              "name": "Stockpiling Drive",
+              "flavor": "In Embergard, disaster preparation is just a fact of life.",
+              "rules": [
+                "Each player receives 1 extra victory point at the end of their turn for each relic they control that they did not control at the start of their turn.",
+                "The underdog must place the Battered Barricade. If there is no underdog, the players roll off and the winner must place it."
+              ],
+              "maxPoints": 4
+            },
+            {
+              "id": "crux-point",
+              "name": "Crux Point",
+              "flavor": "Now you see it – the centre of the crossroads is the axle around which victory turns.",
+              "rules": [
+                "Each player receives 1 extra victory point at the end of their turn if they control the junction (the large circular objective in the centre).",
+                "The underdog must place the Ulguan Steel Caltrops. If there is no underdog, the players roll off and the winner must place them."
               ],
               "maxPoints": 1
             },
             {
-              "id": "coa-cinder-2",
-              "name": "Cinder Placeholder 2",
-              "flavor": "Placeholder City of Ash twist — replace with final card text.",
+              "id": "adrenaline-rush",
+              "name": "Adrenaline Rush",
+              "flavor": "The arcane fluctuations of the emberstone deposits beneath Embergard can imbue those who battle above with unexpected vigour.",
               "rules": [
-                "Placeholder effect for Cinder twist 2 (no victory points)."
+                "Starting with the underdog, each player can pick up to 2 friendly units that are not in combat to immediately move up to 3\". If there is no underdog, the active player moves their units first.",
+                "The underdog's units can end those moves in combat."
               ],
               "maxPoints": 0
             },
             {
-              "id": "coa-cinder-3",
-              "name": "Cinder Placeholder 3",
-              "flavor": "Placeholder City of Ash twist — replace with final card text.",
+              "id": "rapid-manoeuvres",
+              "name": "Rapid Manoeuvres",
+              "flavor": "Though their cobbled surface is cracked and pitted, Embergard's roads still allow for swift movement – leaving more strength for cutting.",
               "rules": [
-                "Placeholder scoring rule for Cinder twist 3."
+                "While a unit is wholly on the roads, it can use CHARGE abilities even if it used a RUN ability in the same turn.",
+                "The underdog can pick a friendly unit. That unit's melee weapons gain Anti-charge (+1 Rend) for the rest of the battle round."
               ],
-              "maxPoints": 2
+              "maxPoints": 0
             }
           ]
         }
