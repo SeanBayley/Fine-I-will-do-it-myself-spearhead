@@ -519,7 +519,7 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
         sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
         'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' },
         'cities-of-sigmar': { color: '#b91c1c', rgb: '185, 28, 28' },
-        'helsmiths-of-hashut': { color: '#1a3d2e', rgb: '26, 61, 46' },
+        'helsmiths-of-hashut': { color: '#1f4d38', rgb: '31, 77, 56' },
         'idoneth-deepkin': { color: '#0f766e', rgb: '15, 118, 110' }
     };
 
