@@ -85,6 +85,33 @@
                     </div>
                 </div>
 
+                <!-- Seizing the Initiative: choose seize vs forced double turn -->
+                <div id="match-seize-choice" class="turn-order-selection match-seize-panel" style="display: none;">
+                    <div class="turn-order-prompt">
+                        <h3>Seizing the Initiative?</h3>
+                        <p id="match-seize-choice-text" class="seize-panel-text"></p>
+                    </div>
+                    <div class="turn-order-buttons seize-choice-buttons">
+                        <button type="button" id="seize-yes-btn" class="turn-order-btn">Seized the Initiative</button>
+                        <button type="button" id="seize-forced-btn" class="turn-order-btn">Forced to go first</button>
+                        <button type="button" id="seize-choice-back-btn" class="turn-order-btn turn-order-btn--secondary">Back</button>
+                    </div>
+                </div>
+
+                <!-- Seizing warning: no battle tactic draw -->
+                <div id="match-seize-warning" class="turn-order-selection match-seize-panel" style="display: none;">
+                    <div class="turn-order-prompt">
+                        <h3>No Battle Tactic Draw</h3>
+                        <p id="match-seize-warning-text" class="seize-panel-text"></p>
+                        <p class="seize-panel-text seize-panel-text--muted">They keep only the cards already in hand (shown below). No new tactics will be drawn this battle round.</p>
+                        <div id="match-seize-kept-cards" class="seize-kept-cards"></div>
+                    </div>
+                    <div class="turn-order-buttons seize-choice-buttons">
+                        <button type="button" id="seize-confirm-btn" class="turn-order-btn">Confirm — Start Round</button>
+                        <button type="button" id="seize-warning-back-btn" class="turn-order-btn turn-order-btn--secondary">Back</button>
+                    </div>
+                </div>
+
                 <div id="match-in-progress" class="match-in-progress" style="display: none;">
                     <div class="match-clock">
                         <div class="turn-indicator" id="match-turn-indicator">
