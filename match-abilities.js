@@ -516,7 +516,11 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
         skaven: { color: '#8FD129', rgb: '143, 209, 41' },
         seraphon: { color: '#40E0D0', rgb: '64, 224, 208' },
         'ossiarch-bonereapers': { color: '#F5F5DC', rgb: '245, 245, 220' },
-        sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' }
+        sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
+        'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' },
+        'cities-of-sigmar': { color: '#b91c1c', rgb: '185, 28, 28' },
+        'helsmiths-of-hashut': { color: '#1f4d38', rgb: '31, 77, 56' },
+        'idoneth-deepkin': { color: '#0f766e', rgb: '15, 118, 110' }
     };
 
     function getSideChipStyle(side) {

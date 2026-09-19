@@ -1,0 +1,358 @@
+{
+  "factionName": "Helsmiths of Hashut",
+  "factionId": "helsmiths-of-hashut",
+  "lore": "<h2>Helforge Host</h2><p>To the servants of Hashut, war is a matter of calculation. A <strong>Helforge Host</strong> is a concise but deadly force sent to claim a resource or punish a chosen enemy — highborn commanders, household warriors, and daemon engines drawn from the forges.</p><h3>Daemonic Artifice</h3><p>A cruel <strong>War Despot</strong> drives the <strong>Infernal Cohort</strong> onward while a <strong>Dominator Engine</strong> and <strong>Tormentor Bombard</strong> turn Hashut’s spite into fire and ruin.</p><h3>Spearhead Force</h3><p>Harness daemonic power each hero phase, allocate it carefully, and grind the foe beneath brass and flame.</p>",
+  "armyRules": [
+    {
+      "name": "HARNESS DAEMONIC POWER",
+      "type": "Battle Trait",
+      "timing": "Your Hero Phase",
+      "frequency": "Once Per Turn (Army)",
+      "description": "The Helsmiths of Hashut believe themselves above the fell influence of Chaos and readily harness daemonic power to embolden their spellcraft and ensorcelled weapons. Effect: You must use this ability at the start of each of your hero phases. Remove all daemonic power points from each friendly unit. Then, gain a number of daemonic power points equal to the current battle round number plus 1. Then, allocate your daemonic power points to friendly units. Each unit can have a maximum of 3 daemonic power points. Then, all unallocated daemonic power points are lost. Designer’s Note: Your units have abilities that become more powerful depending on how many daemonic power points they have. We recommend using coloured dice to track the number of points each unit has.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "GRINDING ADVANCE",
+      "type": "Regiment Ability",
+      "timing": "Deployment Phase",
+      "frequency": "Once Per Battle",
+      "description": "The scions of Hashut do not come swiftly – but they are thorough, relentless and in time, all shall be ground to rubble before them. Declare: Pick up to 2 friendly Infernal Cohort units to be the targets. Effect: Each target can immediately move up to 3\" but cannot use CHARGE abilities in the first battle round.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 2
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "instant",
+          "description": "Move up to 3\"; cannot CHARGE in battle round 1"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "SUPPRESSIVE BOMBARDMENT",
+      "type": "Regiment Ability",
+      "timing": "Your Shooting Phase",
+      "frequency": "Once Per Turn",
+      "description": "Shows of extreme force are a favoured tactic of the Zharrdron. Declare: Pick an enemy INFANTRY unit that had any damage points allocated to it this turn as a result of shooting attacks made by a friendly Tormentor Bombard to be the target. Effect: Until the start of your next turn, subtract 1 from the number of dice rolled when making charge rolls for the target, to a minimum of 1.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [
+            "INFANTRY"
+          ],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "charge",
+          "modifier": "-1 dice (min 1)",
+          "duration": "until_start_of_next_hero_phase",
+          "active_phases": [
+            "all"
+          ],
+          "description": "Target’s charge rolls use 1 fewer dice (minimum 1)"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "SCROLL OF PETRIFICATION",
+      "type": "Artefact of Power",
+      "timing": "Any Hero Phase",
+      "frequency": "Once Per Battle",
+      "description": "Though they cannot control the stone-flesh curse, the Zharrdron still believe it can be harnessed. This scroll is the result of such a belief. One who reads from it can transform themselves into stone for a fleeting moment. Effect: For the rest of the turn, your general has WARD (2+) but cannot use abilities or be picked to be the target of friendly abilities.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "TALISMAN OF OBSIDIAN",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Bartered in exchange for years of gruelling service, this talisman renders its wearer impervious to all but the most grievous of wounds. Effect: Ignore the first damage point allocated to your general in each phase."
+    },
+    {
+      "name": "CHALICE OF DARKNESS",
+      "type": "Artefact of Power",
+      "timing": "Your Shooting Phase",
+      "frequency": "Once Per Battle",
+      "description": "Dread power spills from this vessel of ebon-black stone. Declare: Pick a visible enemy unit within 12\" of your general to be the target. Effect: Inflict D3 mortal damage on the target.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "AMULET OF BURNING HATE",
+      "type": "Artefact of Power",
+      "timing": "Any Combat Phase",
+      "frequency": "Once Per Battle",
+      "description": "A sacred relic of the Drazghar order, this amulet is said to contain the merest flicker of Hashut’s depthless spite. Effect: For the rest of the turn, your general’s attacks score critical hits on unmodified hit rolls of 5+.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    }
+  ],
+  "spearheadComposition": [
+    "General: 1 War Despot",
+    "Units:",
+    "1 Dominator Engine with Immolation Cannons",
+    "1 Tormentor Bombard",
+    "5 Infernal Cohort with Hashutite Spears",
+    "5 Infernal Cohort with Hashutite Spears (with Gong Carrier)"
+  ],
+  "units": [
+    {
+      "name": "War Despot",
+      "imageUrl": "images/helsmiths_of_hashut/War Despot.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "4\"",
+        "health": 6,
+        "save": "3+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Daemonflame Glaive",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2,
+          "abilities": [
+            {
+              "name": "Crit (Mortal)",
+              "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon’s Damage characteristic, instead of the normal damage."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "BLACK-HEARTED CONQUEROR",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Those sworn to serve beneath a Despot must offer them conquest and tribute or suffer the consequences… Effect: While this unit has any daemonic power points, friendly units with 0 daemonic power points count as having 1 daemonic power point while they are wholly within 6\" of and visible to this unit. For each daemonic power point this unit has, add 3\" to the range of this ability."
+        }
+      ],
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "HERO",
+        "INFANTRY"
+      ]
+    },
+    {
+      "name": "Infernal Cohort with Hashutite Spears",
+      "imageUrl": "images/helsmiths_of_hashut/Infernal Cohort with Hashutite Spears.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "4\"",
+        "health": 1,
+        "save": "3+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Hashutite Spear",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Anti-charge (+1 Rend)",
+              "description": "Add 1 to the Rend characteristic of this weapon for attacks that target a unit that charged in the same turn."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "STRIKE THE GONGS",
+          "type": "Ability",
+          "timing": "Any Hero Phase",
+          "frequency": "Once Per Battle",
+          "description": "Borne by straining hobgrots, these gongs are holy relics to the servants of Hashut. Effect: This unit’s Gong Carrier (if any) is a token. You can remove its Gong Carrier from the battlefield and return D3 slain models to this unit.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_battle"
+          }
+        },
+        {
+          "name": "DAEMONIC RESILIENCE",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Spitting contempt from between their tusks, these duardin refuse to show the slightest shred of weakness. Effect: Apply the effect below that corresponds with the number of daemonic power points (DPP) this unit has: 1 — This unit has WARD (6+). 2 — This unit has WARD (5+). 3 — This unit has WARD (5+) and you ignore the first damage point allocated to this unit in each phase."
+        }
+      ],
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "INFANTRY",
+        "REINFORCEMENTS"
+      ]
+    },
+    {
+      "name": "Dominator Engine with Immolation Cannons",
+      "imageUrl": "images/helsmiths_of_hashut/Dominator Engine with Immolation Cannons.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "6\"",
+        "health": 10,
+        "save": "2+",
+        "control": 2
+      },
+      "rangedWeapons": [
+        {
+          "name": "Immolation Cannons",
+          "range": "8\"",
+          "attacks": 5,
+          "hit": "2+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": "D3",
+          "abilities": [
+            {
+              "name": "Shoot in Combat",
+              "description": "This weapon can be used to shoot even while this unit is in combat."
+            }
+          ]
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Horns and Pummelling Strikes",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3"
+        }
+      ],
+      "abilities": [
+        {
+          "name": "DAEMONIC STRENGTH",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "When empowered with a surplus of daemonic energy, Dominator Engines are made faster and deadlier still. Effect: For each daemonic power point this unit has: Add 1\" to its Move characteristic. Add 1 to the Attacks characteristic of its weapons."
+        }
+      ],
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "WAR MACHINE",
+        "REINFORCEMENTS"
+      ]
+    },
+    {
+      "name": "Tormentor Bombard",
+      "imageUrl": "images/helsmiths_of_hashut/Tormentor Bombard.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "4\"",
+        "health": 8,
+        "save": "3+",
+        "control": 2
+      },
+      "rangedWeapons": [
+        {
+          "name": "Torrent of Ruinous Energy",
+          "range": "30\"",
+          "attacks": 4,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3",
+          "abilities": [
+            {
+              "name": "Anti-INFANTRY (+1 Rend)",
+              "description": "Add 1 to the Rend characteristic of this weapon for attacks that target an INFANTRY unit."
+            },
+            {
+              "name": "Anti-CAVALRY (+1 Rend)",
+              "description": "Add 1 to the Rend characteristic of this weapon for attacks that target a CAVALRY unit."
+            }
+          ]
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Artillerist Weapons",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "CALCULATED TRAJECTORY",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "The warhosts of the Chaos duardin revel in overwhelming their foes with excessive, punishing firepower. Effect: Add 1 to hit rolls for this unit’s shooting attacks that target an enemy unit with 5 or more models that is more than 12\" from this unit."
+        },
+        {
+          "name": "RUINOUS BOMBARDMENT",
+          "type": "Ability",
+          "timing": "Your Shooting Phase",
+          "frequency": "Once Per Turn (Army)",
+          "description": "Those who survive the initial unmaking wave of raw Chaos energy laid down by a Tormentor Bombard are left addled and disoriented. Declare: If this unit used a SHOOT ability this turn and all of its attacks targeted the same enemy unit, that enemy unit is the target. Then, you can pick a number of enemy units within 6\" of the target equal to the number of daemonic power points this unit has to be additional targets. Effect: Roll a dice for each target. On a 3+, subtract 3 from the target’s control score for the rest of the turn.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_turn"
+          }
+        }
+      ],
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "WAR MACHINE"
+      ]
+    }
+  ],
+  "spearheadName": "Helforge Host",
+  "spearheadId": "helforge-host"
+}

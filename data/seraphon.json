@@ -16,7 +16,7 @@
       "name": "PREDATORY FIGHTERS",
       "type": "Regiment Ability",
       "timing": "Any End of Turn",
-      "frequency": "Once per turn", 
+      "frequency": "Once per turn",
       "description": "Declare: Roll a dice for each enemy unit in combat with any friendly units. Effect: On a 3+, inflict 1 mortal damage on the unit being rolled for."
     },
     {
@@ -32,7 +32,7 @@
       "name": "SOTEK'S GAZE",
       "type": "Artefact of Power",
       "timing": "Any End of Turn",
-      "frequency": "N/A", 
+      "frequency": "N/A",
       "description": "Effect: Roll a dice. Add the roll to your general's control score this turn.",
       "effects": [
         {
@@ -52,8 +52,8 @@
     {
       "name": "ANCIENT STRATEGIST",
       "type": "Artefact of Power",
-      "timing": "Enemy Movement Phase", 
-      "frequency": "Once Per Battle", 
+      "timing": "Enemy Movement Phase",
+      "frequency": "Once Per Battle",
       "description": "Declare: Pick a friendly unit wholly within 12\" of your general. You cannot pick your general. Effect: That unit can use the 'Normal Move' ability as if it were your movement phase.",
       "targeting": {
         "type": "friendly_unit",
@@ -142,7 +142,7 @@
       "name": "Saurus Oldblood on Carnosaur",
       "imageUrl": "images/seraphon/Saurus_Oldblood_on_Carnosaur.png",
       "backgroundPosition": 40,
-      "stats": { 
+      "stats": {
         "move": "10\"",
         "health": 14,
         "control": 5,
@@ -158,7 +158,10 @@
           "rend": 1,
           "damage": 1,
           "abilities": [
-            { "name": "Shoot in Combat", "description": "This weapon can target enemy units within 3 inches of the bearer, but it must target the closest enemy unit." }
+            {
+              "name": "Shoot in Combat",
+              "description": "This weapon can target enemy units within 3 inches of the bearer, but it must target the closest enemy unit."
+            }
           ]
         }
       ],
@@ -179,57 +182,70 @@
           "rend": 2,
           "damage": 3,
           "abilities": [
-             { "name": "Companion", "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics." }
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
           ]
         }
       ],
       "abilities": [
         {
-            "name": "Ancient Warlord",
-            "type": "Ability",
-            "timing": "Your Hero Phase",
-            "frequency": "Once per turn",
-            "description": "Declare: Pick a friendly unit wholly within 12\" of this unit. You cannot pick this unit. Effect: Add 1 to charge rolls for the target unit until the end of your next turn.",
-            "targeting": {
-                "type": "friendly_unit",
-                "range": "12\"",
-                "targeting_criteria": {
-                    "keywords": ["SERAPHON"],
-                    "exclude_self": true,
-                    "max_targets": 1
-                }
-            },
-            "effects": [
-                {
-                    "type": "modify_stat",
-                    "stat": "charge_roll",
-                    "modifier": "+1",
-                    "duration": "until_end_of_turn",
-                    "active_phases": ["charge_phase"],
-                    "symbol": "⚡",
-                    "description": "+1 to charge rolls"
-                }
-            ],
-            "usage": {
-                "max_uses": 1,
-                "reset_period": "per_turn"
+          "name": "Ancient Warlord",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "Once per turn",
+          "description": "Declare: Pick a friendly unit wholly within 12\" of this unit. You cannot pick this unit. Effect: Add 1 to charge rolls for the target unit until the end of your next turn.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [
+                "SERAPHON"
+              ],
+              "exclude_self": true,
+              "max_targets": 1
             }
+          },
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "charge_roll",
+              "modifier": "+1",
+              "duration": "until_end_of_turn",
+              "active_phases": [
+                "charge_phase"
+              ],
+              "symbol": "⚡",
+              "description": "+1 to charge rolls"
+            }
+          ],
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_turn"
+          }
         },
         {
-            "name": "Battle Damaged",
-            "type": "Ability",
-            "timing": "Combat Phase",
-            "frequency": "N/A",
-            "description": "Effect: While this unit has 10 or more damage points, the Attacks characteristic of its Carnosaur's Massive Jaws is 1."
+          "name": "Battle Damaged",
+          "type": "Ability",
+          "timing": "Combat Phase",
+          "frequency": "N/A",
+          "description": "Effect: While this unit has 10 or more damage points, the Attacks characteristic of its Carnosaur's Massive Jaws is 1."
         }
       ],
-      "keywords": ["ORDER", "SERAPHON", "SAURUS", "HERO", "MONSTER"] 
+      "keywords": [
+        "ORDER",
+        "SERAPHON",
+        "SAURUS",
+        "HERO",
+        "MONSTER"
+      ]
     },
     {
       "name": "Saurus Warriors",
       "imageUrl": "images/seraphon/Saurus_warriors.jpg_large",
       "backgroundPosition": 50,
-      "stats": { 
+      "stats": {
         "move": "5\"",
         "health": 2,
         "control": 1,
@@ -248,20 +264,24 @@
       ],
       "abilities": [
         {
-            "name": "Ordered Cohorts",
-            "type": "Ability",
-            "timing": "Combat Phase",
-            "frequency": "N/A",
-            "description": "Effect: Add 1 to save rolls for this unit while it is contesting an objective you control."
+          "name": "Ordered Cohorts",
+          "type": "Ability",
+          "timing": "Combat Phase",
+          "frequency": "N/A",
+          "description": "Effect: Add 1 to save rolls for this unit while it is contesting an objective you control."
         }
       ],
-      "keywords": ["ORDER", "SERAPHON", "INFANTRY"] 
+      "keywords": [
+        "ORDER",
+        "SERAPHON",
+        "INFANTRY"
+      ]
     },
     {
       "name": "Kroxigor",
       "imageUrl": "images/seraphon/Kroxigor.png",
       "backgroundPosition": 20,
-      "stats": { 
+      "stats": {
         "move": "5\"",
         "health": 6,
         "control": 2,
@@ -280,14 +300,20 @@
       ],
       "abilities": [
         {
-            "name": "Brutal Blows",
-            "type": "Ability",
-            "timing": "Combat Phase",
-            "frequency": "N/A",
-            "description": "Effect: This unit's melee weapons have Crit (2 Hits) if the target unit has 5 or more models."
+          "name": "Brutal Blows",
+          "type": "Ability",
+          "timing": "Combat Phase",
+          "frequency": "N/A",
+          "description": "Effect: This unit's melee weapons have Crit (2 Hits) if the target unit has 5 or more models."
         }
       ],
-      "keywords": ["ORDER", "SERAPHON", "INFANTRY"] 
+      "keywords": [
+        "ORDER",
+        "SERAPHON",
+        "INFANTRY"
+      ]
     }
-  ]
-} 
+  ],
+  "spearheadName": "Seraphon Spearhead",
+  "spearheadId": "seraphon-spearhead"
+}

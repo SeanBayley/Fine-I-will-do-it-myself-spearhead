@@ -121,7 +121,9 @@
           "stat": "rend",
           "modifier": "+1",
           "duration": "until_start_of_next_hero_phase",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "symbol": "🗡️",
           "description": "+1 Rend to melee weapons until the start of your next turn"
         }
@@ -173,7 +175,13 @@
           "description": "The wizard plucks reviving motes of magic from the air and uses them to renew the broken forms of fallen warriors. Declare: Pick a visible friendly unit wholly within 18\" of this unit to be the target, then make a casting roll of 2D6. Effect: On a 7+, you can return 1 slain model to the target unit. If you picked a Tree-Revenants unit, you can return D3 slain models instead of 1."
         }
       ],
-      "keywords": ["ORDER", "SYLVANETH", "HERO", "WIZARD", "INFANTRY"]
+      "keywords": [
+        "ORDER",
+        "SYLVANETH",
+        "HERO",
+        "WIZARD",
+        "INFANTRY"
+      ]
     },
     {
       "name": "Treelord",
@@ -241,7 +249,9 @@
               "stat": "strike_order",
               "modifier": "STRIKE-LAST",
               "duration": "until_end_of_phase",
-              "active_phases": ["combat_phase"],
+              "active_phases": [
+                "combat_phase"
+              ],
               "symbol": "⏰",
               "description": "On a 4+, target has STRIKE-LAST this phase"
             }
@@ -255,7 +265,11 @@
           "description": "While this unit has 10 or more damage points, the Attacks characteristic of its Massive Impaling Talons is 1."
         }
       ],
-      "keywords": ["ORDER", "SYLVANETH", "MONSTER"]
+      "keywords": [
+        "ORDER",
+        "SYLVANETH",
+        "MONSTER"
+      ]
     },
     {
       "name": "Kurnoth Hunters",
@@ -297,7 +311,11 @@
           "description": "While this unit is contesting an objective, friendly units contesting that objective have WARD (6+)."
         }
       ],
-      "keywords": ["ORDER", "SYLVANETH", "INFANTRY"]
+      "keywords": [
+        "ORDER",
+        "SYLVANETH",
+        "INFANTRY"
+      ]
     },
     {
       "name": "Tree-Revenants",
@@ -329,7 +347,14 @@
           "description": "Pick 1 of the following effects to apply to this unit this phase: Memories of War — Add 1 to hit rolls for attacks made by this unit. Memories of Peace — Add 1 to save rolls for this unit."
         }
       ],
-      "keywords": ["ORDER", "SYLVANETH", "INFANTRY", "REINFORCEMENTS"]
+      "keywords": [
+        "ORDER",
+        "SYLVANETH",
+        "INFANTRY",
+        "REINFORCEMENTS"
+      ]
     }
-  ]
+  ],
+  "spearheadName": "Bitterbark Copse",
+  "spearheadId": "bitterbark-copse"
 }
