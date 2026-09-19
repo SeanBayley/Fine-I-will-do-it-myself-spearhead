@@ -331,6 +331,16 @@ body.sylvaneth {
     --primary-700: #15803d;
 }
 
+/* Daughters of Khaine Theme (Blood crimson) */
+body.daughters-of-khaine {
+    --primary-color: #be123c;
+    --primary-color-rgb: 190, 18, 60;
+    --primary-hover-color: #9f1239;
+    --primary-500: #be123c;
+    --primary-600: #9f1239;
+    --primary-700: #881337;
+}
+
 .rule-box.selected {
     border-color: var(--primary-color);
     background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
@@ -735,6 +745,12 @@ main#rules-content section {
     --primary-color: #22c55e;
     --primary-color-rgb: 34, 197, 94;
     --primary-hover-color: #16a34a;
+}
+
+.faction-card.theme-daughters-of-khaine {
+    --primary-color: #be123c;
+    --primary-color-rgb: 190, 18, 60;
+    --primary-hover-color: #9f1239;
 }
 /* --- END Per-card Theme Overrides --- */
 

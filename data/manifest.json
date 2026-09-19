@@ -19,6 +19,10 @@
     {
       "name": "Sylvaneth",
       "dataFile": "data/sylvaneth.json"
+    },
+    {
+      "name": "Daughters of Khaine",
+      "dataFile": "data/daughters_of_khaine.json"
     }
   ]
 }

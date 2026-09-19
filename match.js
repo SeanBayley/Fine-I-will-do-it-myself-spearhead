@@ -75,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
         seraphon: { color: '#40E0D0', rgb: '64, 224, 208' },
         'ossiarch-bonereapers': { color: '#F5F5DC', rgb: '245, 245, 220' },
         sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
-        'orruk-warclans': { color: '#84cc16', rgb: '132, 204, 22' }
+        'orruk-warclans': { color: '#84cc16', rgb: '132, 204, 22' },
+        'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' }
     };
 
     // Image folder names under /images (underscore style used by existing assets)
@@ -85,7 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         seraphon: 'seraphon',
         'ossiarch-bonereapers': 'ossiarch_bonereapers',
         sylvaneth: 'sylvaneth',
-        'orruk-warclans': 'orruk_warclans'
+        'orruk-warclans': 'orruk_warclans',
+        'daughters-of-khaine': 'daughters_of_khaine'
     };
 
     const match = {
@@ -281,7 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'skaven',
         'seraphon',
         'ossiarch-bonereapers',
-        'sylvaneth'
+        'sylvaneth',
+        'daughters-of-khaine'
     ];
 
     function applyActiveArmyChrome() {
@@ -1065,13 +1068,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const scorePill = document.querySelector(`.match-score-pill[data-side="${side.id}"]`);
 
         // Replace any previous faction theme class on this panel/pill only
-        const themeClasses = [
-            'stormcast-eternals',
-            'skaven',
-            'seraphon',
-            'ossiarch-bonereapers',
-            'sylvaneth'
-        ];
+        const themeClasses = FACTION_THEME_CLASSES;
         themeClasses.forEach((cls) => {
             panel.classList.remove(cls);
             if (scorePill) scorePill.classList.remove(cls);
