@@ -1,0 +1,407 @@
+{
+  "factionName": "Cities of Sigmar",
+  "factionId": "cities-of-sigmar",
+  "lore": "<h2>Zenestra’s Zealots</h2><p>For all the terrible potency of its cannons and Cogforts, faith is the bedrock of the Sigmarite war machine. Few beings represent that belief as much as <strong>Pontifex Zenestra</strong>, Matriarch of the Great Wheel. Several times has she been recorded as slain, only to manifest anew wherever the need of the God-King’s folk is greatest.</p><h3>Faithful Escort</h3><p>Zenestra selects the most pious <strong>Freeguild Marshals</strong> and their <strong>Command Corps</strong> to accompany her, tempering the righteous fury of the <strong>Steelhelms</strong> with tactical nous. Full of zealous drive, these stubborn souls would rather perish than fail their saintly leader.</p><h3>Spearhead Force</h3><p>Shadowy Whisperblades, relic envoys, and fanatical infantry — Zenestra’s Zealots fight as if the Great Wheel itself turns upon their courage.</p>",
+  "armyRules": [
+    {
+      "name": "SHADOWY SPYMASTER",
+      "type": "Battle Trait",
+      "timing": "Deployment / Your Movement Phase",
+      "frequency": "N/A",
+      "description": "Whisperblades ensure that their masters are omniscient and their enemies oblivious. Your Whisperblade is not set up during the deployment phase. Instead, from the second battle round onwards, it can use the SUDDEN AMBUSH ability in your movement phase: set up this unit within 6\" of an enemy unit and not in combat."
+    },
+    {
+      "name": "LADY OF THE WHEEL",
+      "type": "Battle Trait",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Zenestra’s followers will defend her with a strength that can cow even a follower of the Dark Gods. Effect: Each time a friendly model is slain by a combat attack, roll a number of dice equal to that model’s Health characteristic. For each 5+, inflict 1 mortal damage on the attacking unit after the FIGHT ability has been resolved.",
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "while_condition",
+          "description": "When friendly models are slain by combat attacks, roll dice equal to Health; each 5+ inflicts 1 MD on the attacking unit after FIGHT"
+        }
+      ]
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "FERVENT RUSH",
+      "type": "Regiment Ability",
+      "timing": "Your Movement Phase",
+      "frequency": "Once Per Turn (Army)",
+      "description": "Singing righteous hymns and prepared to give their lives for the cause, these Sigmarites charge forward to battle. Declare: Pick a friendly unit to use this ability. Effect: This unit can use CHARGE abilities this turn even if it used a RUN ability in the same turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "until_end_of_turn",
+          "description": "Unit can CHARGE after RUN in the same turn"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    },
+    {
+      "name": "FIERCE ZEALOTS",
+      "type": "Regiment Ability",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Should Zenestra demand it, these followers will fight tooth and nail for even the meanest patch of dirt. Effect: Add 3 to the control scores of friendly Freeguild Steelhelms units.",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "control",
+          "modifier": 3,
+          "duration": "while_condition",
+          "description": "+3 control to friendly Freeguild Steelhelms units"
+        }
+      ]
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "DEVOUT COMMANDER",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "This faithful commander strikes with a ferocity born of utter conviction. Effect: Add 1 to the Attacks characteristic and the Rend characteristic of your general’s Master-forged Weapon.",
+      "effects": [
+        {
+          "type": "addWeaponAbility",
+          "target": {
+            "unit": "Freeguild Marshal and Relic Envoy",
+            "weapon": "Master-forged Weapon"
+          },
+          "ability": {
+            "name": "DEVOUT COMMANDER",
+            "description": "Add 1 to the Attacks characteristic and the Rend characteristic of this weapon."
+          }
+        }
+      ]
+    },
+    {
+      "name": "STAND FAST, COMRADES",
+      "type": "Artefact of Power",
+      "timing": "Your Hero Phase",
+      "frequency": "Once Per Battle",
+      "description": "The general calls upon their soldiers to hold the line, no matter the cost and no matter the foe. Declare: Pick a visible friendly non-HERO unit wholly within 12\" of your general to be the target. Effect: The target has WARD (4+) until the start of the next battle round.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "STEP TO IT!",
+      "type": "Artefact of Power",
+      "timing": "Reaction: You declared a RUN ability for a non-HERO unit wholly within 12\" of your general",
+      "frequency": "Once Per Turn",
+      "description": "The Marshal tells their men to heft their weapons and get moving! Effect: Do not make a run roll as part of that RUN ability. Instead, add 6\" to that non-HERO unit’s Move characteristic to determine the distance each model in that unit can move as part of that RUN ability.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    },
+    {
+      "name": "ARDENT DEMAND",
+      "type": "Artefact of Power",
+      "timing": "Any Combat Phase",
+      "frequency": "N/A",
+      "description": "With a bellowed order, the Marshal ignites the passion and fury of the Freeguilders, and they lay into the enemy furiously. Declare: Pick a visible friendly non-HERO unit wholly within 12\" of your general to be the target. Effect: Add 1 to hit rolls for the target’s combat attacks for the rest of the turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      }
+    }
+  ],
+  "spearheadComposition": [
+    "General: Freeguild Marshal and Relic Envoy (Relic Envoy is a token)",
+    "Units:",
+    "Pontifex Zenestra, Matriarch of the Great Wheel",
+    "1 Freeguild Command Corps Whisperblade",
+    "1 Freeguild Command Corps Arch-Knight and Retinue",
+    "5 Freeguild Steelhelms",
+    "5 Freeguild Steelhelms"
+  ],
+  "units": [
+    {
+      "name": "Freeguild Marshal and Relic Envoy",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Marshal and Relic Envoy.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "5\"",
+        "health": 5,
+        "save": "3+",
+        "control": 2
+      },
+      "rangedWeapons": [
+        {
+          "name": "Duelling Pistols",
+          "range": "10\"",
+          "attacks": 4,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Shoot in Combat",
+              "description": "This weapon can be used to shoot even while this unit is in combat."
+            }
+          ]
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Master-forged Weapon",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "MARSHAL’S ORDERS",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "The Relic Envoy rushes across the battlefield to hand-deliver a message. Declare: Pick a visible friendly unit wholly within 12\" of this unit to be the target. Effect: Remove this unit’s Relic Envoy token from the battlefield, then give it to the target.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        },
+        {
+          "name": "RELIC ENVOY",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Relic Envoys relay orders from the Freeguild Marshal to the soldiers of the line. Effect: While a friendly unit other than this unit has the Relic Envoy token, add 1 to wound rolls for that unit’s combat attacks. If this unit is destroyed, remove the Relic Envoy token from the battlefield."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Pontifex Zenestra, Matriarch of the Great Wheel",
+      "imageUrl": "images/cities_of_sigmar/Pontifex Zenestra, Matriarch of the Great Wheel.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "5\"",
+        "health": 9,
+        "save": "5+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Sceptre of the Wheel",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": "D3"
+        }
+      ],
+      "abilities": [
+        {
+          "name": "WARD (4+)",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit has WARD (4+)."
+        },
+        {
+          "name": "VESSEL OF SIGMAR",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "Channelling the divine might of the God-King, Pontifex Zenestra is a powerful beacon of faith who bolsters the righteous and smites the corrupt. Declare: Pick up to 3 visible friendly or enemy units to be the targets. Effect: Roll a D3 for each target. On a 2+: If it is a friendly target, it has WARD (5+) until the start of your next turn. If it is an enemy target, inflict an amount of mortal damage on it equal to the roll.",
+          "targeting": {
+            "type": "any_unit",
+            "range": "unlimited",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 3
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "PRIEST",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Freeguild Command Corps Whisperblade",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Command Corps Whisperblade.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "5\"",
+        "health": 3,
+        "save": "6+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Enchanted Rapier",
+          "attacks": 4,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 2,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "FOREWARNED IS FOREARMED",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "The Whisperblade is both master spy and deadly assassin combined: the ultimate opportunist. Effect: While it is your turn, this unit has STRIKE-FIRST."
+        },
+        {
+          "name": "SUDDEN AMBUSH",
+          "type": "Ability",
+          "timing": "Your Movement Phase",
+          "frequency": "N/A",
+          "description": "The Whisperblade hides until it is the perfect moment to strike. (This unit is not set up during deployment; from the second battle round onwards it can use this ability.) Effect: Set up this unit within 6\" of an enemy unit and not in combat."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Freeguild Command Corps Arch-Knight and Retinue",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Command Corps Arch-Knight and Retinue.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "5\"",
+        "health": 2,
+        "save": "4+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Command Weapons",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "UNIT COMPOSITION",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit comprises 1 Arch-Knight, 1 Great Herald, 1 War Surgeon, 1 Soul Shepherd and 1 Mascot Gargoylian."
+        },
+        {
+          "name": "TALENTED CHAMPIONS",
+          "type": "Ability",
+          "timing": "Reaction: You used a command",
+          "frequency": "Once Per Turn",
+          "description": "Each member of the Command Corps has their own special skills to be employed. Effect: After that command has been resolved, return the card to your hand. Designer’s Note: This allows you to either use the command a second time or score the battle tactic on that card as well.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_turn"
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Freeguild Steelhelms",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Steelhelms.png",
+      "backgroundPosition": 50,
+      "stats": {
+        "move": "5\"",
+        "health": 1,
+        "save": "4+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Freeguild Weapon",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "FANATICAL FOLLOWERS",
+          "type": "Ability",
+          "timing": "Any Combat Phase",
+          "frequency": "N/A",
+          "description": "Such is the zealous frenzy that fills these warriors that even after suffering mortal wounds, they will drag themselves to their feet and continue to fight. Effect: Return 1 slain model to this unit."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "INFANTRY",
+        "REINFORCEMENTS",
+        "HUMAN"
+      ]
+    }
+  ],
+  "spearheadName": "Zenestra’s Zealots",
+  "spearheadId": "zenestras-zealots"
+}
