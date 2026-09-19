@@ -1060,20 +1060,35 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
             });
         }
 
+        // Match solo units.js tables (headers + Abilities), with horizontal scroll on narrow viewports.
+        function weaponAbilitiesCell(weapon) {
+            if (!weapon.abilities?.length) return '-';
+            return weapon.abilities
+                .map((ab) => {
+                    const description = escapeHtml(ab.description || '');
+                    const timing = escapeHtml(ab.timing || '');
+                    const frequency = escapeHtml(ab.frequency || '');
+                    return `<span class="ability-name" data-description="${description}" data-timing="${timing}" data-frequency="${frequency}">${escapeHtml(ab.name)}</span>`;
+                })
+                .join(', ');
+        }
+
         let weaponsHtml = '';
         if (unit.rangedWeapons?.length) {
-            weaponsHtml += '<details class="weapon-section"><summary><h4 class="card-section-header">Ranged Weapons</h4></summary><ul>';
+            weaponsHtml += '<details class="weapon-section"><summary><h4 class="card-section-header">Ranged Weapons</h4></summary>';
+            weaponsHtml += '<div class="table-scroll-wrapper"><table class="weapons-table ranged-weapons-table"><thead><tr><th>Name</th><th>Range</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
             unit.rangedWeapons.forEach((w) => {
-                weaponsHtml += `<li><strong>${escapeHtml(w.name)}</strong> — ${escapeHtml(w.range)} / A${escapeHtml(w.attacks)} / ${escapeHtml(w.hit)} / ${escapeHtml(w.wound)} / R${escapeHtml(w.rend)} / D${escapeHtml(w.damage)}</li>`;
+                weaponsHtml += `<tr><td>${escapeHtml(w.name)}</td><td>${escapeHtml(w.range)}</td><td>${escapeHtml(w.attacks)}</td><td>${escapeHtml(w.hit)}</td><td>${escapeHtml(w.wound)}</td><td>${escapeHtml(w.rend)}</td><td>${escapeHtml(w.damage)}</td><td>${weaponAbilitiesCell(w)}</td></tr>`;
             });
-            weaponsHtml += '</ul></details>';
+            weaponsHtml += '</tbody></table></div></details>';
         }
         if (unit.meleeWeapons?.length) {
-            weaponsHtml += '<details class="weapon-section"><summary><h4 class="card-section-header">Melee Weapons</h4></summary><ul>';
+            weaponsHtml += '<details class="weapon-section"><summary><h4 class="card-section-header">Melee Weapons</h4></summary>';
+            weaponsHtml += '<div class="table-scroll-wrapper"><table class="weapons-table melee-weapons-table"><thead><tr><th>Name</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
             unit.meleeWeapons.forEach((w) => {
-                weaponsHtml += `<li><strong>${escapeHtml(w.name)}</strong> — A${escapeHtml(w.attacks)} / ${escapeHtml(w.hit)} / ${escapeHtml(w.wound)} / R${escapeHtml(w.rend)} / D${escapeHtml(w.damage)}</li>`;
+                weaponsHtml += `<tr><td>${escapeHtml(w.name)}</td><td>${escapeHtml(w.attacks)}</td><td>${escapeHtml(w.hit)}</td><td>${escapeHtml(w.wound)}</td><td>${escapeHtml(w.rend)}</td><td>${escapeHtml(w.damage)}</td><td>${weaponAbilitiesCell(w)}</td></tr>`;
             });
-            weaponsHtml += '</ul></details>';
+            weaponsHtml += '</tbody></table></div></details>';
         }
 
         let abilitiesHtml = '';
