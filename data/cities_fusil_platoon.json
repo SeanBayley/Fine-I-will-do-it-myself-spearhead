@@ -1,0 +1,397 @@
+{
+  "factionName": "Cities of Sigmar",
+  "factionId": "cities-of-sigmar",
+  "lore": "<h2>Fusil-Platoon</h2><p>Steel and blackpowder are the lifeblood of the Cities of Sigmar, but so is relentless vigilance. The <strong>Fusil-Platoons</strong> of the Sigmarite armies represent all three. Deployed as mobile gunnery brigades, their job is to seek out enemies trying to outmanoeuvre or ambush the slower battlelines and then blast them out of hiding.</p><h3>Mobile Watchtowers</h3><p>Each platoon is led by a <strong>Fusil-Major</strong> carried to battle by an Ogor Warhulk. His steady orders direct the withering fire of <strong>Freeguild Fusiliers</strong>, while an <strong>Alchemite Warforger</strong> enhances their weapons and seasoned <strong>Wildercorps Hunters</strong> slip around the flanks.</p><h3>Spearhead Force</h3><p>Pavises slammed into the dirt, volleys of fusil-cannon fire, and trailhounds in the scrub — a Fusil-Platoon turns any approach into a killing ground.</p>",
+  "armyRules": [
+    {
+      "name": "FORTIFY POSITION",
+      "type": "Battle Trait",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Heavy pavises are slammed into the dirt, forming a wall of oak and iron as strong as a fortification. Effect: Subtract 1 from the Rend characteristic of weapons used for attacks that target friendly CASTELITE units if they did not use a MOVE ability in the same turn.",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "rend",
+          "modifier": -1,
+          "duration": "while_condition",
+          "description": "Friendly CASTELITE that did not MOVE this turn: −1 Rend against attacks targeting them"
+        }
+      ]
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "WELL PROVISIONED",
+      "type": "Regiment Ability",
+      "timing": "Your Shooting Phase",
+      "frequency": "Once Per Turn (Army)",
+      "description": "This brigade has a quartermaster well versed in the art of keeping their troops, healthy, hale and supplied with plenty of arrows and blackpowder. Declare: Pick a friendly non-HERO unit to be the target. Effect: Roll a dice. On a 3+, add 1 to wound rolls for that unit’s shooting attacks for the rest of the phase.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "until_end_of_phase",
+          "description": "On a 3+, +1 to wound rolls for that unit’s shooting attacks for the rest of the phase"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    },
+    {
+      "name": "RESPECTED LEADER",
+      "type": "Regiment Ability",
+      "timing": "Deployment Phase",
+      "frequency": "Once Per Battle",
+      "description": "On occasion, a brigade will attract more Wildercorps Hunters than normal, as word reaches their ears of a commander worthy of their loyalty. Effect: Friendly Wildercorps Hunters units gain the REINFORCEMENTS keyword.",
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "permanent",
+          "description": "Friendly Wildercorps Hunters units gain the REINFORCEMENTS keyword"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "ADEPT TACTICIAN",
+      "type": "Artefact of Power",
+      "timing": "Your Movement Phase",
+      "frequency": "Once Per Battle",
+      "description": "Assembling reinforcements into ad-hoc regiments is the hallmark of a seasoned, if a somewhat desperate, general. Declare: Pick 2 friendly Freeguild Fusiliers units that have been destroyed and have not already been replaced. Effect: Set up a single replacement Freeguild Fusiliers unit with 10 models more than 6\" from all enemy units.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "BRACE!",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "With a keen eye for incoming attacks, this Ogor Warhulk is adept at rebuffing any and all threats made towards the Fusil-Major riding atop its gun platform. Effect: Your general has WARD (5+).",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Fusil-Major on Ogor Warhulk"
+          },
+          "ability": {
+            "name": "WARD (5+)",
+            "description": "Your general has WARD (5+).",
+            "timing": "Passive",
+            "frequency": "N/A"
+          }
+        }
+      ]
+    },
+    {
+      "name": "SHIELD BASH",
+      "type": "Artefact of Power",
+      "timing": "Your Movement Phase",
+      "frequency": "Once Per Turn",
+      "description": "With a bellow, the Ogor Warhulk drives their shield forward, forcing the enemy back. Declare: Pick an enemy INFANTRY, WAR MACHINE or CAVALRY unit in combat with your general to be the target. Effect: Roll a dice. On a 3+, the target must immediately use the ‘Retreat’ ability as if it were the enemy movement phase.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "combat",
+        "targeting_criteria": {
+          "keywords": [
+            "INFANTRY",
+            "WAR MACHINE",
+            "CAVALRY"
+          ],
+          "max_targets": 1
+        }
+      },
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    },
+    {
+      "name": "POINT-BLANK VOLLEY",
+      "type": "Artefact of Power",
+      "timing": "Enemy Combat Phase",
+      "frequency": "Once Per Turn",
+      "description": "A deadly round of shots are fired off at close range. Declare: Pick an enemy unit in combat with your general to be the target. Effect: Roll a D3. On a 2+, inflict an amount of mortal damage on the target equal to the roll.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "combat",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "spearheadComposition": [
+    "General: 1 Fusil-Major on Ogor Warhulk",
+    "Units:",
+    "1 Alchemite Warforger",
+    "5 Freeguild Fusiliers with 1 Blackpowder Squire token",
+    "5 Freeguild Fusiliers",
+    "11 Wildercorps Hunters"
+  ],
+  "units": [
+    {
+      "name": "Fusil-Major on Ogor Warhulk",
+      "imageUrl": "images/cities_of_sigmar/Fusil-Major on Ogor Warhulk.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "5\"",
+        "health": 8,
+        "save": "3+",
+        "control": 2
+      },
+      "rangedWeapons": [
+        {
+          "name": "Long Fusil",
+          "range": "24\"",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Warhulk's Mace",
+          "attacks": 4,
+          "hit": "4+",
+          "wound": "2+",
+          "rend": 2,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "MARK TARGETS",
+          "type": "Ability",
+          "timing": "Your Shooting Phase",
+          "frequency": "N/A",
+          "description": "Experts in ballistics, Fusil-Majors can direct the fire of nearby Castelite formations to eliminate priority targets. Declare: Pick an enemy unit that was targeted by this unit’s shooting attacks this turn to be the target. Effect: Add 1 to hit rolls for shooting attacks made by friendly units that target that unit for the rest of the turn.",
+          "targeting": {
+            "type": "enemy_unit",
+            "range": "unlimited",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "CASTELITE",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Wildercorps Hunters",
+      "imageUrl": "images/cities_of_sigmar/Wildercorps Hunters.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "5\"",
+        "health": 1,
+        "save": "5+",
+        "control": 1
+      },
+      "rangedWeapons": [
+        {
+          "name": "Hunting Crossbow",
+          "range": "15\"",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Hunting Weapons",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        },
+        {
+          "name": "Trailhound’s Ferocious Bite",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": "-",
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "UNIT COMPOSITION",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Each model in this unit is armed with a Hunting Crossbow and Hunting Weapons. The Wildercorps Warden is armed with a Trailhound’s Ferocious Bite in addition to their other weapons. 4/11 models are Trailhounds and are armed with a Trailhound’s Ferocious Bite instead of any other weapons."
+        },
+        {
+          "name": "EXPERT TRACKERS",
+          "type": "Ability",
+          "timing": "Deployment Phase",
+          "frequency": "N/A",
+          "description": "These soldiers are tasked with scouting ahead of the main advance. Effect: This unit can use the ‘Normal Move’ ability as if it were your movement phase."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "INFANTRY",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Alchemite Warforger",
+      "imageUrl": "images/cities_of_sigmar/Alchemite Warforger.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "5\"",
+        "health": 5,
+        "save": "5+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Tongstaff",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": "D3"
+        }
+      ],
+      "abilities": [
+        {
+          "name": "BLAZING WEAPONS",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "The weapons of the Warforger's allies glow red-hot with magical power. Declare: Pick a friendly unit wholly within 12\" of this unit to be the target, then make a casting roll of 2D6. Effect: On a 6+, the target’s melee weapons have Crit (Mortal) until the start of your next turn.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "WIZARD",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Freeguild Fusiliers",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Fusiliers.png",
+      "backgroundPosition": 50,
+      "stats": {
+        "move": "5\"",
+        "health": 1,
+        "save": "4+",
+        "control": 1
+      },
+      "rangedWeapons": [
+        {
+          "name": "Fusil-cannon",
+          "range": "18\"",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Bayonet",
+          "attacks": 1,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "BLACKPOWDER SQUIRE",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "When ammunition runs low, Blackpowder Squires bring fresh supplies to the line and relay orders. Effect: While this unit has a Blackpowder Squire token, this unit’s ranged weapons have Shoot in Combat."
+        },
+        {
+          "name": "CAN'T STOP!",
+          "type": "Ability",
+          "timing": "Your Shooting Phase",
+          "frequency": "Once Per Turn (Army)",
+          "description": "The Blackpowder Squire dashes to another unit amidst the mayhem of battle. Declare: Pick another friendly Freeguild Fusiliers unit to be the target. Effect: Remove this unit’s Blackpowder Squire token from the battlefield, then give it to the target.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "unlimited",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          },
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_turn"
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "INFANTRY",
+        "CASTELITE",
+        "REINFORCEMENTS",
+        "HUMAN"
+      ]
+    }
+  ],
+  "spearheadName": "Fusil-Platoon",
+  "spearheadId": "fusil-platoon"
+}

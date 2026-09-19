@@ -66,7 +66,19 @@
       "spearheads": [
         {
           "name": "Castelite Company",
-          "dataFile": "data/cities_of_sigmar.json"
+          "dataFile": "data/cities_castelite_company.json"
+        },
+        {
+          "name": "Fusil-Platoon",
+          "dataFile": "data/cities_fusil_platoon.json"
+        },
+        {
+          "name": "Sentinels of Embergard",
+          "dataFile": "data/cities_sentinels_of_embergard.json"
+        },
+        {
+          "name": "Zenestra’s Zealots",
+          "dataFile": "data/cities_zenestras_zealots.json"
         }
       ]
     },

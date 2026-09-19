@@ -1,0 +1,328 @@
+{
+  "factionName": "Cities of Sigmar",
+  "factionId": "cities-of-sigmar",
+  "lore": "<h2>Sentinels of Embergard</h2><p>It takes especially hard-bitten souls to fight in Embergard. Many Freeguilders are sent to this vital bastion, but only the most vicious survive to achieve veteran status. Those who do often slip outside typical chains of command, gravitating towards charismatic captains proven in battle.</p><h3>Heir of the Kraken</h3><p><strong>Jorvan Kreel</strong>, Heir of the Kraken, is one such leader: a debonair ranger from fallen Anvilgard. Alongside his faithful ash panther <strong>Thexa</strong>, he harries the ratmen from their holes with <strong>Freeguild Grenadiers</strong>, honour-bound <strong>Gallants</strong>, and a bellowing <strong>Mallus Forgepriest</strong>.</p><h3>Spearhead Force</h3><p>Fluid ranger doctrines, close-quarters firepower, and stubborn defiance turn the ruins of Embergard into a fortress of ash and steel.</p>",
+  "armyRules": [
+    {
+      "name": "RANGER DOCTRINES",
+      "type": "Battle Trait",
+      "timing": "Reaction: You declared a FIGHT ability for your general or a friendly non-HERO unit wholly within 12\" of your general",
+      "frequency": "Once Per Turn (Army)",
+      "description": "Kreel was once a captain in the Wildercorps. While he now commands an eclectic assortment of forces, the fluid tactics he honed in his prior life can still be used to great effect. Used By: The unit using that FIGHT ability. Effect: Immediately after that FIGHT ability has been resolved, pick a point on the battlefield within 6\" of your general. Remove the unit using this ability from the battlefield and set it up again within 1\" of that point and not in combat.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "CLOSE-QUARTERS DRILL",
+      "type": "Regiment Ability",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Kreel has trained his Grenadiers to hold their fire until it can be unloaded right in their foes’ faces. Effect: Friendly units’ ranged weapons have Shoot in Combat but you must subtract 1 from hit rolls for their shooting attacks while they are in combat.",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "shoot_in_combat",
+          "modifier": "active_with_-1_hit",
+          "duration": "while_condition",
+          "description": "Friendly ranged weapons have Shoot in Combat; −1 hit while shooting in combat"
+        }
+      ]
+    },
+    {
+      "name": "COME AND TAKE IT, BLAGGARDS!",
+      "type": "Regiment Ability",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Though their city lies in ruin, these warriors defy any enemy who tries to prise the wreckage from them. Effect: Add 5 to the control scores of friendly non-HERO units while they are in combat with any enemy units that have 6 or more models or a Health characteristic of 3 or more.",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "control",
+          "modifier": 5,
+          "duration": "while_condition",
+          "description": "+5 control to friendly non-HERO in combat with enemy units that have 6+ models or Health 3+"
+        }
+      ]
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "THROWING KNIVES",
+      "type": "Artefact of Power",
+      "timing": "Any Shooting Phase",
+      "frequency": "N/A",
+      "description": "Jorvan Kreel has, over the course of his adventures, acquired an assortment of deadly blades ready to be hurled into a chest, stomach or skull. Declare: Pick a visible enemy unit within 10\" of your general to be the target. Effect: Roll a dice. On a 3+, inflict 1 mortal damage on the target.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "10\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      }
+    },
+    {
+      "name": "HOT-BLOODED ENDURANCE",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "A lifetime spent in the wilderness has left Kreel an indefatigable warrior. Effect: Your general can use CHARGE abilities even if they used a RUN or RETREAT ability in the same turn and no mortal damage is inflicted on them by RETREAT abilities.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Jorvan Kreel, Heir of the Kraken"
+          },
+          "ability": {
+            "name": "HOT-BLOODED ENDURANCE",
+            "description": "This unit can use CHARGE abilities even if it used a RUN or RETREAT ability in the same turn and no mortal damage is inflicted on it by RETREAT abilities.",
+            "timing": "Passive",
+            "frequency": "N/A"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TRAINED RANGER",
+      "type": "Artefact of Power",
+      "timing": "Your Movement Phase",
+      "frequency": "Once Per Battle",
+      "description": "The pathfinding skills he picked up in the jungles of the Charrwind Coast serve Kreel well in Embergard’s urban sprawl. Declare: Pick a friendly unit wholly within 6\" of a battlefield edge to be the target. Effect: Remove the target from the battlefield and set it up again wholly within 3\" of a battlefield edge and more than 6\" from all enemy units.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "BLADE OF THE KRAKEN",
+      "type": "Artefact of Power",
+      "timing": "Any Combat Phase",
+      "frequency": "Once Per Battle",
+      "description": "In a decisive moment, Kreel fights ferociously to avenge Embergard’s fall – and also to maintain his warrior reputation… Effect: Double the Attacks characteristic of your general’s melee weapons for the rest of the turn.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    }
+  ],
+  "spearheadComposition": [
+    "General: Jorvan Kreel, Heir of the Kraken (Thexa token)",
+    "Units:",
+    "1 Mallus Forgepriest",
+    "5 Freeguild Gallants",
+    "5 Freeguild Grenadiers",
+    "5 Freeguild Grenadiers"
+  ],
+  "units": [
+    {
+      "name": "Jorvan Kreel, Heir of the Kraken",
+      "imageUrl": "images/cities_of_sigmar/Jorvan Kreel, Heir of the Kraken.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "6\"",
+        "health": 5,
+        "save": "4+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Ranger Blades",
+          "attacks": 6,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "VETERAN SKIRMISHERS",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "Kreel has trained his ragtag soldiers well, emphasising speed and surety of foot over headlong sprints. Declare: Pick a friendly unit wholly within 12\" of this unit to be the target. Effect: Roll a dice. On a 3+, for the rest of the turn, add 2\" to the target’s Move characteristic but it cannot use RUN abilities.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        },
+        {
+          "name": "PROWLING ASH PANTHER",
+          "type": "Ability",
+          "timing": "End of Any Turn",
+          "frequency": "N/A",
+          "description": "Thexa prowls the shadows, waiting for the right moment to pounce. Effect: If this unit has the Thexa token, give that token to an enemy unit within 6\" of this unit. If an enemy unit has the Thexa token, inflict D3 mortal damage on that enemy unit. Then, give this unit the Thexa token."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Mallus Forgepriest",
+      "imageUrl": "images/cities_of_sigmar/Mallus Forgepriest.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "5\"",
+        "health": 5,
+        "save": "4+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Sigmarite Warhammer",
+          "attacks": 4,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3"
+        }
+      ],
+      "abilities": [
+        {
+          "name": "CONSECRATE THE LAND",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "Bellowing Sigmarite hymns, the priest purges the taint of Chaos from the land and consecrates it in the name of the God-King. Declare: Pick an objective within 12\" of this unit, then make a chanting roll of D6. Effect: On a 3+, for the rest of the turn, friendly units have WARD (5+) while they are contesting that objective.",
+          "targeting": {
+            "type": "objective",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "INFANTRY",
+        "PRIEST",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Freeguild Grenadiers",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Grenadiers.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "5\"",
+        "health": 1,
+        "save": "4+",
+        "control": 1
+      },
+      "rangedWeapons": [
+        {
+          "name": "Ruin-sweeper Arsenal",
+          "range": "10\"",
+          "attacks": 1,
+          "hit": "4+",
+          "wound": "2+",
+          "rend": 2,
+          "damage": 1
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Grenadier Bardiche",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "CINDER AND ASH",
+          "type": "Ability",
+          "timing": "End of Any Turn",
+          "frequency": "Once Per Turn (Army)",
+          "description": "Freeguild Grenadiers carry specialised gear to reduce dug-in enemies to a panicked, screaming bonfire of melting flesh and charred hair. Declare: Pick up to 1 terrain feature contested by this unit and up to 1 objective contested by this unit, then pick any enemy units also contesting them to be the targets. Effect: Roll a dice for each target. On a 3+, inflict 1 mortal damage on the target.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_turn"
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "INFANTRY",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Freeguild Gallants",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Gallants.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "5\"",
+        "health": 2,
+        "save": "3+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Weapons of Gallantry",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "UNBREACHABLE WILL",
+          "type": "Ability",
+          "timing": "Any Combat Phase",
+          "frequency": "N/A",
+          "description": "Having each survived punishing trials, Freeguild Gallants break before no foe. Declare: If this unit has not charged this turn, pick an enemy unit in combat with it to be the target. Effect: For the rest of the turn, subtract 1 from the Rend characteristic of the target’s weapons for attacks that target this unit.",
+          "targeting": {
+            "type": "enemy_unit",
+            "range": "combat",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "INFANTRY",
+        "HUMAN"
+      ]
+    }
+  ],
+  "spearheadName": "Sentinels of Embergard",
+  "spearheadId": "sentinels-of-embergard"
+}
