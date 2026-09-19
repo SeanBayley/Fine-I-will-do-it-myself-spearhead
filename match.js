@@ -19,6 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupPanel = document.getElementById('match-setup-panel');
     const turnOrderPanel = document.getElementById('match-turn-order');
     const inProgressPanel = document.getElementById('match-in-progress');
+    const seizeChoicePanel = document.getElementById('match-seize-choice');
+    const seizeWarningPanel = document.getElementById('match-seize-warning');
+    const seizeYesBtn = document.getElementById('seize-yes-btn');
+    const seizeForcedBtn = document.getElementById('seize-forced-btn');
+    const seizeChoiceBackBtn = document.getElementById('seize-choice-back-btn');
+    const seizeConfirmBtn = document.getElementById('seize-confirm-btn');
+    const seizeWarningBackBtn = document.getElementById('seize-warning-back-btn');
 
     const startMatchBtn = document.getElementById('start-match-btn');
     const sideAFirstBtn = document.getElementById('side-a-first-btn');
@@ -110,6 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPhase: 0,
         activeSide: 'A',
         startingSide: null,
+        underdogSide: null, // 'A' | 'B' | null — locked for the current battle round
+        lastRoundSecondSide: null, // who went second last round (for Seizing the Initiative)
+        pendingFirstSide: null, // first-player pick awaiting seize confirmation
         roundTurnsCompleted: 0,
         phases: PHASES,
         phaseNames: PHASE_NAMES,
@@ -440,6 +450,37 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(`final-label-${id}`).textContent = side.displayName;
             document.getElementById(`final-score-${id}`).textContent = totals.total;
         });
+        updateUnderdogDisplay();
+    }
+
+    // Underdog is locked at round start from current totals; tied scores → no underdog.
+    function determineUnderdogForRound() {
+        const scoreA = calcSideTotals(match.sides.A).total;
+        const scoreB = calcSideTotals(match.sides.B).total;
+        if (scoreA === scoreB) {
+            match.underdogSide = null;
+        } else {
+            match.underdogSide = scoreA < scoreB ? 'A' : 'B';
+        }
+        console.log(`Round ${match.currentRound} underdog:`, {
+            underdogSide: match.underdogSide,
+            scoreA,
+            scoreB
+        });
+        updateUnderdogDisplay();
+    }
+
+    function updateUnderdogDisplay() {
+        ['A', 'B'].forEach((id) => {
+            const icon = document.getElementById(`underdog-icon-${id}`);
+            const pill = document.querySelector(`.match-score-pill[data-side="${id}"]`);
+            const isUnderdog = match.underdogSide === id;
+            if (icon) {
+                icon.hidden = !isUnderdog;
+                icon.setAttribute('aria-hidden', isUnderdog ? 'false' : 'true');
+            }
+            if (pill) pill.classList.toggle('is-underdog', isUnderdog);
+        });
     }
 
     function updateActiveSideHighlight() {
@@ -471,15 +512,111 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Side ${side.id} drew cards for round ${match.currentRound}:`, cardsForRound);
     }
 
-    function drawCardsForRound() {
+    // Seizing the Initiative: carry kept hand only — no new draws this round
+    function carryKeptCardsOnly(side) {
+        const cardsForRound = [...side.keptCards];
+        side.keptCards.forEach((cardNumber) => setCardStatus(side, cardNumber, 'Pending'));
+        side.keptCards = [];
+        side.currentRoundCards = cardsForRound;
+        side.cardsByRound[match.currentRound] = cardsForRound;
+        console.log(
+            `Side ${side.id} seized initiative — carrying ${cardsForRound.length} kept card(s), no draw`
+        );
+    }
+
+    function drawCardsForRound(options = {}) {
         if (!usesBattleTacticCards()) {
             console.log('Custom ruleset — skipping card draw');
             return;
         }
-        drawCardsForSide(match.sides.A);
-        drawCardsForSide(match.sides.B);
-        renderSideCards(match.sides.A);
-        renderSideCards(match.sides.B);
+        const skipId = options.skipDrawForSide || null;
+        ['A', 'B'].forEach((id) => {
+            const side = match.sides[id];
+            if (skipId === id) {
+                carryKeptCardsOnly(side);
+            } else {
+                drawCardsForSide(side);
+            }
+            renderSideCards(side);
+        });
+    }
+
+    function getVictoryPointGap() {
+        const scoreA = calcSideTotals(match.sides.A).total;
+        const scoreB = calcSideTotals(match.sides.B).total;
+        return Math.abs(scoreA - scoreB);
+    }
+
+    // Exempt from seize penalty: underdog AND behind by 5+ VP
+    function isSeizeDrawExempt(sideId) {
+        return match.underdogSide === sideId && getVictoryPointGap() >= 5;
+    }
+
+    function couldBeSeizingInitiative(sideId) {
+        return (
+            usesBattleTacticCards() &&
+            match.currentRound > 1 &&
+            match.lastRoundSecondSide &&
+            sideId === match.lastRoundSecondSide
+        );
+    }
+
+    function hideSeizePanels() {
+        if (seizeChoicePanel) seizeChoicePanel.style.display = 'none';
+        if (seizeWarningPanel) seizeWarningPanel.style.display = 'none';
+    }
+
+    function showSeizeChoiceModal(sideId) {
+        const side = match.sides[sideId];
+        turnOrderPanel.style.display = 'none';
+        inProgressPanel.style.display = 'none';
+        if (seizeWarningPanel) seizeWarningPanel.style.display = 'none';
+        if (seizeChoicePanel) {
+            document.getElementById('match-seize-choice-text').textContent =
+                `${side.displayName} went second last round and is going first now. ` +
+                `Did they seize the initiative, or were they forced to take a double turn?`;
+            seizeChoicePanel.style.display = 'flex';
+        }
+        console.log('Seize choice prompt for', sideId);
+    }
+
+    function populateSeizeKeptCardsPreview(sideId) {
+        const container = document.getElementById('match-seize-kept-cards');
+        if (!container) return;
+        const side = match.sides[sideId];
+        const kept = [...(side.keptCards || [])];
+        container.innerHTML = '';
+        if (!kept.length) {
+            container.innerHTML =
+                '<p class="seize-kept-empty">No cards currently in hand — they will have an empty hand this round.</p>';
+            return;
+        }
+        kept.forEach((cardNumber) => {
+            const tactic = battleTactics.find((t) => t.cardNumber === cardNumber);
+            const el = document.createElement('div');
+            el.className = 'seize-kept-card';
+            el.textContent = tactic?.name
+                ? `${cardNumber}. ${tactic.name}`
+                : `Card ${cardNumber}`;
+            container.appendChild(el);
+        });
+    }
+
+    function showSeizeWarningModal(sideId) {
+        const side = match.sides[sideId];
+        if (seizeChoicePanel) seizeChoicePanel.style.display = 'none';
+        populateSeizeKeptCardsPreview(sideId);
+        document.getElementById('match-seize-warning-text').textContent =
+            `${side.displayName} is seizing the initiative. They will not draw battle tactic cards this battle round.`;
+        if (seizeWarningPanel) seizeWarningPanel.style.display = 'flex';
+        console.log('Seize warning shown for', sideId, 'kept:', side.keptCards);
+    }
+
+    function returnToTurnOrderFromSeize() {
+        match.pendingFirstSide = null;
+        hideSeizePanels();
+        showTurnOrderSelection();
+        console.log('Returned to turn-order selection from seize flow');
     }
 
     function renderCurrentTwistSlot() {
@@ -667,6 +804,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function finishEndOfRoundFlow() {
+        // Remember who went second this round (for Seizing the Initiative next round)
+        if (match.startingSide) {
+            match.lastRoundSecondSide = match.startingSide === 'A' ? 'B' : 'A';
+            console.log('Recorded last-round second player', match.lastRoundSecondSide);
+        }
+
         // After round 4, skip keep/discard — those choices never apply
         if (match.currentRound >= 4) {
             endMatch('All 4 rounds have been completed.');
@@ -1124,6 +1267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showTurnOrderSelection() {
         setupPanel.style.display = 'none';
         inProgressPanel.style.display = 'none';
+        hideSeizePanels();
         turnOrderPanel.style.display = 'block';
         roundNumberEl.textContent = match.currentRound;
 
@@ -1135,7 +1279,11 @@ document.addEventListener('DOMContentLoaded', () => {
         sideBFirstBtn.textContent = `${match.sides.B.displayName} Goes First`;
     }
 
-    function beginRoundWithStartingSide(sideId) {
+    function finalizeRoundStart(sideId, options = {}) {
+        const skipDrawForSide = options.skipDrawForSide || null;
+        match.pendingFirstSide = null;
+        hideSeizePanels();
+
         match.startingSide = sideId;
         match.activeSide = sideId;
         match.roundTurnsCompleted = 0;
@@ -1144,17 +1292,41 @@ document.addEventListener('DOMContentLoaded', () => {
         inProgressPanel.style.display = 'flex';
         match.isActive = true;
 
+        // Lock underdog from current totals for this whole round
+        determineUnderdogForRound();
+
         // Draw battle tactics + shared twist together at round start (every round)
         const cardsAlreadyDrawn = Boolean(match.sides.A?.cardsByRound?.[match.currentRound]);
         if (usesBattleTacticCards() && !cardsAlreadyDrawn) {
-            drawCardsForRound();
+            drawCardsForRound({ skipDrawForSide });
         }
         drawTwistForRound();
 
         updateSharedDisplay();
         console.log(`Round ${match.currentRound} starting with Side ${sideId}`, {
-            twist: match.currentTwist?.name || null
+            twist: match.currentTwist?.name || null,
+            underdogSide: match.underdogSide,
+            seizeSkipDraw: skipDrawForSide
         });
+    }
+
+    function beginRoundWithStartingSide(sideId) {
+        match.pendingFirstSide = sideId;
+
+        // Underdog must be known before the 5+ seize exemption check
+        determineUnderdogForRound();
+
+        if (couldBeSeizingInitiative(sideId)) {
+            if (isSeizeDrawExempt(sideId)) {
+                console.log('Potential seize but exempt (underdog by 5+ VP) — normal draw');
+                finalizeRoundStart(sideId, { skipDrawForSide: null });
+                return;
+            }
+            showSeizeChoiceModal(sideId);
+            return;
+        }
+
+        finalizeRoundStart(sideId, { skipDrawForSide: null });
     }
 
     function endMatch(message) {
@@ -1176,6 +1348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tacticModal.style.display = 'none';
         if (twistModal) twistModal.style.display = 'none';
         if (endRoundTwistModal) endRoundTwistModal.style.display = 'none';
+        hideSeizePanels();
         gameOverModal.style.display = 'flex';
         console.log('Match over', { a, b });
     }
@@ -1344,6 +1517,9 @@ document.addEventListener('DOMContentLoaded', () => {
         match.currentTwist = null;
         match.twistByRound = {};
         match.drawnTwistIds = [];
+        match.underdogSide = null;
+        match.lastRoundSecondSide = null;
+        match.pendingFirstSide = null;
         activeTwistDeck = null;
 
         match.sides.A = createSideState(setup.sideA, 'A');
@@ -1399,6 +1575,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sideAFirstBtn.addEventListener('click', () => beginRoundWithStartingSide('A'));
     sideBFirstBtn.addEventListener('click', () => beginRoundWithStartingSide('B'));
+
+    if (seizeYesBtn) {
+        seizeYesBtn.addEventListener('click', () => {
+            const sideId = match.pendingFirstSide;
+            if (!sideId) return;
+            showSeizeWarningModal(sideId);
+        });
+    }
+    if (seizeForcedBtn) {
+        seizeForcedBtn.addEventListener('click', () => {
+            const sideId = match.pendingFirstSide;
+            if (!sideId) return;
+            console.log('Forced double turn — normal battle tactic draw');
+            finalizeRoundStart(sideId, { skipDrawForSide: null });
+        });
+    }
+    if (seizeChoiceBackBtn) {
+        seizeChoiceBackBtn.addEventListener('click', returnToTurnOrderFromSeize);
+    }
+    if (seizeConfirmBtn) {
+        seizeConfirmBtn.addEventListener('click', () => {
+            const sideId = match.pendingFirstSide;
+            if (!sideId) return;
+            finalizeRoundStart(sideId, { skipDrawForSide: sideId });
+        });
+    }
+    if (seizeWarningBackBtn) {
+        seizeWarningBackBtn.addEventListener('click', () => {
+            // Back to seize vs forced choice (keep pendingFirstSide)
+            if (seizeWarningPanel) seizeWarningPanel.style.display = 'none';
+            if (match.pendingFirstSide) showSeizeChoiceModal(match.pendingFirstSide);
+        });
+    }
+
     nextPhaseBtn.addEventListener('click', nextPhase);
     endGameBtn.addEventListener('click', () => {
         if (confirm('End the match early?')) {
