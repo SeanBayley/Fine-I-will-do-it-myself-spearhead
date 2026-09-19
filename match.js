@@ -766,11 +766,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (customTacticsEl) customTacticsEl.style.display = 'none';
             tacticsScoringEl.style.display = '';
             tacticsScoringEl.innerHTML = '';
-            const pending = (side.cardsByRound[match.currentRound] || []).filter((n) => {
-                const status = getCardStatus(side, n);
-                // Used = command already spent; card can still be scored for VP
-                return status === 'Pending' || status === 'Used';
-            });
+            // INTENTIONAL (not a bug): only Pending cards can be scored.
+            // Using a card's command sets status to Used, which removes it from
+            // scoring — that is by design (command OR score, not both).
+            // Do not "fix" this by treating Used as scoreable.
+            const pending = (side.cardsByRound[match.currentRound] || []).filter(
+                (n) => getCardStatus(side, n) === 'Pending'
+            );
 
             pending.forEach((cardNumber) => {
                 const tactic = battleTactics.find((t) => t.cardNumber === cardNumber);
@@ -1458,6 +1460,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const side = match.sides[openTacticContext.sideId];
         if (openTacticContext.sideId !== match.activeSide) return;
         if (getCardStatus(side, openTacticContext.cardNumber) !== 'Pending') return;
+        // INTENTIONAL: Used removes the card from end-of-turn scoring (command OR score).
         setCardStatus(side, openTacticContext.cardNumber, 'Used');
         useCommandBtn.textContent = 'Command Used';
         useCommandBtn.disabled = true;
