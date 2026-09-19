@@ -616,6 +616,16 @@
     --primary-700: #881337;
 }
 
+.match-side.cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
+    --primary-hover-color: #991b1b;
+    --primary-400: #ef4444;
+    --primary-500: #b91c1c;
+    --primary-600: #991b1b;
+    --primary-700: #7f1d1d;
+}
+
 .match-side.is-active {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.45), 0 12px 28px rgba(0, 0, 0, 0.3);
@@ -705,6 +715,10 @@
 .match-cards-lane.daughters-of-khaine {
     --primary-color: #be123c;
     --primary-color-rgb: 190, 18, 60;
+}
+.match-cards-lane.cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
 }
 
 .match-cards-lane-label {
@@ -908,6 +922,10 @@
     --primary-color: #be123c;
     --primary-color-rgb: 190, 18, 60;
 }
+.match-score-pill.cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
+}
 
 .match-score-pill .pill-label {
     font-size: 0.8rem;
@@ -1060,6 +1078,21 @@ body.match-page.daughters-of-khaine,
     --primary-500: #be123c;
     --primary-600: #9f1239;
     --primary-700: #881337;
+}
+
+body.match-page.cities-of-sigmar,
+.match-board.cities-of-sigmar,
+.match-shared-bar.cities-of-sigmar,
+.match-unified-phases.cities-of-sigmar,
+.match-cards-row.cities-of-sigmar,
+#match-turn-indicator.cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
+    --primary-hover-color: #991b1b;
+    --primary-400: #ef4444;
+    --primary-500: #b91c1c;
+    --primary-600: #991b1b;
+    --primary-700: #7f1d1d;
 }
 
 .match-shared-actions .next-phase-btn,

@@ -341,6 +341,16 @@ body.daughters-of-khaine {
     --primary-700: #881337;
 }
 
+/* Cities of Sigmar Theme (Freeguild red) */
+body.cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
+    --primary-hover-color: #991b1b;
+    --primary-500: #b91c1c;
+    --primary-600: #991b1b;
+    --primary-700: #7f1d1d;
+}
+
 .rule-box.selected {
     border-color: var(--primary-color);
     background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
@@ -751,6 +761,12 @@ main#rules-content section {
     --primary-color: #be123c;
     --primary-color-rgb: 190, 18, 60;
     --primary-hover-color: #9f1239;
+}
+
+.faction-card.theme-cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
+    --primary-hover-color: #991b1b;
 }
 /* --- END Per-card Theme Overrides --- */
 

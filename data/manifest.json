@@ -23,6 +23,10 @@
     {
       "name": "Daughters of Khaine",
       "dataFile": "data/daughters_of_khaine.json"
+    },
+    {
+      "name": "Cities of Sigmar",
+      "dataFile": "data/cities_of_sigmar.json"
     }
   ]
 }

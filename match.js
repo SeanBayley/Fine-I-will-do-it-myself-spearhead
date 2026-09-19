@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'ossiarch-bonereapers': { color: '#F5F5DC', rgb: '245, 245, 220' },
         sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
         'orruk-warclans': { color: '#84cc16', rgb: '132, 204, 22' },
-        'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' }
+        'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' },
+        'cities-of-sigmar': { color: '#b91c1c', rgb: '185, 28, 28' }
     };
 
     // Image folder names under /images (underscore style used by existing assets)
@@ -87,7 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'ossiarch-bonereapers': 'ossiarch_bonereapers',
         sylvaneth: 'sylvaneth',
         'orruk-warclans': 'orruk_warclans',
-        'daughters-of-khaine': 'daughters_of_khaine'
+        'daughters-of-khaine': 'daughters_of_khaine',
+        'cities-of-sigmar': 'cities_of_sigmar'
     };
 
     const match = {
@@ -284,7 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'seraphon',
         'ossiarch-bonereapers',
         'sylvaneth',
-        'daughters-of-khaine'
+        'daughters-of-khaine',
+        'cities-of-sigmar'
     ];
 
     function applyActiveArmyChrome() {

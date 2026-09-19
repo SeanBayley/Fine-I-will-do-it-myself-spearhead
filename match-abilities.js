@@ -517,7 +517,8 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
         seraphon: { color: '#40E0D0', rgb: '64, 224, 208' },
         'ossiarch-bonereapers': { color: '#F5F5DC', rgb: '245, 245, 220' },
         sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
-        'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' }
+        'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' },
+        'cities-of-sigmar': { color: '#b91c1c', rgb: '185, 28, 28' }
     };
 
     function getSideChipStyle(side) {
