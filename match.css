@@ -921,9 +921,29 @@
     color: var(--primary-color);
 }
 
-.match-score-pill strong {
+.match-score-pill strong,
+.match-score-pill .pill-score-row {
     font-size: 1.5rem;
     color: #fff;
+}
+
+.pill-score-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+}
+
+.underdog-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+
+.match-score-pill.is-underdog {
+    box-shadow:
+        0 0 0 1px rgba(251, 191, 36, 0.45),
+        0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
 /* Unified phase rules for both armies */

@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPhase: 0,
         activeSide: 'A',
         startingSide: null,
+        underdogSide: null, // 'A' | 'B' | null — locked for the current battle round
         roundTurnsCompleted: 0,
         phases: PHASES,
         phaseNames: PHASE_NAMES,
@@ -427,6 +428,37 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(`score-label-${id}`).textContent = side.displayName;
             document.getElementById(`final-label-${id}`).textContent = side.displayName;
             document.getElementById(`final-score-${id}`).textContent = totals.total;
+        });
+        updateUnderdogDisplay();
+    }
+
+    // Underdog is locked at round start from current totals; tied scores → no underdog.
+    function determineUnderdogForRound() {
+        const scoreA = calcSideTotals(match.sides.A).total;
+        const scoreB = calcSideTotals(match.sides.B).total;
+        if (scoreA === scoreB) {
+            match.underdogSide = null;
+        } else {
+            match.underdogSide = scoreA < scoreB ? 'A' : 'B';
+        }
+        console.log(`Round ${match.currentRound} underdog:`, {
+            underdogSide: match.underdogSide,
+            scoreA,
+            scoreB
+        });
+        updateUnderdogDisplay();
+    }
+
+    function updateUnderdogDisplay() {
+        ['A', 'B'].forEach((id) => {
+            const icon = document.getElementById(`underdog-icon-${id}`);
+            const pill = document.querySelector(`.match-score-pill[data-side="${id}"]`);
+            const isUnderdog = match.underdogSide === id;
+            if (icon) {
+                icon.hidden = !isUnderdog;
+                icon.setAttribute('aria-hidden', isUnderdog ? 'false' : 'true');
+            }
+            if (pill) pill.classList.toggle('is-underdog', isUnderdog);
         });
     }
 
@@ -1132,6 +1164,9 @@ document.addEventListener('DOMContentLoaded', () => {
         inProgressPanel.style.display = 'flex';
         match.isActive = true;
 
+        // After who-goes-first: lock underdog from current totals for this whole round
+        determineUnderdogForRound();
+
         // Draw battle tactics + shared twist together at round start (every round)
         const cardsAlreadyDrawn = Boolean(match.sides.A?.cardsByRound?.[match.currentRound]);
         if (usesBattleTacticCards() && !cardsAlreadyDrawn) {
@@ -1141,7 +1176,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateSharedDisplay();
         console.log(`Round ${match.currentRound} starting with Side ${sideId}`, {
-            twist: match.currentTwist?.name || null
+            twist: match.currentTwist?.name || null,
+            underdogSide: match.underdogSide
         });
     }
 
@@ -1336,6 +1372,7 @@ document.addEventListener('DOMContentLoaded', () => {
         match.currentTwist = null;
         match.twistByRound = {};
         match.drawnTwistIds = [];
+        match.underdogSide = null;
         activeTwistDeck = null;
 
         match.sides.A = createSideState(setup.sideA, 'A');
