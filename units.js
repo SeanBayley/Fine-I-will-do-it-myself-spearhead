@@ -2595,7 +2595,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear previous battle tactics
         battleTacticsScoring.innerHTML = '';
         
-        // Get available battle tactics (only cards with Pending status from current round)
+        // Get available battle tactics (only cards with Pending status from current round).
+        // INTENTIONAL (not a bug): Used cards are excluded — using the command forgoes scoring.
+        // Do not treat Used as scoreable.
         const currentRoundCards = gameState.cardsByRound[gameState.currentRound] || [];
         const availableTactics = currentRoundCards.filter(cardNumber => 
             getCardStatus(cardNumber) === 'Pending'
