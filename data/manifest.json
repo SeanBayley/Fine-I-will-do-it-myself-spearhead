@@ -31,6 +31,10 @@
     {
       "name": "Helsmiths of Hashut",
       "dataFile": "data/helsmiths_of_hashut.json"
+    },
+    {
+      "name": "Idoneth Deepkin",
+      "dataFile": "data/idoneth_deepkin.json"
     }
   ]
 }

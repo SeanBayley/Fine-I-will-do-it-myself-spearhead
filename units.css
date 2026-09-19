@@ -2683,8 +2683,8 @@ details.phase-section > summary:hover {
 
 .helsmiths-of-hashut .start-game-btn,
 .helsmiths-of-hashut .next-phase-btn {
-    background: linear-gradient(135deg, rgba(180, 83, 9, 0.08), rgba(255,255,255,0.03));
-    border: 1px solid rgba(180, 83, 9, 0.35);
+    background: linear-gradient(135deg, rgba(26, 61, 46, 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(26, 61, 46, 0.35);
     color: var(--text-color);
     box-shadow: 0 10px 24px rgba(0,0,0,0.35);
     transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
@@ -2692,9 +2692,25 @@ details.phase-section > summary:hover {
 
 .helsmiths-of-hashut .start-game-btn:hover,
 .helsmiths-of-hashut .next-phase-btn:hover {
-    border-color: rgba(180, 83, 9, 0.7);
+    border-color: rgba(26, 61, 46, 0.7);
     transform: translateY(-2px);
-    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(180, 83, 9, 0.3);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(26, 61, 46, 0.3);
+}
+
+.idoneth-deepkin .start-game-btn,
+.idoneth-deepkin .next-phase-btn {
+    background: linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(15, 118, 110, 0.35);
+    color: var(--text-color);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transition: transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.idoneth-deepkin .start-game-btn:hover,
+.idoneth-deepkin .next-phase-btn:hover {
+    border-color: rgba(15, 118, 110, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px rgba(0,0,0,0.45), 0 0 12px rgba(15, 118, 110, 0.3);
 }
 
 .orruk-warclans .start-game-btn,
