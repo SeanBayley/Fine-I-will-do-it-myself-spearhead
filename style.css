@@ -351,6 +351,16 @@ body.cities-of-sigmar {
     --primary-700: #7f1d1d;
 }
 
+/* Helsmiths of Hashut Theme (Hashut brass) */
+body.helsmiths-of-hashut {
+    --primary-color: #b45309;
+    --primary-color-rgb: 180, 83, 9;
+    --primary-hover-color: #92400e;
+    --primary-500: #b45309;
+    --primary-600: #92400e;
+    --primary-700: #78350f;
+}
+
 .rule-box.selected {
     border-color: var(--primary-color);
     background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
@@ -767,6 +777,12 @@ main#rules-content section {
     --primary-color: #b91c1c;
     --primary-color-rgb: 185, 28, 28;
     --primary-hover-color: #991b1b;
+}
+
+.faction-card.theme-helsmiths-of-hashut {
+    --primary-color: #b45309;
+    --primary-color-rgb: 180, 83, 9;
+    --primary-hover-color: #92400e;
 }
 /* --- END Per-card Theme Overrides --- */
 

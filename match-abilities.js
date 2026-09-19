@@ -518,7 +518,8 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
         'ossiarch-bonereapers': { color: '#F5F5DC', rgb: '245, 245, 220' },
         sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
         'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' },
-        'cities-of-sigmar': { color: '#b91c1c', rgb: '185, 28, 28' }
+        'cities-of-sigmar': { color: '#b91c1c', rgb: '185, 28, 28' },
+        'helsmiths-of-hashut': { color: '#b45309', rgb: '180, 83, 9' }
     };
 
     function getSideChipStyle(side) {

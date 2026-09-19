@@ -27,6 +27,10 @@
     {
       "name": "Cities of Sigmar",
       "dataFile": "data/cities_of_sigmar.json"
+    },
+    {
+      "name": "Helsmiths of Hashut",
+      "dataFile": "data/helsmiths_of_hashut.json"
     }
   ]
 }
