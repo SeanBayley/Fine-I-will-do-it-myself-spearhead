@@ -32,10 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("factionGridContainer:", factionGridContainer); // DEBUG
     console.log("mainContinueButton:", mainContinueButton); // DEBUG
 
-    // Session Storage Keys
+    // Session Storage Keys (values remain spearhead dataFile paths)
     const FACTION_KEY = 'selectedFaction';
     const ABILITY_KEY = 'selectedAbility';
     const ENHANCEMENT_KEY = 'selectedEnhancement';
+
+    let factionPickerApi = null;
+    let currentSpearheadMeta = null;
 
     // --- Helper function to check if both selections are made ---
     function checkSelectionsComplete() {
@@ -228,187 +231,169 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(list);
     }
 
-    // --- NEW: Function to Load and Display Faction Data ---
+    // --- Function to Load and Display Spearhead Data ---
     function loadAndDisplayFaction(selectedDataFile, isRestoring = false) {
-        // Reset body class
-        document.body.className = ''; // Remove previous faction classes
+        document.body.className = '';
 
-        // *** Store selected faction (if valid) and clear related choices ***
         if (selectedDataFile) {
-             sessionStorage.setItem(FACTION_KEY, selectedDataFile);
-             // Remove selection styling from all cards
-             factionGridContainer.querySelectorAll('.faction-card').forEach(card => card.classList.remove('selected'));
-             // Add selection styling to the chosen card
-             const selectedCard = factionGridContainer.querySelector(`.faction-card[data-file="${CSS.escape(selectedDataFile)}"]`);
-             if (selectedCard) {
-                 selectedCard.classList.add('selected');
-             }
-             // Clear ability/enhancement ONLY when faction changes *manually*
-             if (!isRestoring) { 
-                 console.log("Manual faction change - clearing sub-selections."); // DEBUG
-                 sessionStorage.removeItem(ABILITY_KEY);
-                 sessionStorage.removeItem(ENHANCEMENT_KEY);
-             }
+            sessionStorage.setItem(FACTION_KEY, selectedDataFile);
+            if (factionPickerApi) {
+                factionPickerApi.setSelectedDataFile(selectedDataFile);
+            }
+            if (!isRestoring) {
+                console.log('Manual spearhead change - clearing sub-selections.');
+                sessionStorage.removeItem(ABILITY_KEY);
+                sessionStorage.removeItem(ENHANCEMENT_KEY);
+            }
         } else {
-             sessionStorage.removeItem(FACTION_KEY);
-             sessionStorage.removeItem(ABILITY_KEY);
-             sessionStorage.removeItem(ENHANCEMENT_KEY);
-             // Clear selection styling from all cards
-             factionGridContainer.querySelectorAll('.faction-card').forEach(card => card.classList.remove('selected'));
+            sessionStorage.removeItem(FACTION_KEY);
+            sessionStorage.removeItem(ABILITY_KEY);
+            sessionStorage.removeItem(ENHANCEMENT_KEY);
+            if (factionPickerApi) {
+                factionPickerApi.setSelectedDataFile(null);
+            }
         }
-        
-        // ********************************************************
 
-        // Reset areas when changing selection or selecting default
         displayArmyRules([], armyRulesContainer);
-        displayComposition([], compositionContainer); 
+        displayComposition([], compositionContainer);
         displayRegimentAbilitySelection([], regimentAbilityContainer);
         displayEnhancementSelection([], enhancementSelectionContainer);
         factionRulesSection.style.display = 'none';
         mainContinueButton.style.display = 'none';
         mainContinueButton.disabled = true;
 
-        if (!selectedDataFile) {
-            return; // Exit if no faction is selected
-        }
+        const rulesHeading = document.getElementById('faction-rules-heading');
+        if (rulesHeading) rulesHeading.textContent = 'Faction Rules';
+
+        if (!selectedDataFile) return;
 
         console.log(`Loading data for: ${selectedDataFile}`);
-        // Fetch the selected faction's data
         fetch(selectedDataFile)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+            .then((response) => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return response.json();
             })
-            .then(factionData => {
-                console.log('Fetched faction data:', factionData);
-
-                // *** STORE CURRENT FACTION DATA FOR LORE ACCESS ***
+            .then((factionData) => {
+                console.log('Fetched spearhead data:', factionData);
                 currentFactionData = factionData;
-                // ********************************
+                currentSpearheadMeta = {
+                    factionName: factionData.factionName,
+                    spearheadName: factionData.spearheadName || null,
+                    factionId: factionData.factionId
+                };
 
-                // *** ADD FACTION CLASS TO BODY ***
                 if (factionData.factionId) {
                     document.body.classList.add(factionData.factionId);
                 }
-                // ********************************
 
-                // Show relevant sections
+                if (rulesHeading) {
+                    rulesHeading.textContent = factionData.spearheadName
+                        ? `${factionData.factionName} — ${factionData.spearheadName}`
+                        : (factionData.factionName || 'Faction Rules');
+                }
+
                 factionRulesSection.style.display = 'block';
-
-                // Populate HTML with fetched data
                 displayArmyRules(factionData.armyRules, armyRulesContainer);
-                displayComposition(factionData.spearheadComposition, compositionContainer); 
+                displayComposition(factionData.spearheadComposition, compositionContainer);
                 displayRegimentAbilitySelection(factionData.regimentAbilities, regimentAbilityContainer);
                 displayEnhancementSelection(factionData.enhancements, enhancementSelectionContainer);
 
-                // *** Restore Ability/Enhancement Selections ***
                 const storedAbility = sessionStorage.getItem(ABILITY_KEY);
                 const storedEnhancement = sessionStorage.getItem(ENHANCEMENT_KEY);
 
                 if (storedAbility) {
-                    const abilityRadio = regimentAbilityContainer.querySelector(`input[name="regiment-ability-selection"][value="${CSS.escape(storedAbility)}"]`);
+                    const abilityRadio = regimentAbilityContainer.querySelector(
+                        `input[name="regiment-ability-selection"][value="${CSS.escape(storedAbility)}"]`
+                    );
                     if (abilityRadio) {
                         abilityRadio.checked = true;
                         abilityRadio.closest('.rule-box')?.classList.add('selected');
-                         console.log('Restored ability:', storedAbility);
+                        console.log('Restored ability:', storedAbility);
                     } else {
-                         console.warn('Stored ability not found for this faction, clearing:', storedAbility);
-                         sessionStorage.removeItem(ABILITY_KEY); // Clear if invalid for this faction
+                        console.warn('Stored ability not found for this spearhead, clearing:', storedAbility);
+                        sessionStorage.removeItem(ABILITY_KEY);
                     }
                 }
                 if (storedEnhancement) {
-                    const enhancementRadio = enhancementSelectionContainer.querySelector(`input[name="enhancement-selection"][value="${CSS.escape(storedEnhancement)}"]`);
+                    const enhancementRadio = enhancementSelectionContainer.querySelector(
+                        `input[name="enhancement-selection"][value="${CSS.escape(storedEnhancement)}"]`
+                    );
                     if (enhancementRadio) {
                         enhancementRadio.checked = true;
                         enhancementRadio.closest('.rule-box')?.classList.add('selected');
-                         console.log('Restored enhancement:', storedEnhancement);
+                        console.log('Restored enhancement:', storedEnhancement);
                     } else {
-                         console.warn('Stored enhancement not found for this faction, clearing:', storedEnhancement);
-                         sessionStorage.removeItem(ENHANCEMENT_KEY); // Clear if invalid for this faction
+                        console.warn('Stored enhancement not found for this spearhead, clearing:', storedEnhancement);
+                        sessionStorage.removeItem(ENHANCEMENT_KEY);
                     }
                 }
-                // Update button state after restoring/loading
-                checkSelectionsComplete(); 
-                // *******************************************
+                checkSelectionsComplete();
             })
-            .catch(error => {
-                console.error('Error loading faction data:', error);
-                // Display error messages
+            .catch((error) => {
+                console.error('Error loading spearhead data:', error);
+                currentFactionData = null;
+                currentSpearheadMeta = null;
                 armyRulesContainer.innerHTML = '<h3>Army Rules</h3><p>Error loading data.</p>';
-                compositionContainer.innerHTML = '<h3>Spearhead Composition</h3><p>Error loading data.</p>'; 
+                compositionContainer.innerHTML = '<h3>Spearhead Composition</h3><p>Error loading data.</p>';
                 regimentAbilityContainer.innerHTML = '<h3>Regiment Ability</h3><p>Error loading data.</p>';
                 enhancementSelectionContainer.innerHTML = '<h3>Enhancement</h3><p>Error loading data.</p>';
-                factionRulesSection.style.display = 'block'; 
-                 // Clear stored selections if loading failed for the restored faction
-                 sessionStorage.removeItem(ABILITY_KEY);
-                 sessionStorage.removeItem(ENHANCEMENT_KEY);
+                factionRulesSection.style.display = 'block';
+                sessionStorage.removeItem(ABILITY_KEY);
+                sessionStorage.removeItem(ENHANCEMENT_KEY);
             });
     }
     // --- END loadAndDisplayFaction ---
 
-    // Fetch the list of factions and populate the grid (MODIFIED)
+    // Fetch factions + spearheads and populate the grid
     fetch('data/manifest.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+        .then((response) => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return response.json();
         })
-        .then(manifest => {
-             // Check container *again* just before using it
-             if (!factionGridContainer) {
-                 console.error("Faction grid container not found right before populating!");
-                 return; 
-             }
-            factionGridContainer.innerHTML = ''; // Clear existing content
-
-            manifest.factions.forEach(faction => {
-                const factionCard = document.createElement('div');
-                factionCard.className = 'faction-card';
-                factionCard.textContent = faction.name;
-                factionCard.dataset.file = faction.dataFile; // Store file path in data attribute
-
-                // Add per-card theme class based on file or name
-                const idFromFile = (faction.dataFile || '')
-                    .replace(/^.*\/(.*)\.json$/, '$1') // extract filename without extension
-                    .replace(/_/g, '-');
-                if (idFromFile) {
-                    factionCard.classList.add(`theme-${idFromFile}`);
-                }
-
-                // Add click listener
-                factionCard.addEventListener('click', () => {
-                    loadAndDisplayFaction(faction.dataFile);
-                });
-
-                factionGridContainer.appendChild(factionCard);
-            });
-
-            // Staggered reveal of faction cards
-            applyReveal(factionGridContainer, '.faction-card', 0, 70);
-
-            // *** Restore faction selection after populating grid ***
-            const storedFaction = sessionStorage.getItem(FACTION_KEY);
-            if (storedFaction) {
-                 const storedFactionCard = factionGridContainer.querySelector(`.faction-card[data-file="${CSS.escape(storedFaction)}"]`);
-                 if (storedFactionCard) {
-                    console.log('Restoring faction:', storedFaction);
-                    // Don't add 'selected' class here, loadAndDisplayFaction will do it
-                    loadAndDisplayFaction(storedFaction, true); // Pass true for isRestoring
-                 } else {
-                    console.warn('Stored faction not found in manifest, clearing:', storedFaction);
-                    sessionStorage.removeItem(FACTION_KEY); // Clear if invalid
-                 }
-             }
-        })
-        .catch(error => {
-            console.error('Error loading faction list:', error);
-            if (factionGridContainer) { // Check if container exists before showing error
-                factionGridContainer.innerHTML = '<p class="error-message">Error loading factions. Please try refreshing.</p>';
+        .then((manifest) => {
+            if (!factionGridContainer) {
+                console.error('Faction grid container not found right before populating!');
+                return;
             }
-            // No need to disable anything as there's no dropdown
+            if (!window.SpearheadFactionPicker) {
+                console.error('faction-picker.js failed to load');
+                factionGridContainer.innerHTML =
+                    '<p class="error-message">Faction picker failed to load. Please refresh.</p>';
+                return;
+            }
+
+            const storedFaction = sessionStorage.getItem(FACTION_KEY);
+            factionPickerApi = window.SpearheadFactionPicker.populateFactionGrid(
+                factionGridContainer,
+                manifest,
+                {
+                    selectedDataFile: storedFaction,
+                    onSpearheadChosen: (dataFile) => loadAndDisplayFaction(dataFile, false)
+                }
+            );
+
+            applyReveal(factionGridContainer, '.faction-card-wrap', 0, 70);
+
+            if (storedFaction) {
+                const owner = window.SpearheadFactionPicker.findFactionForDataFile(
+                    factionPickerApi.factions,
+                    storedFaction
+                );
+                if (owner) {
+                    console.log('Restoring spearhead:', storedFaction);
+                    loadAndDisplayFaction(storedFaction, true);
+                } else {
+                    console.warn('Stored spearhead not found in manifest, clearing:', storedFaction);
+                    sessionStorage.removeItem(FACTION_KEY);
+                }
+            }
+        })
+        .catch((error) => {
+            console.error('Error loading faction list:', error);
+            if (factionGridContainer) {
+                factionGridContainer.innerHTML =
+                    '<p class="error-message">Error loading factions. Please try refreshing.</p>';
+            }
         });
 
     // REMOVED Faction Select event listener
@@ -466,7 +451,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loreButton) {
         loreButton.addEventListener('click', () => {
             if (currentFactionData && currentFactionData.lore) {
-                loreModalTitle.textContent = `${currentFactionData.factionName} Lore`;
+                loreModalTitle.textContent = currentFactionData.spearheadName
+                    ? `${currentFactionData.factionName} — ${currentFactionData.spearheadName}`
+                    : `${currentFactionData.factionName} Lore`;
                 loreModalBody.innerHTML = currentFactionData.lore;
                 loreModal.style.display = 'flex';
             } else {

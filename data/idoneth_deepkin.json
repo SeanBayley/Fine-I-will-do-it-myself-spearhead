@@ -1,0 +1,366 @@
+{
+  "factionName": "Idoneth Deepkin",
+  "factionId": "idoneth-deepkin",
+  "lore": "<h2>Akhelian Tide Guard</h2><p>An <strong>Akhelian King</strong> or Queen never rides to war alone. Their <strong>Tide Guard</strong> — finest Morrsarr shock riders, Ishlaen bodyguards, and Namarti Reaver scouts — put beast and body between any blow meant for their liege.</p><h3>Surge and Shield</h3><p><strong>Morrsarr Guard</strong> crash in with biovoltaic voltspears while <strong>Ishlaen Guard</strong> hold the line with galv-shields. <strong>Namarti Reavers</strong> harry the foe with whisperbow fire.</p><h3>Spearhead Force</h3><p>In the third battle round, Royal Imperative turns honour into a decisive strike — Strike-first fury or Crit (Mortal) precision.</p>",
+  "armyRules": [
+    {
+      "name": "ROYAL IMPERATIVE",
+      "type": "Battle Trait",
+      "timing": "Any Combat Phase",
+      "frequency": "Once Per Battle (Army)",
+      "description": "Desperate to honour their liege, the Tide Guard strike a decisive blow. You can only use this ability in the third battle round. Effect: Pick 1 of the following effects to apply for the rest of the battle round: Into Them!: Friendly units have Strike-first. Strike Sure: Friendly units’ melee weapons have Crit (Mortal).",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "THE SPEAR OF ASPHOREN",
+      "type": "Regiment Ability",
+      "timing": "Any Charge Phase",
+      "frequency": "Once Per Turn (Army)",
+      "description": "Those Idoneth who wish to follow the example of legendary commander Asphoren must strike at the foe like the surging tide. Declare: Pick a friendly unit that is not in combat to use this ability. Effect: Add 1 to charge rolls for that unit for the rest of the turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "charge",
+          "modifier": "+1",
+          "duration": "until_end_of_turn",
+          "active_phases": [
+            "all"
+          ],
+          "description": "+1 to charge rolls for the rest of the turn"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    },
+    {
+      "name": "THE SHIELD OF ULCHISS",
+      "type": "Regiment Ability",
+      "timing": "Your Movement Phase",
+      "frequency": "Once Per Turn (Army)",
+      "description": "Mastery of the ebb and flow of battle is core to the teachings of Ulchiss, which state that a timely withdrawal can open up enemy vulnerabilities. Declare: Pick a friendly unit in combat to use this ability. Effect: For the rest of the turn, each time that unit uses a Retreat ability, no mortal damage is inflicted on it.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "in_combat": true,
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "until_end_of_turn",
+          "description": "Retreat abilities inflict no mortal damage on this unit for the rest of the turn"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "DUTIFUL SOULS",
+      "type": "Artefact of Power",
+      "timing": "Your Hero Phase",
+      "frequency": "Once Per Battle",
+      "description": "The Tide Guard will fight to protect their King even when gravely wounded. Declare: Pick a friendly unit wholly within 12\" of your general to be the target. Effect: You can return 1 slain model to the target unit. If the target is an Infantry unit, you can return D3 slain models to it instead.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "SHIMMERING AMULET",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "This void-pearl amulet conceals its wearer behind a shimmering cloak of refracted magic. Effect: Your general has Ward (5+)."
+    },
+    {
+      "name": "VOLTAIC CHARGE",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "This general’s weapons crackle with electric power, ready to be discharged. Effect: Your general’s Akhelian Royal Weapons have Charge (+1 Damage).",
+      "legacy_effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Akhelian King"
+          },
+          "ability": {
+            "name": "Charge (+1 Damage)",
+            "description": "Add 1 to the Damage characteristic of Akhelian Royal Weapons if this unit charged in the same turn.",
+            "weapon": "Akhelian Royal Weapons"
+          }
+        }
+      ]
+    },
+    {
+      "name": "SOUL STEALER",
+      "type": "Artefact of Power",
+      "timing": "End of Any Turn",
+      "frequency": "N/A",
+      "description": "This warrior is said to siphon the spirits of fallen foes to sustain them in battle. Effect: If your general is in combat, Heal (D3) your general."
+    }
+  ],
+  "spearheadComposition": [
+    "General: 1 Akhelian King",
+    "Units:",
+    "3 Akhelian Morrsarr Guard",
+    "3 Akhelian Ishlaen Guard",
+    "10 Namarti Reavers"
+  ],
+  "units": [
+    {
+      "name": "Akhelian King",
+      "imageUrl": "images/idoneth_deepkin/Akhelian King.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "12\"",
+        "health": 7,
+        "save": "3+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Akhelian Royal Weapons",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        },
+        {
+          "name": "Deepmare’s Fangs, Talons and Lashing Tails",
+          "attacks": 4,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2,
+          "abilities": [
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "RAIDERS’ RESOLVE",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "The Akhelian King orders the warriors under their command to stand firm in the face of the enemy. Declare: Pick another friendly unit wholly within this unit’s combat range to be the target. Effect: Roll a dice. On a 3+, add 1 to save rolls for the target until the start of your next turn."
+        },
+        {
+          "name": "WAVE RIDER",
+          "type": "Ability",
+          "timing": "Any Charge Phase",
+          "frequency": "N/A",
+          "description": "When an Akhelian King charges the foe, they hit with the power of a crashing wave. Declare: If this unit charged this phase, pick an enemy unit within 1\" of it to be the target. Effect: Roll a D3. On a 2+, inflict an amount of mortal damage on the target equal to the roll."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "HERO",
+        "CAVALRY",
+        "FLY"
+      ]
+    },
+    {
+      "name": "Akhelian Morrsarr Guard",
+      "imageUrl": "images/idoneth_deepkin/Akhelian Morrsarr Guard.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "14\"",
+        "health": 4,
+        "save": "4+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Voltspear",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Charge (+1 Damage)",
+              "description": "Add 1 to the Damage characteristic of this weapon if this unit charged in the same turn."
+            }
+          ]
+        },
+        {
+          "name": "Fangmora’s Fangs and Lashing Tail",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3",
+          "abilities": [
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "BIOVOLTAIC BLAST",
+          "type": "Ability",
+          "timing": "Any Charge Phase",
+          "frequency": "Once Per Battle",
+          "description": "The biovoltaic energy produced by Fangmora Eels is stored by Morrsarr Guard, ready to be discharged as a bolt of energy when the time is right. Declare: If this unit charged this phase, pick an enemy unit within 1\" of it to be the target. Effect: Roll a number of dice equal to the number of models in this unit. Add 1 to each roll if there are more models in the target unit than this unit. For each 3+, inflict 1 mortal damage on the target.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_battle"
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "CAVALRY",
+        "FLY"
+      ]
+    },
+    {
+      "name": "Akhelian Ishlaen Guard",
+      "imageUrl": "images/idoneth_deepkin/Akhelian Ishlaen Guard.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "14\"",
+        "health": 4,
+        "save": "4+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Helsabre",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        },
+        {
+          "name": "Fangmora’s Fangs and Lashing Tail",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": "D3",
+          "abilities": [
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "BIOVOLTAIC BARRIER",
+          "type": "Ability",
+          "timing": "Any Combat Phase",
+          "frequency": "Once Per Battle",
+          "description": "The biovoltaic energy produced by Fangmora Eels is channelled by Ishlaen Guard into a crackling luminescent energy field that protects them from harm. Declare: Pick an enemy unit in combat with this unit to be the target. Effect: Roll a dice. On a 3+, subtract 1 from the Attacks characteristic of the target’s weapons for the rest of the turn.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_battle"
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "CAVALRY",
+        "FLY"
+      ]
+    },
+    {
+      "name": "Namarti Reavers",
+      "imageUrl": "images/idoneth_deepkin/Namarti Reavers.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "7\"",
+        "health": 1,
+        "save": "5+",
+        "control": 1
+      },
+      "rangedWeapons": [
+        {
+          "name": "Whisperbow",
+          "range": "12\"",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Keening Blade",
+          "attacks": 1,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "STRIKE ON THE MOVE",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "Namarti Reavers are experts at running out from cover to unleash a hail of deadly arrows. Effect: This unit can use Shoot abilities even if it used a Run or Retreat ability in the same turn."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "INFANTRY",
+        "REINFORCEMENTS"
+      ]
+    }
+  ],
+  "spearheadName": "Akhelian Tide Guard",
+  "spearheadId": "akhelian-tide-guard"
+}

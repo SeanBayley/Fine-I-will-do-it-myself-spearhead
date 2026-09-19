@@ -85,7 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
         seraphon: { color: '#40E0D0', rgb: '64, 224, 208' },
         'ossiarch-bonereapers': { color: '#F5F5DC', rgb: '245, 245, 220' },
         sylvaneth: { color: '#22c55e', rgb: '34, 197, 94' },
-        'orruk-warclans': { color: '#84cc16', rgb: '132, 204, 22' }
+        'orruk-warclans': { color: '#84cc16', rgb: '132, 204, 22' },
+        'daughters-of-khaine': { color: '#be123c', rgb: '190, 18, 60' },
+        'cities-of-sigmar': { color: '#b91c1c', rgb: '185, 28, 28' },
+        'helsmiths-of-hashut': { color: '#1f4d38', rgb: '31, 77, 56' },
+        'idoneth-deepkin': { color: '#0f766e', rgb: '15, 118, 110' }
     };
 
     // Image folder names under /images (underscore style used by existing assets)
@@ -95,7 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
         seraphon: 'seraphon',
         'ossiarch-bonereapers': 'ossiarch_bonereapers',
         sylvaneth: 'sylvaneth',
-        'orruk-warclans': 'orruk_warclans'
+        'orruk-warclans': 'orruk_warclans',
+        'daughters-of-khaine': 'daughters_of_khaine',
+        'cities-of-sigmar': 'cities_of_sigmar',
+        'helsmiths-of-hashut': 'helsmiths_of_hashut',
+        'idoneth-deepkin': 'idoneth_deepkin'
     };
 
     const match = {
@@ -326,7 +334,11 @@ document.addEventListener('DOMContentLoaded', () => {
         'skaven',
         'seraphon',
         'ossiarch-bonereapers',
-        'sylvaneth'
+        'sylvaneth',
+        'daughters-of-khaine',
+        'cities-of-sigmar',
+        'helsmiths-of-hashut',
+        'idoneth-deepkin'
     ];
 
     function applyActiveArmyChrome() {
@@ -1347,7 +1359,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
         applyEnhancementEffects(data, side.enhancement);
         side.factionData = data;
-        side.displayName = data.factionName || side.displayName;
+        side.displayName = data.spearheadName
+            ? `${data.factionName || side.displayName} — ${data.spearheadName}`
+            : (data.factionName || side.displayName);
         abilities.prepareSide(side);
 
         const factionId = data.factionId || '';
@@ -1355,13 +1369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const scorePill = document.querySelector(`.match-score-pill[data-side="${side.id}"]`);
 
         // Replace any previous faction theme class on this panel/pill only
-        const themeClasses = [
-            'stormcast-eternals',
-            'skaven',
-            'seraphon',
-            'ossiarch-bonereapers',
-            'sylvaneth'
-        ];
+        const themeClasses = FACTION_THEME_CLASSES;
         themeClasses.forEach((cls) => {
             panel.classList.remove(cls);
             if (scorePill) scorePill.classList.remove(cls);

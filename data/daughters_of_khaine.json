@@ -1,0 +1,507 @@
+{
+  "factionName": "Daughters of Khaine",
+  "factionId": "daughters-of-khaine",
+  "lore": "<h2>Khainite Shadow Coven</h2><p>When Morathi-Khaine needs to dispose of an enemy host swiftly and precisely, she deploys a <strong>Khainite Shadow Coven</strong> — specialists in subterfuge and misdirection who blend Cauldron gore-smoke with the umbral arts of her elite agents.</p><h3>Blood and Shadow</h3><p>A potent <strong>Cauldron of Blood</strong> anchors the coven, flanked by fearsome <strong>Sisters of Slaughter</strong>, roaming <strong>Khainite Shadowstalkers</strong>, and a <strong>Bloodwrack Medusa</strong> whose malevolent gaze leaves foes vulnerable to a killing blow.</p><h3>Spearhead Force</h3><p>Led by a <strong>Slaughter Queen on Cauldron of Blood</strong> and a <strong>Hag Queen</strong>, this Spearhead strikes from smoke and shadow — confusing, bleeding, then finishing their prey.</p>",
+  "armyRules": [
+    {
+      "name": "SHADOWMASKED",
+      "type": "Battle Trait",
+      "timing": "Any Charge Phase",
+      "frequency": "Once Per Turn",
+      "description": "The umbral arts of the Khainite Shadowstalkers and the gore-smoke of the Cauldron are utilised to mask the movements of the Shadow Coven. Declare: Pick a friendly INFANTRY unit that is in combat and did not charge this turn to be the target. Effect: Subtract 1 from hit rolls and wound rolls for combat attacks that target that friendly unit for the rest of the turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [
+            "INFANTRY"
+          ],
+          "in_combat": true,
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "hit_wound_defence",
+          "modifier": "-1 hit and wound vs this unit",
+          "duration": "until_end_of_turn",
+          "active_phases": [
+            "all"
+          ],
+          "description": "Enemy combat attacks targeting this unit subtract 1 from hit and wound rolls"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "BLEED THEM PALE",
+      "type": "Regiment Ability",
+      "timing": "Any Combat Phase",
+      "frequency": "Once Per Battle",
+      "description": "These aelves delight in bleeding their enemies slowly, darting away before they are attacked in turn. Declare: Pick a friendly INFANTRY unit that is in combat and did not charge this turn to be the target. Effect: The target can move 6\" but cannot end that move in combat.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [
+            "INFANTRY"
+          ],
+          "in_combat": true,
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "instant",
+          "description": "Move 6\"; cannot end in combat"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "MURDEROUS STRIKE",
+      "type": "Regiment Ability",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "A Shadow Coven attacks without warning, seeking to cripple the enemy with the cruelty of their opening strike. Effect: Add 1 to the Rend characteristic of melee weapons used by friendly INFANTRY units that charged in the same turn.",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "rend",
+          "modifier": "+1",
+          "duration": "while_condition",
+          "active_phases": [
+            "combat_phase"
+          ],
+          "description": "+1 Rend to melee weapons of friendly INFANTRY that charged this turn"
+        }
+      ]
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "SHADOW AVATAR",
+      "type": "Artefact of Power",
+      "timing": "Your Combat Phase",
+      "frequency": "Once Per Battle",
+      "description": "The shadow of the Avatar of Khaine peels away and attacks the foe, every strike cleaving through both body and soul. Effect: Add 1 to the Rend characteristic of your general’s melee weapons for the rest of the turn.",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "rend",
+          "modifier": "+1",
+          "duration": "until_end_of_turn",
+          "active_phases": [
+            "all"
+          ],
+          "description": "+1 Rend to general’s melee weapons for the rest of the turn"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "BOILING BLOOD",
+      "type": "Artefact of Power",
+      "timing": "Your Shooting Phase",
+      "frequency": "N/A",
+      "description": "A torrent of scalding blood is vomited forth by the Avatar of Khaine, reducing even polished sigmarite to molten slag. Declare: Pick a visible enemy unit within 12\" of your general to be the target. Effect: Roll a dice. If the roll equals or exceeds the target’s Save characteristic, halve the target’s Move characteristic until the start of your next turn.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "move",
+          "modifier": "halved",
+          "duration": "until_start_of_next_hero_phase",
+          "active_phases": [
+            "all"
+          ],
+          "description": "If roll ≥ Save, halve target Move until start of your next turn"
+        }
+      ]
+    },
+    {
+      "name": "FRENZIED EXHORTATIONS",
+      "type": "Artefact of Power",
+      "timing": "Your Hero Phase",
+      "frequency": "N/A",
+      "description": "The Slaughter Queen atop the Cauldron of Blood howls a bloody liturgy that empowers nearby cultists. Declare: Pick a visible friendly unit wholly within 12\" of your general to be the target. Effect: Roll a dice. On a 3+, add 1 to ward rolls for the target for the rest of the turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "12\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "ward",
+          "modifier": "+1 to ward rolls",
+          "duration": "until_end_of_turn",
+          "active_phases": [
+            "all"
+          ],
+          "description": "On a 3+, +1 to ward rolls for the rest of the turn"
+        }
+      ]
+    },
+    {
+      "name": "BLADED IMPACT",
+      "type": "Artefact of Power",
+      "timing": "Any Charge Phase",
+      "frequency": "N/A",
+      "description": "The bladed carriage of a Cauldron of Blood can plough its way through enemy ranks with ease. Declare: If your general charged this phase, pick an enemy unit within 1\" of them to be the target. Effect: Roll a D3. On a 2+, inflict an amount of mortal damage on the target equal to the roll.",
+      "targeting": {
+        "type": "enemy_unit",
+        "range": "1\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "instant",
+          "description": "On a 2+, inflict mortal damage equal to the D3 roll"
+        }
+      ]
+    }
+  ],
+  "spearheadComposition": [
+    "General: 1 Slaughter Queen on Cauldron of Blood",
+    "Units:",
+    "1 Hag Queen",
+    "1 Bloodwrack Medusa",
+    "9 Khainite Shadowstalkers",
+    "5 Sisters of Slaughter",
+    "5 Sisters of Slaughter"
+  ],
+  "units": [
+    {
+      "name": "Slaughter Queen on Cauldron of Blood",
+      "imageUrl": "images/daughters_of_khaine/Slaughter Queen on Cauldron of Blood.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "6\"",
+        "health": 12,
+        "save": "4+",
+        "control": 5
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Shrine Guardians’ Blades",
+          "attacks": 9,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "CONSECRATED REVULSION",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "The Slaughter Queen’s fanaticism is so intense that her deity provides protection for her followers from the attacks of heathens and weaklings. Declare: Pick a visible friendly INFANTRY unit wholly within 12\" of this unit to be the target. Effect: Roll a dice. On a 3+, add 1 to save rolls for the target until the start of your next turn.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [
+                "INFANTRY"
+              ],
+              "max_targets": 1
+            }
+          },
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "save",
+              "modifier": "+1",
+              "duration": "until_start_of_next_hero_phase",
+              "active_phases": [
+                "all"
+              ],
+              "description": "On a 3+, +1 to save rolls until the start of your next turn"
+            }
+          ]
+        },
+        {
+          "name": "WARD (6+)",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit has a ward of 6+."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "HERO",
+        "PRIEST",
+        "WAR MACHINE",
+        "WARD (6+)"
+      ]
+    },
+    {
+      "name": "Hag Queen",
+      "imageUrl": "images/daughters_of_khaine/Hag Queen.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "6\"",
+        "health": 5,
+        "save": "5+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Blade of Khaine",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "BLOODY INCITEMENT",
+          "type": "Ability",
+          "timing": "Any Combat Phase",
+          "frequency": "N/A",
+          "description": "The Hag Queen drives her followers into a violent rage. Declare: Pick a visible friendly unit wholly within 12\" of this unit to be the target. Effect: If this unit is in combat, the target’s melee weapons have Crit (Auto-wound) for the rest of the turn. If this unit is not in combat, roll a dice. On a 3+, the target’s melee weapons have Crit (Auto-wound) for the rest of the turn.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          },
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "crit",
+              "modifier": "Crit (Auto-wound)",
+              "duration": "until_end_of_turn",
+              "active_phases": [
+                "all"
+              ],
+              "description": "Target melee weapons gain Crit (Auto-wound) for the rest of the turn (auto if Hag Queen in combat; else on 3+)"
+            }
+          ]
+        },
+        {
+          "name": "WARD (6+)",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit has a ward of 6+."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "HERO",
+        "PRIEST",
+        "INFANTRY",
+        "WARD (6+)"
+      ]
+    },
+    {
+      "name": "Bloodwrack Medusa",
+      "imageUrl": "images/daughters_of_khaine/Bloodwrack Medusa.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "8\"",
+        "health": 6,
+        "save": "5+",
+        "control": 2
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Bloodwrack Spear",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "abilities": [
+        {
+          "name": "EXSANGUINATING GLARE",
+          "type": "Ability",
+          "timing": "Your Shooting Phase",
+          "frequency": "N/A",
+          "description": "The Bloodwrack Medusa’s eyes blaze with pure hatred, and her victim's blood explodes violently from their every pore. Declare: If this unit is in combat, pick an enemy unit in combat with it to be the target. Otherwise, pick a visible enemy unit within 12\" of it to be the target. Effect: Roll a dice. On a 3+, inflict 1 mortal damage on the target. Then, if any enemy models were slain by that mortal damage, inflict an additional 1 mortal damage on the target.",
+          "targeting": {
+            "type": "enemy_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          },
+          "effects": [
+            {
+              "type": "instant_effect",
+              "duration": "instant",
+              "description": "On a 3+, 1 mortal damage; +1 more if a model was slain"
+            }
+          ]
+        },
+        {
+          "name": "WARD (6+)",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit has a ward of 6+."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "HERO",
+        "WIZARD",
+        "INFANTRY",
+        "WARD (6+)"
+      ]
+    },
+    {
+      "name": "Khainite Shadowstalkers",
+      "imageUrl": "images/daughters_of_khaine/Khainite Shadowstalkers.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "6\"",
+        "health": 1,
+        "save": "5+",
+        "control": 1
+      },
+      "rangedWeapons": [
+        {
+          "name": "Cursed Bolts and Missiles",
+          "range": "10\"",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Blades of Murder",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "SHADOW LEAP",
+          "type": "Ability",
+          "timing": "Your Movement Phase",
+          "frequency": "Once Per Battle",
+          "description": "Shadowstalkers can vanish and reappear at will as they navigate the Umbral Web. Effect: Remove this unit from the battlefield and set it up again on the battlefield more than 6\" from all enemy units.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_battle"
+          }
+        },
+        {
+          "name": "WARD (6+)",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit has a ward of 6+."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "INFANTRY",
+        "WARD (6+)"
+      ]
+    },
+    {
+      "name": "Sisters of Slaughter",
+      "imageUrl": "images/daughters_of_khaine/Sisters of Slaughter.png",
+      "backgroundPosition": 50,
+      "stats": {
+        "move": "6\"",
+        "health": 1,
+        "save": "6+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Kruiplash",
+          "attacks": 3,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "DANCE OF DEATH",
+          "type": "Ability",
+          "timing": "Enemy Combat Phase",
+          "frequency": "Once Per Turn (Army)",
+          "description": "Sisters of Slaughter delight in frustrating foes with acts of incredible acrobatics and martial skill. Effect: If this unit is in combat, it can move 2D6\". It can move through the combat ranges of enemy units but must end that move in combat.",
+          "usage": {
+            "max_uses": 1,
+            "reset_period": "per_turn"
+          }
+        },
+        {
+          "name": "WARD (6+)",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "This unit has a ward of 6+."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "INFANTRY",
+        "REINFORCEMENTS",
+        "WARD (6+)"
+      ]
+    }
+  ],
+  "spearheadName": "Khainite Shadow Coven",
+  "spearheadId": "khainite-shadow-coven"
+}

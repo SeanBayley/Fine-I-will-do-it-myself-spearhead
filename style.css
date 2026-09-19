@@ -331,6 +331,46 @@ body.sylvaneth {
     --primary-700: #15803d;
 }
 
+/* Daughters of Khaine Theme (Blood crimson) */
+body.daughters-of-khaine {
+    --primary-color: #be123c;
+    --primary-color-rgb: 190, 18, 60;
+    --primary-hover-color: #9f1239;
+    --primary-500: #be123c;
+    --primary-600: #9f1239;
+    --primary-700: #881337;
+}
+
+/* Cities of Sigmar Theme (Freeguild red) */
+body.cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
+    --primary-hover-color: #991b1b;
+    --primary-500: #b91c1c;
+    --primary-600: #991b1b;
+    --primary-700: #7f1d1d;
+}
+
+/* Helsmiths of Hashut Theme (black-green) */
+body.helsmiths-of-hashut {
+    --primary-color: #1f4d38;
+    --primary-color-rgb: 31, 77, 56;
+    --primary-hover-color: #123528;
+    --primary-500: #1f4d38;
+    --primary-600: #123528;
+    --primary-700: #0c2419;
+}
+
+/* Idoneth Deepkin Theme (abyssal teal) */
+body.idoneth-deepkin {
+    --primary-color: #0f766e;
+    --primary-color-rgb: 15, 118, 110;
+    --primary-hover-color: #115e59;
+    --primary-500: #0f766e;
+    --primary-600: #115e59;
+    --primary-700: #134e4a;
+}
+
 .rule-box.selected {
     border-color: var(--primary-color);
     background-color: rgba(var(--primary-color-rgb), 0.1); /* Use RGB variable */
@@ -399,7 +439,68 @@ body.sylvaneth {
     height: 0;
 } */
 
-/* --- End Faction Grid Styles --- */ 
+/* --- Faction card + spearhead picker --- */
+.faction-card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    min-width: 0;
+}
+
+.faction-card-wrap .faction-card {
+    width: 100%;
+    font: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.faction-card-wrap.is-open .spearhead-picker,
+.faction-card-wrap.is-selected .spearhead-picker {
+    display: flex;
+}
+
+.spearhead-picker {
+    display: none;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.55rem 0.65rem 0.7rem;
+    border-radius: 10px;
+    border: 1px solid rgba(var(--primary-color-rgb, 96, 165, 250), 0.35);
+    background: linear-gradient(180deg, rgba(var(--primary-color-rgb, 96, 165, 250), 0.1), rgba(255, 255, 255, 0.02));
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.spearhead-picker-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(var(--primary-color-rgb, 96, 165, 250), 0.95);
+}
+
+.spearhead-select {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(var(--primary-color-rgb, 96, 165, 250), 0.45);
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--text-color, #f3f4f6);
+    padding: 0.45rem 0.55rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.spearhead-select:focus-visible {
+    outline: 2px solid var(--primary-color, #60a5fa);
+    outline-offset: 2px;
+}
+
+.spearhead-select option {
+    background: #111827;
+    color: #f9fafb;
+}
+ 
 
 /* Layout */
 .app-container {
@@ -735,6 +836,30 @@ main#rules-content section {
     --primary-color: #22c55e;
     --primary-color-rgb: 34, 197, 94;
     --primary-hover-color: #16a34a;
+}
+
+.faction-card.theme-daughters-of-khaine {
+    --primary-color: #be123c;
+    --primary-color-rgb: 190, 18, 60;
+    --primary-hover-color: #9f1239;
+}
+
+.faction-card.theme-cities-of-sigmar {
+    --primary-color: #b91c1c;
+    --primary-color-rgb: 185, 28, 28;
+    --primary-hover-color: #991b1b;
+}
+
+.faction-card.theme-helsmiths-of-hashut {
+    --primary-color: #1f4d38;
+    --primary-color-rgb: 31, 77, 56;
+    --primary-hover-color: #123528;
+}
+
+.faction-card.theme-idoneth-deepkin {
+    --primary-color: #0f766e;
+    --primary-color-rgb: 15, 118, 110;
+    --primary-hover-color: #115e59;
 }
 /* --- END Per-card Theme Overrides --- */
 

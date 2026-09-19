@@ -1,0 +1,376 @@
+{
+  "factionName": "Cities of Sigmar",
+  "factionId": "cities-of-sigmar",
+  "lore": "<h2>Castelite Company</h2><p>When a full army corps cannot be deployed, a <strong>Castelite Company</strong> is sent to seize vital ground and hold it. Led by a adaptable <strong>Freeguild Cavalier-Marshal</strong>, these Freeguilders absorb the enemy’s fury, then answer with cannon-fire and a thunderous counter-charge.</p><h3>Anvil and Hammer</h3><p><strong>Freeguild Steelhelms</strong> lock shields as the anvil. An <strong>Ironweld Great Cannon</strong> punches holes in the foe while <strong>Freeguild Cavaliers</strong> smash through whatever remains.</p><h3>Spearhead Force</h3><p>Discipline, faith, and well-timed Officar’s Orders turn a small Freeguild detachment into a fortress on the march.</p>",
+  "armyRules": [
+    {
+      "name": "THE OFFICAR'S ORDER",
+      "type": "Battle Trait",
+      "timing": "Start of Battle Round",
+      "frequency": "Once Per Battle Round",
+      "description": "Reading the flow of battle, a ranking Freeguilder dispatches an order that could well turn the tide in the Sigmarites’ favour. Declare: Pick a battle tactic card in your hand and place it face-down separately next to your other battle tactic cards. The information on it is still hidden from your opponent but make it clear which card is separate. The card stays separate until you use the command on it or score the battle tactic on it as described below. Effect: When you use the command on that card, it is not discarded but returns to your hand. Your opponent can check the information on it before it returns to your hand. The card goes back to being a normal battle tactic card, with the exception that you cannot use the command on it in the same phase it went back into your hand. If you did not use the command on the card you separated, you can still score the battle tactic on it at the end of your turn as normal if you met its conditions. If you do so, discard it as normal. If you neither used the command nor scored the battle tactic on the card, it automatically returns to your hand at the end of your turn. Designer’s Note: This ability essentially lets you use a command ‘for free’, but you have to choose the command at the start of the battle round, so it requires some planning ahead!",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle_round"
+      }
+    }
+  ],
+  "regimentAbilities": [
+    {
+      "name": "FOR SIGMAR, CHARGE!",
+      "type": "Regiment Ability",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "With their blade raised high, the Marshal signals the charge of the Cavaliers. Effect: Friendly CAVALRY units have STRIKE-FIRST if they charged in the same turn.",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "strike_order",
+          "modifier": "STRIKE-FIRST",
+          "duration": "while_condition",
+          "active_phases": [
+            "combat_phase"
+          ],
+          "description": "Friendly CAVALRY that charged have STRIKE-FIRST"
+        }
+      ]
+    },
+    {
+      "name": "IRONWELD DISCIPLINE",
+      "type": "Regiment Ability",
+      "timing": "Enemy Shooting Phase",
+      "frequency": "Once Per Turn",
+      "description": "With nerves of steel, the crew of the Great Cannon prepare to fire even as enemies close in on all sides. Declare: Pick your Ironweld Great Cannon to use this ability. Effect: Roll a dice. On a 3+, it can use the ‘Shoot’ ability as if it were your shooting phase.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "instant",
+          "description": "On a 3+, Ironweld Great Cannon can Shoot in the enemy shooting phase"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_turn"
+      }
+    }
+  ],
+  "enhancements": [
+    {
+      "name": "FLASK OF LETHISIAN DARKWATER",
+      "type": "Artefact of Power",
+      "timing": "Start of Any Turn",
+      "frequency": "Once Per Battle",
+      "description": "Sourced from the lakewaters of the city of Lethis, when this potion is carefully sipped, its black liquid soothes the body and soul. Effect: Heal (D6) your general.",
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
+    },
+    {
+      "name": "BRAZIER OF HOLY FLAME",
+      "type": "Artefact of Power",
+      "timing": "End of Any Turn",
+      "frequency": "N/A",
+      "description": "The torch borne by this champion symbolises the light of civilisation being carried forth into the darkness of the wilds, a sacred act that emboldens those who march alongside them. Declare: Pick a friendly Freeguild Steelhelms unit within your general’s combat range. Effect: You can return up to D3 slain models to that unit.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "combat",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "instant_effect",
+          "duration": "instant",
+          "description": "Return up to D3 slain models to a Freeguild Steelhelms unit in combat range"
+        }
+      ]
+    },
+    {
+      "name": "HEIRLOOM BLADE",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "Wielded in countless battles, the edge of this blade is as keen as the day it was forged. Effect: Add 1 to the Rend characteristic of your general’s Master-forged Longsword.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Cavalier-Marshal"
+          },
+          "ability": {
+            "name": "HEIRLOOM BLADE",
+            "description": "Add 1 to the Rend characteristic of this unit’s Master-forged Longsword.",
+            "timing": "Passive",
+            "frequency": "N/A"
+          }
+        }
+      ]
+    },
+    {
+      "name": "GLIMMERING",
+      "type": "Artefact of Power",
+      "timing": "Passive",
+      "frequency": "N/A",
+      "description": "The glinting facets of this tiny fragment of Mallus offer fleeting glimpses of the future. Effect: Each phase, you can re-roll 1 hit roll, or 1 wound roll, or 1 save roll made for your general."
+    }
+  ],
+  "spearheadComposition": [
+    "General: 1 Freeguild Cavalier-Marshal",
+    "Units:",
+    "5 Freeguild Steelhelms",
+    "5 Freeguild Steelhelms",
+    "5 Freeguild Cavaliers",
+    "1 Ironweld Great Cannon"
+  ],
+  "units": [
+    {
+      "name": "Freeguild Cavalier-Marshal",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Cavalier-Marshal.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "10\"",
+        "health": 7,
+        "save": "3+",
+        "control": 2
+      },
+      "rangedWeapons": [
+        {
+          "name": "Dragoon Pistol",
+          "range": "10\"",
+          "attacks": 2,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Shoot in Combat",
+              "description": "This weapon can be used to shoot even while this unit is in combat."
+            }
+          ]
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Master-forged Longsword",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 2
+        },
+        {
+          "name": "Warhorse’s Steel-shod Hooves",
+          "attacks": 2,
+          "hit": "5+",
+          "wound": "3+",
+          "rend": "-",
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "DECISIVE COMMANDER",
+          "type": "Ability",
+          "timing": "Your Hero Phase",
+          "frequency": "N/A",
+          "description": "In the face of the oncoming enemy, Freeguild Marshals employ rousing oratory to inspire their soldiers to stand strong in the name of Sigmar. Declare: Pick a friendly Freeguild Steelhelms unit wholly within 12\" of this unit to be the target and roll a dice. Effect: On a 2+, pick 1: On Your Feet!: If the target unit is not in combat, you can return D3 slain models to it. Yield No Quarter!: Add 3 to the target unit’s control score until the start of your next turn.",
+          "targeting": {
+            "type": "friendly_unit",
+            "range": "12\"",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "CAVALRY",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Ironweld Great Cannon",
+      "imageUrl": "images/cities_of_sigmar/Ironweld Great Cannon.png",
+      "backgroundPosition": 45,
+      "stats": {
+        "move": "3\"",
+        "health": 8,
+        "save": "4+",
+        "control": 2
+      },
+      "rangedWeapons": [
+        {
+          "name": "Great Cannon: Cannonball",
+          "range": "24\"",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "2+",
+          "rend": 2,
+          "damage": "D3+2"
+        },
+        {
+          "name": "Great Cannon: Grapeshot",
+          "range": "12\"",
+          "attacks": 5,
+          "hit": "3+",
+          "wound": "3+",
+          "rend": 1,
+          "damage": 2
+        }
+      ],
+      "meleeWeapons": [
+        {
+          "name": "Crew’s Tools and Sidearms",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "SHOT AND SHELL",
+          "type": "Ability",
+          "timing": "Passive",
+          "frequency": "N/A",
+          "description": "The engineers of the Ironweld Arsenal have developed different ammunition for the Great Cannon to fire. Effect: Each time this unit uses a SHOOT ability, choose either the Cannonball or Grapeshot weapon characteristics for all the attacks it makes with its Great Cannon. The Cannonball can only be chosen if this unit has not used a MOVE ability that turn."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "WAR MACHINE",
+        "REINFORCEMENTS"
+      ]
+    },
+    {
+      "name": "Freeguild Cavaliers",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Cavaliers.png",
+      "backgroundPosition": 40,
+      "stats": {
+        "move": "10\"",
+        "health": 3,
+        "save": "3+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Cavalier Weapon",
+          "attacks": 3,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Charge (+1 Damage)",
+              "description": "Add 1 to the Damage characteristic of this weapon if this unit charged in the same turn."
+            }
+          ]
+        },
+        {
+          "name": "Warhorse’s Steel-shod Hooves",
+          "attacks": 2,
+          "hit": "5+",
+          "wound": "3+",
+          "rend": "-",
+          "damage": 1,
+          "abilities": [
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "name": "DEVASTATING CHARGE",
+          "type": "Ability",
+          "timing": "Any Charge Phase",
+          "frequency": "N/A",
+          "description": "Thundering across the battlefield, the Cavaliers build up momentum before smashing deep into the enemy’s ranks, laying about themselves with blade, axe, hammer and flail. Declare: If this unit charged this phase, pick an enemy unit in combat with it to be the target and roll a dice. Effect: On a 2+, inflict D3 mortal damage on the target.",
+          "targeting": {
+            "type": "enemy_unit",
+            "range": "combat",
+            "targeting_criteria": {
+              "keywords": [],
+              "max_targets": 1
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "CAVALRY",
+        "REINFORCEMENTS",
+        "HUMAN"
+      ]
+    },
+    {
+      "name": "Freeguild Steelhelms",
+      "imageUrl": "images/cities_of_sigmar/Freeguild Steelhelms.png",
+      "backgroundPosition": 50,
+      "stats": {
+        "move": "5\"",
+        "health": 1,
+        "save": "4+",
+        "control": 1
+      },
+      "rangedWeapons": [],
+      "meleeWeapons": [
+        {
+          "name": "Freeguild Weapon",
+          "attacks": 2,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": "-",
+          "damage": 1
+        }
+      ],
+      "abilities": [
+        {
+          "name": "CONSECRATE THE LAND",
+          "type": "Ability",
+          "timing": "Your Movement Phase",
+          "frequency": "N/A",
+          "description": "Bellowing Sigmarite hymns, the Battle Priest who accompanies the Steelhelms purges the taint of Chaos from the land and consecrates it in the name of the God-King. Declare: If this unit is contesting an objective you control that is not contested by any enemy models, roll a dice. Effect: On a 3+, that objective is considered by you to be consecrated. Friendly units have WARD (6+) while they are contesting a consecrated objective. If your opponent gains control of a consecrated objective, it is no longer consecrated."
+        }
+      ],
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "INFANTRY",
+        "REINFORCEMENTS",
+        "HUMAN"
+      ]
+    }
+  ],
+  "spearheadName": "Castelite Company",
+  "spearheadId": "castelite-company"
+}
