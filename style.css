@@ -439,7 +439,68 @@ body.idoneth-deepkin {
     height: 0;
 } */
 
-/* --- End Faction Grid Styles --- */ 
+/* --- Faction card + spearhead picker --- */
+.faction-card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    min-width: 0;
+}
+
+.faction-card-wrap .faction-card {
+    width: 100%;
+    font: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.faction-card-wrap.is-open .spearhead-picker,
+.faction-card-wrap.is-selected .spearhead-picker {
+    display: flex;
+}
+
+.spearhead-picker {
+    display: none;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.55rem 0.65rem 0.7rem;
+    border-radius: 10px;
+    border: 1px solid rgba(var(--primary-color-rgb, 96, 165, 250), 0.35);
+    background: linear-gradient(180deg, rgba(var(--primary-color-rgb, 96, 165, 250), 0.1), rgba(255, 255, 255, 0.02));
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.spearhead-picker-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(var(--primary-color-rgb, 96, 165, 250), 0.95);
+}
+
+.spearhead-select {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(var(--primary-color-rgb, 96, 165, 250), 0.45);
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--text-color, #f3f4f6);
+    padding: 0.45rem 0.55rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.spearhead-select:focus-visible {
+    outline: 2px solid var(--primary-color, #60a5fa);
+    outline-offset: 2px;
+}
+
+.spearhead-select option {
+    background: #111827;
+    color: #f9fafb;
+}
+ 
 
 /* Layout */
 .app-container {

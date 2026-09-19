@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentStep = 'ruleset'; // ruleset | A | B
     let pendingSelection = { faction: null, ability: null, enhancement: null };
+    let factionPickerApi = null;
     let matchSetup = loadMatchSetup();
 
     function loadMatchSetup() {
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rulesetSection.style.display = 'none';
             armySetupSection.style.display = 'block';
             const sideLabel = currentStep === 'A' ? 'Side A' : 'Side B';
-            setupSideTitle.textContent = `${sideLabel} — Select Faction`;
+            setupSideTitle.textContent = `${sideLabel} — Select Faction & Spearhead`;
             factionRulesHeading.textContent = `${sideLabel} — Faction Rules`;
             mainContinueButton.textContent = currentStep === 'A'
                 ? 'Continue to Side B'
@@ -273,12 +274,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.className = '';
         pendingSelection = { faction: selectedDataFile || null, ability: null, enhancement: null };
 
-        factionGridContainer.querySelectorAll('.faction-card').forEach((card) => card.classList.remove('selected'));
-        if (selectedDataFile) {
-            const selectedCard = factionGridContainer.querySelector(
-                `.faction-card[data-file="${CSS.escape(selectedDataFile)}"]`
-            );
-            if (selectedCard) selectedCard.classList.add('selected');
+        if (factionPickerApi) {
+            factionPickerApi.setSelectedDataFile(selectedDataFile || null);
         }
 
         displayArmyRules([], armyRulesContainer);
@@ -288,6 +285,11 @@ document.addEventListener('DOMContentLoaded', () => {
         factionRulesSection.style.display = 'none';
         mainContinueButton.style.display = 'none';
         mainContinueButton.disabled = true;
+
+        if (factionRulesHeading) {
+            const sideLabel = currentStep === 'B' ? 'Side B' : 'Side A';
+            factionRulesHeading.textContent = `${sideLabel} — Faction Rules`;
+        }
 
         if (!selectedDataFile) return;
 
@@ -301,6 +303,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (factionData.factionId) {
                     document.body.classList.add(factionData.factionId);
                 }
+                if (factionRulesHeading) {
+                    const sideLabel = currentStep === 'B' ? 'Side B' : 'Side A';
+                    const title = factionData.spearheadName
+                        ? `${sideLabel} — ${factionData.factionName} · ${factionData.spearheadName}`
+                        : `${sideLabel} — ${factionData.factionName || 'Faction Rules'}`;
+                    factionRulesHeading.textContent = title;
+                }
                 factionRulesSection.style.display = 'block';
                 displayArmyRules(factionData.armyRules, armyRulesContainer);
                 displayComposition(factionData.spearheadComposition, compositionContainer);
@@ -309,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkSelectionsComplete();
             })
             .catch((error) => {
-                console.error('Error loading faction data for match setup:', error);
+                console.error('Error loading spearhead data for match setup:', error);
                 armyRulesContainer.innerHTML = '<h3>Army Rules</h3><p>Error loading data.</p>';
                 factionRulesSection.style.display = 'block';
             });
@@ -322,27 +331,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then((manifest) => {
-                factionGridContainer.innerHTML = '';
-                manifest.factions.forEach((faction) => {
-                    const factionCard = document.createElement('div');
-                    factionCard.className = 'faction-card';
-                    factionCard.textContent = faction.name;
-                    factionCard.dataset.file = faction.dataFile;
-
-                    const idFromFile = (faction.dataFile || '')
-                        .replace(/^.*\/(.*)\.json$/, '$1')
-                        .replace(/_/g, '-');
-                    if (idFromFile) {
-                        factionCard.classList.add(`theme-${idFromFile}`);
+                if (!window.SpearheadFactionPicker) {
+                    console.error('faction-picker.js failed to load');
+                    factionGridContainer.innerHTML =
+                        '<p class="error-message">Faction picker failed to load. Please refresh.</p>';
+                    return;
+                }
+                factionPickerApi = window.SpearheadFactionPicker.populateFactionGrid(
+                    factionGridContainer,
+                    manifest,
+                    {
+                        onSpearheadChosen: (dataFile) => loadAndDisplayFaction(dataFile)
                     }
-
-                    factionCard.addEventListener('click', () => {
-                        loadAndDisplayFaction(faction.dataFile);
-                    });
-
-                    factionGridContainer.appendChild(factionCard);
-                });
-                applyReveal(factionGridContainer, '.faction-card', 0, 70);
+                );
+                applyReveal(factionGridContainer, '.faction-card-wrap', 0, 70);
             })
             .catch((error) => {
                 console.error('Error loading faction list:', error);

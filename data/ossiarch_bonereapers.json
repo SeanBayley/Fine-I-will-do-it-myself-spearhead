@@ -34,26 +34,28 @@
       "description": "Pick a friendly unit to use this ability. Until the end of the phase, add 1 to ward rolls for that unit.",
       "keywords": "OSSIARCH COMMAND",
       "targeting": {
-          "type": "friendly_unit",
-          "range": "unlimited",
-          "targeting_criteria": {
-              "keywords": [],
-              "max_targets": 1
-          }
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
       },
       "effects": [
-          {
-              "type": "modify_stat",
-              "stat": "ward",
-              "modifier": "+1",
-              "duration": "until_end_of_phase",
-              "active_phases": ["combat_phase"],
-              "description": "+1 to ward rolls"
-          }
+        {
+          "type": "modify_stat",
+          "stat": "ward",
+          "modifier": "+1",
+          "duration": "until_end_of_phase",
+          "active_phases": [
+            "combat_phase"
+          ],
+          "description": "+1 to ward rolls"
+        }
       ],
       "usage": {
-          "max_uses": 1,
-          "reset_period": "per_battle"
+        "max_uses": 1,
+        "reset_period": "per_battle"
       }
     },
     {
@@ -64,27 +66,31 @@
       "description": "Pick a friendly Mortek Guard unit in combat to use this ability. That unit can use a RETREAT ability this phase without any mortal damage being inflicted on it.",
       "keywords": "OSSIARCH COMMAND",
       "targeting": {
-          "type": "friendly_unit",
-          "range": "unlimited",
-          "targeting_criteria": {
-              "keywords": ["MORTEK GUARD"],
-              "in_combat": true,
-              "max_targets": 1
-          }
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [
+            "MORTEK GUARD"
+          ],
+          "in_combat": true,
+          "max_targets": 1
+        }
       },
       "effects": [
-          {
-              "type": "modify_stat",
-              "stat": "retreat",
-              "modifier": "no_mortal_damage",
-              "duration": "until_end_of_phase",
-              "active_phases": ["movement_phase"],
-              "description": "Retreat without mortal damage"
-          }
+        {
+          "type": "modify_stat",
+          "stat": "retreat",
+          "modifier": "no_mortal_damage",
+          "duration": "until_end_of_phase",
+          "active_phases": [
+            "movement_phase"
+          ],
+          "description": "Retreat without mortal damage"
+        }
       ],
       "usage": {
-          "max_uses": 1,
-          "reset_period": "per_battle"
+        "max_uses": 1,
+        "reset_period": "per_battle"
       }
     }
   ],
@@ -185,7 +191,9 @@
       "name": "Mortisan Soulreaper",
       "imageUrl": "images/ossiarch_bonereapers/mortisan_soulreaper.png",
       "backgroundPosition": 75,
-      "keywords": ["WARD (6+)"],
+      "keywords": [
+        "WARD (6+)"
+      ],
       "stats": {
         "move": "6\"",
         "health": 5,
@@ -223,7 +231,9 @@
       "name": "Mortek Guard",
       "imageUrl": "images/ossiarch_bonereapers/mortek_guard.png",
       "backgroundPosition": 60,
-      "keywords": ["WARD (6+)"],
+      "keywords": [
+        "WARD (6+)"
+      ],
       "stats": {
         "move": "5\"",
         "health": 10,
@@ -248,7 +258,10 @@
           "rend": 1,
           "damage": 1,
           "abilities": [
-            { "name": "Anti-charge (+1 rend)", "description": "If this unit is charged, add 1 to the rend characteristic of this weapon." }
+            {
+              "name": "Anti-charge (+1 rend)",
+              "description": "If this unit is charged, add 1 to the rend characteristic of this weapon."
+            }
           ]
         }
       ],
@@ -265,7 +278,9 @@
       "name": "Kavalos Deathriders",
       "imageUrl": "images/ossiarch_bonereapers/kavalos_deathriders.png",
       "backgroundPosition": 70,
-      "keywords": ["WARD (6+)"],
+      "keywords": [
+        "WARD (6+)"
+      ],
       "stats": {
         "move": "10\"",
         "health": 3,
@@ -282,7 +297,10 @@
           "rend": 1,
           "damage": 1,
           "abilities": [
-            { "name": "Charge (+1 damage)", "description": "Add 1 to the damage characteristic of this weapon if the target made a charge move in the same turn." }
+            {
+              "name": "Charge (+1 damage)",
+              "description": "Add 1 to the damage characteristic of this weapon if the target made a charge move in the same turn."
+            }
           ]
         },
         {
@@ -307,22 +325,26 @@
       "name": "Gothizzar Harvester",
       "imageUrl": "images/ossiarch_bonereapers/gothizzar_harvester.png",
       "backgroundPosition": 50,
-      "keywords": ["WARD (6+)"],
+      "keywords": [
+        "WARD (6+)"
+      ],
       "stats": {
         "move": "6\"",
         "health": 10,
         "control": 5,
         "save": "4+"
       },
-      "rangedWeapons": [{
-        "name": "Death’s Head Maw",
-        "range": "12\"",
-        "attacks": 4,
-        "hit": "4+",
-        "wound": "4+",
-        "rend": 1,
-        "damage": 1
-      }],
+      "rangedWeapons": [
+        {
+          "name": "Death’s Head Maw",
+          "range": "12\"",
+          "attacks": 4,
+          "hit": "4+",
+          "wound": "4+",
+          "rend": 1,
+          "damage": 1
+        }
+      ],
       "meleeWeapons": [
         {
           "name": "Soulcrusher Bludgeons",
@@ -356,5 +378,7 @@
         }
       ]
     }
-  ]
-} 
+  ],
+  "spearheadName": "Ossiarch Bonereapers Spearhead",
+  "spearheadId": "ossiarch-bonereapers-spearhead"
+}

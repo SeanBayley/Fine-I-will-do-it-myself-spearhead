@@ -22,7 +22,7 @@
 
         <main>
             <div class="faction-selection-section">
-                <h2 class="app-title">Select Your Faction</h2>
+                <h2 class="app-title">Select Your Faction & Spearhead</h2>
                 <p class="solo-mode-hint">Solo army tracker. For both armies on one laptop, use <a href="match-setup.html">Local 2-Player</a>.</p>
                 <!-- Faction grid will be loaded here by JavaScript -->
                 <div id="faction-grid"></div>
@@ -31,7 +31,7 @@
             <div id="rules-content">
                 <section id="faction-rules" style="display: none;">
                     <div class="faction-rules-header">
-                        <h2>Faction Rules</h2>
+                        <h2 id="faction-rules-heading">Faction Rules</h2>
                         <button id="lore-button" class="lore-button" title="View Faction Lore">
                             <span class="material-symbols-outlined">menu_book</span>
                         </button>
@@ -73,6 +73,7 @@
         </div>
     </div>
 
+    <script src="faction-picker.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 

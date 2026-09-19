@@ -13,7 +13,9 @@
         "type": "friendly_unit",
         "range": "unlimited",
         "targeting_criteria": {
-          "keywords": ["STORMCAST ETERNALS"],
+          "keywords": [
+            "STORMCAST ETERNALS"
+          ],
           "max_targets": 1
         }
       },
@@ -23,7 +25,9 @@
           "stat": "ward",
           "modifier": "5+",
           "duration": "until_start_of_next_hero_phase",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "description": "Ward (5+)"
         }
       ],
@@ -42,7 +46,9 @@
         "type": "friendly_unit",
         "range": "unlimited",
         "targeting_criteria": {
-          "keywords": ["STORMCAST ETERNALS"],
+          "keywords": [
+            "STORMCAST ETERNALS"
+          ],
           "not_within_3_of_enemy": true,
           "max_targets": 1
         }
@@ -64,63 +70,68 @@
   ],
   "regimentAbilities": [
     {
-        "name": "Blaze of Glory",
-        "type": "Regiment Ability",
-        "timing": "Combat phase",
-        "frequency": "Once per battle, any combat phase",
-        "description": "Pick a friendly unit in combat and until the end of the phase each time a model from that unit is slain roll a D6. On a 4+ an enemy unit in combat with that unit takes 1 mortal wound.",
-        "targeting": {
-            "type": "friendly_unit",
-            "range": "unlimited",
-            "targeting_criteria": {
-                "keywords": [],
-                "in_combat": true,
-                "max_targets": 1
-            }
-        },
-        "effects": [
-            {
-                "type": "modify_stat",
-                "stat": "blaze_of_glory",
-                "modifier": "active",
-                "duration": "until_end_of_phase",
-                "active_phases": ["combat_phase"],
-                "description": "When models slain, roll D6, on 4+ enemy takes 1 mortal wound"
-            }
-        ],
-        "usage": {
-            "max_uses": 1,
-            "reset_period": "per_battle"
+      "name": "Blaze of Glory",
+      "type": "Regiment Ability",
+      "timing": "Combat phase",
+      "frequency": "Once per battle, any combat phase",
+      "description": "Pick a friendly unit in combat and until the end of the phase each time a model from that unit is slain roll a D6. On a 4+ an enemy unit in combat with that unit takes 1 mortal wound.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "in_combat": true,
+          "max_targets": 1
         }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "blaze_of_glory",
+          "modifier": "active",
+          "duration": "until_end_of_phase",
+          "active_phases": [
+            "combat_phase"
+          ],
+          "description": "When models slain, roll D6, on 4+ enemy takes 1 mortal wound"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
     },
     {
-        "name": "Strike Where Needed",
-        "type": "Regiment Ability",
-        "timing": "Movement phase",
-        "frequency": "Once per battle",
-        "description": "Select a unit. For this unit no mortal damage is inflicted when retreating and then can still charge this turn.",
-        "targeting": {
-            "type": "friendly_unit",
-            "range": "unlimited",
-            "targeting_criteria": {
-                "keywords": [],
-                "max_targets": 1
-            }
-        },
-        "effects": [
-            {
-                "type": "modify_stat",
-                "stat": "retreat",
-                "modifier": "no_mortal_damage",
-                "duration": "until_end_of_turn",
-                "active_phases": ["movement_phase", "charge_phase"],
-                "description": "No mortal damage when retreating, can still charge"
-            }
-        ],
-        "usage": {
-            "max_uses": 1,
-            "reset_period": "per_battle"
+      "name": "Strike Where Needed",
+      "type": "Regiment Ability",
+      "timing": "Movement phase",
+      "frequency": "Once per battle",
+      "description": "Select a unit. For this unit no mortal damage is inflicted when retreating and then can still charge this turn.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "unlimited",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
         }
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "retreat",
+          "modifier": "no_mortal_damage",
+          "duration": "until_end_of_turn",
+          "active_phases": [
+            "movement_phase",
+            "charge_phase"
+          ],
+          "description": "No mortal damage when retreating, can still charge"
+        }
+      ],
+      "usage": {
+        "max_uses": 1,
+        "reset_period": "per_battle"
+      }
     }
   ],
   "enhancements": [
@@ -243,7 +254,10 @@
           "rend": 1,
           "damage": 2,
           "abilities": [
-            { "name": "Companion", "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics." }
+            {
+              "name": "Companion",
+              "description": "Unless otherwise specified, attacks made by this weapon cannot get an improvement to their hit, wound or weapon characteristics."
+            }
           ]
         }
       ],
@@ -263,7 +277,12 @@
           "description": "Declare: Pick an objective you do not control. Effect: For the rest of the turn, add 1 to hit rolls for combat attacks made by friendly units that target enemy units contesting that objective."
         }
       ],
-      "keywords": ["ORDER", "STORMCAST ETERNALS", "HERO", "CAVALRY"]
+      "keywords": [
+        "ORDER",
+        "STORMCAST ETERNALS",
+        "HERO",
+        "CAVALRY"
+      ]
     },
     {
       "name": "Lord-Veritant",
@@ -278,7 +297,7 @@
       "rangedWeapons": [],
       "meleeWeapons": [
         {
-          "name": "Staff of Abjuration", 
+          "name": "Staff of Abjuration",
           "attacks": 1,
           "hit": "3+",
           "wound": "3+",
@@ -286,15 +305,21 @@
           "damage": 3
         },
         {
-          "name": "Judgement Blade", 
+          "name": "Judgement Blade",
           "attacks": 3,
           "hit": "3+",
           "wound": "3+",
           "rend": 1,
           "damage": "D3",
           "abilities": [
-            { "name": "Anti-Wizard (+1 Rend)", "description": "Add 1 to the Rend characteristic of attacks made with this weapon that target a WIZARD." },
-            { "name": "Anti-Priest (+1 Rend)", "description": "Add 1 to the Rend characteristic of attacks made with this weapon that target a PRIEST." }
+            {
+              "name": "Anti-Wizard (+1 Rend)",
+              "description": "Add 1 to the Rend characteristic of attacks made with this weapon that target a WIZARD."
+            },
+            {
+              "name": "Anti-Priest (+1 Rend)",
+              "description": "Add 1 to the Rend characteristic of attacks made with this weapon that target a PRIEST."
+            }
           ]
         }
       ],
@@ -314,7 +339,12 @@
           "description": "Declare: Pick a visible enemy unit within 12\" of this unit to be the target, then make a chanting roll of D6. Effect: On a 3+, roll a dice for each model in the target unit. For each 5+, inflict 1 mortal wound on the target unit."
         }
       ],
-      "keywords": ["ORDER", "STORMCAST ETERNALS", "HERO", "PRIEST"]
+      "keywords": [
+        "ORDER",
+        "STORMCAST ETERNALS",
+        "HERO",
+        "PRIEST"
+      ]
     },
     {
       "name": "Liberators",
@@ -329,25 +359,31 @@
       "rangedWeapons": [],
       "meleeWeapons": [
         {
-          "name": "Grandhammer (1 in 5 models)", 
+          "name": "Grandhammer (1 in 5 models)",
           "attacks": 2,
           "hit": "3+",
           "wound": "3+",
           "rend": 1,
           "damage": 2,
           "abilities": [
-            { "name": "Crit (Mortal)", "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage." }
+            {
+              "name": "Crit (Mortal)",
+              "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage."
+            }
           ]
         },
         {
-          "name": "Warhammer (4 in 5 models)", 
+          "name": "Warhammer (4 in 5 models)",
           "attacks": 2,
           "hit": "3+",
           "wound": "3+",
           "rend": 1,
           "damage": 1,
           "abilities": [
-            { "name": "Crit (Mortal)", "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage." }
+            {
+              "name": "Crit (Mortal)",
+              "description": "If you roll a Critical Hit when attacking with this weapon, that attack inflicts mortal damage on the target equal to the weapon's Damage characteristic, instead of the normal damage."
+            }
           ]
         }
       ],
@@ -360,7 +396,12 @@
           "description": "Add 3 to the control characteristic of this unit while it contests an objective wholly within friendly territory."
         }
       ],
-      "keywords": ["ORDER", "STORMCAST ETERNALS", "INFANTRY", "REINFORCEMENTS"]
+      "keywords": [
+        "ORDER",
+        "STORMCAST ETERNALS",
+        "INFANTRY",
+        "REINFORCEMENTS"
+      ]
     },
     {
       "name": "Prosecutors",
@@ -409,7 +450,15 @@
           "description": "Models in this unit can move within 2\" of each other horizontally and 6\" of each other vertically, instead of 1\" and 5\" respectively."
         }
       ],
-      "keywords": ["ORDER", "STORMCAST ETERNALS", "INFANTRY", "FLY", "REINFORCEMENTS"]
+      "keywords": [
+        "ORDER",
+        "STORMCAST ETERNALS",
+        "INFANTRY",
+        "FLY",
+        "REINFORCEMENTS"
+      ]
     }
-  ]
-} 
+  ],
+  "spearheadName": "Vigilant Brotherhood",
+  "spearheadId": "vigilant-brotherhood"
+}

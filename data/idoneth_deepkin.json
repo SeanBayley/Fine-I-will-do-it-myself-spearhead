@@ -36,7 +36,9 @@
           "stat": "charge",
           "modifier": "+1",
           "duration": "until_end_of_turn",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "description": "+1 to charge rolls for the rest of the turn"
         }
       ],
@@ -109,7 +111,9 @@
       "legacy_effects": [
         {
           "type": "addAbility",
-          "target": { "unit": "Akhelian King" },
+          "target": {
+            "unit": "Akhelian King"
+          },
           "ability": {
             "name": "Charge (+1 Damage)",
             "description": "Add 1 to the Damage characteristic of Akhelian Royal Weapons if this unit charged in the same turn.",
@@ -185,7 +189,13 @@
           "description": "When an Akhelian King charges the foe, they hit with the power of a crashing wave. Declare: If this unit charged this phase, pick an enemy unit within 1\" of it to be the target. Effect: Roll a D3. On a 2+, inflict an amount of mortal damage on the target equal to the roll."
         }
       ],
-      "keywords": ["ORDER", "IDONETH DEEPKIN", "HERO", "CAVALRY", "FLY"]
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "HERO",
+        "CAVALRY",
+        "FLY"
+      ]
     },
     {
       "name": "Akhelian Morrsarr Guard",
@@ -241,7 +251,12 @@
           }
         }
       ],
-      "keywords": ["ORDER", "IDONETH DEEPKIN", "CAVALRY", "FLY"]
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "CAVALRY",
+        "FLY"
+      ]
     },
     {
       "name": "Akhelian Ishlaen Guard",
@@ -291,7 +306,12 @@
           }
         }
       ],
-      "keywords": ["ORDER", "IDONETH DEEPKIN", "CAVALRY", "FLY"]
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "CAVALRY",
+        "FLY"
+      ]
     },
     {
       "name": "Namarti Reavers",
@@ -333,7 +353,14 @@
           "description": "Namarti Reavers are experts at running out from cover to unleash a hail of deadly arrows. Effect: This unit can use Shoot abilities even if it used a Run or Retreat ability in the same turn."
         }
       ],
-      "keywords": ["ORDER", "IDONETH DEEPKIN", "INFANTRY", "REINFORCEMENTS"]
+      "keywords": [
+        "ORDER",
+        "IDONETH DEEPKIN",
+        "INFANTRY",
+        "REINFORCEMENTS"
+      ]
     }
-  ]
+  ],
+  "spearheadName": "Akhelian Tide Guard",
+  "spearheadId": "akhelian-tide-guard"
 }

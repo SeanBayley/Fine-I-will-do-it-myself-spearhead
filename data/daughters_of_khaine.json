@@ -13,7 +13,9 @@
         "type": "friendly_unit",
         "range": "unlimited",
         "targeting_criteria": {
-          "keywords": ["INFANTRY"],
+          "keywords": [
+            "INFANTRY"
+          ],
           "in_combat": true,
           "max_targets": 1
         }
@@ -24,7 +26,9 @@
           "stat": "hit_wound_defence",
           "modifier": "-1 hit and wound vs this unit",
           "duration": "until_end_of_turn",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "description": "Enemy combat attacks targeting this unit subtract 1 from hit and wound rolls"
         }
       ],
@@ -45,7 +49,9 @@
         "type": "friendly_unit",
         "range": "unlimited",
         "targeting_criteria": {
-          "keywords": ["INFANTRY"],
+          "keywords": [
+            "INFANTRY"
+          ],
           "in_combat": true,
           "max_targets": 1
         }
@@ -74,7 +80,9 @@
           "stat": "rend",
           "modifier": "+1",
           "duration": "while_condition",
-          "active_phases": ["combat_phase"],
+          "active_phases": [
+            "combat_phase"
+          ],
           "description": "+1 Rend to melee weapons of friendly INFANTRY that charged this turn"
         }
       ]
@@ -93,7 +101,9 @@
           "stat": "rend",
           "modifier": "+1",
           "duration": "until_end_of_turn",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "description": "+1 Rend to general’s melee weapons for the rest of the turn"
         }
       ],
@@ -122,7 +132,9 @@
           "stat": "move",
           "modifier": "halved",
           "duration": "until_start_of_next_hero_phase",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "description": "If roll ≥ Save, halve target Move until start of your next turn"
         }
       ]
@@ -147,7 +159,9 @@
           "stat": "ward",
           "modifier": "+1 to ward rolls",
           "duration": "until_end_of_turn",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "description": "On a 3+, +1 to ward rolls for the rest of the turn"
         }
       ]
@@ -217,7 +231,9 @@
             "type": "friendly_unit",
             "range": "12\"",
             "targeting_criteria": {
-              "keywords": ["INFANTRY"],
+              "keywords": [
+                "INFANTRY"
+              ],
               "max_targets": 1
             }
           },
@@ -227,7 +243,9 @@
               "stat": "save",
               "modifier": "+1",
               "duration": "until_start_of_next_hero_phase",
-              "active_phases": ["all"],
+              "active_phases": [
+                "all"
+              ],
               "description": "On a 3+, +1 to save rolls until the start of your next turn"
             }
           ]
@@ -240,7 +258,14 @@
           "description": "This unit has a ward of 6+."
         }
       ],
-      "keywords": ["ORDER", "DAUGHTERS OF KHAINE", "HERO", "PRIEST", "WAR MACHINE", "WARD (6+)"]
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "HERO",
+        "PRIEST",
+        "WAR MACHINE",
+        "WARD (6+)"
+      ]
     },
     {
       "name": "Hag Queen",
@@ -284,7 +309,9 @@
               "stat": "crit",
               "modifier": "Crit (Auto-wound)",
               "duration": "until_end_of_turn",
-              "active_phases": ["all"],
+              "active_phases": [
+                "all"
+              ],
               "description": "Target melee weapons gain Crit (Auto-wound) for the rest of the turn (auto if Hag Queen in combat; else on 3+)"
             }
           ]
@@ -297,7 +324,14 @@
           "description": "This unit has a ward of 6+."
         }
       ],
-      "keywords": ["ORDER", "DAUGHTERS OF KHAINE", "HERO", "PRIEST", "INFANTRY", "WARD (6+)"]
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "HERO",
+        "PRIEST",
+        "INFANTRY",
+        "WARD (6+)"
+      ]
     },
     {
       "name": "Bloodwrack Medusa",
@@ -351,7 +385,14 @@
           "description": "This unit has a ward of 6+."
         }
       ],
-      "keywords": ["ORDER", "DAUGHTERS OF KHAINE", "HERO", "WIZARD", "INFANTRY", "WARD (6+)"]
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "HERO",
+        "WIZARD",
+        "INFANTRY",
+        "WARD (6+)"
+      ]
     },
     {
       "name": "Khainite Shadowstalkers",
@@ -404,7 +445,12 @@
           "description": "This unit has a ward of 6+."
         }
       ],
-      "keywords": ["ORDER", "DAUGHTERS OF KHAINE", "INFANTRY", "WARD (6+)"]
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "INFANTRY",
+        "WARD (6+)"
+      ]
     },
     {
       "name": "Sisters of Slaughter",
@@ -447,7 +493,15 @@
           "description": "This unit has a ward of 6+."
         }
       ],
-      "keywords": ["ORDER", "DAUGHTERS OF KHAINE", "INFANTRY", "REINFORCEMENTS", "WARD (6+)"]
+      "keywords": [
+        "ORDER",
+        "DAUGHTERS OF KHAINE",
+        "INFANTRY",
+        "REINFORCEMENTS",
+        "WARD (6+)"
+      ]
     }
-  ]
+  ],
+  "spearheadName": "Khainite Shadow Coven",
+  "spearheadId": "khainite-shadow-coven"
 }

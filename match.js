@@ -1069,7 +1069,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
         applyEnhancementEffects(data, side.enhancement);
         side.factionData = data;
-        side.displayName = data.factionName || side.displayName;
+        side.displayName = data.spearheadName
+            ? `${data.factionName || side.displayName} — ${data.spearheadName}`
+            : (data.factionName || side.displayName);
         abilities.prepareSide(side);
 
         const factionId = data.factionId || '';

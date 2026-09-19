@@ -28,7 +28,9 @@
           "stat": "strike_order",
           "modifier": "STRIKE-FIRST",
           "duration": "while_condition",
-          "active_phases": ["combat_phase"],
+          "active_phases": [
+            "combat_phase"
+          ],
           "description": "Friendly CAVALRY that charged have STRIKE-FIRST"
         }
       ]
@@ -200,7 +202,13 @@
           }
         }
       ],
-      "keywords": ["ORDER", "CITIES OF SIGMAR", "HERO", "CAVALRY", "HUMAN"]
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "HERO",
+        "CAVALRY",
+        "HUMAN"
+      ]
     },
     {
       "name": "Ironweld Great Cannon",
@@ -251,7 +259,12 @@
           "description": "The engineers of the Ironweld Arsenal have developed different ammunition for the Great Cannon to fire. Effect: Each time this unit uses a SHOOT ability, choose either the Cannonball or Grapeshot weapon characteristics for all the attacks it makes with its Great Cannon. The Cannonball can only be chosen if this unit has not used a MOVE ability that turn."
         }
       ],
-      "keywords": ["ORDER", "CITIES OF SIGMAR", "WAR MACHINE", "REINFORCEMENTS"]
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "WAR MACHINE",
+        "REINFORCEMENTS"
+      ]
     },
     {
       "name": "Freeguild Cavaliers",
@@ -311,7 +324,13 @@
           }
         }
       ],
-      "keywords": ["ORDER", "CITIES OF SIGMAR", "CAVALRY", "REINFORCEMENTS", "HUMAN"]
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "CAVALRY",
+        "REINFORCEMENTS",
+        "HUMAN"
+      ]
     },
     {
       "name": "Freeguild Steelhelms",
@@ -343,7 +362,15 @@
           "description": "Bellowing Sigmarite hymns, the Battle Priest who accompanies the Steelhelms purges the taint of Chaos from the land and consecrates it in the name of the God-King. Declare: If this unit is contesting an objective you control that is not contested by any enemy models, roll a dice. Effect: On a 3+, that objective is considered by you to be consecrated. Friendly units have WARD (6+) while they are contesting a consecrated objective. If your opponent gains control of a consecrated objective, it is no longer consecrated."
         }
       ],
-      "keywords": ["ORDER", "CITIES OF SIGMAR", "INFANTRY", "REINFORCEMENTS", "HUMAN"]
+      "keywords": [
+        "ORDER",
+        "CITIES OF SIGMAR",
+        "INFANTRY",
+        "REINFORCEMENTS",
+        "HUMAN"
+      ]
     }
-  ]
+  ],
+  "spearheadName": "Castelite Company",
+  "spearheadId": "castelite-company"
 }

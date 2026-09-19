@@ -332,9 +332,11 @@ document.addEventListener('DOMContentLoaded', () => {
                  }
                  // ********************************
 
-                // Display Faction Name
+                // Display Faction / Spearhead Name
                 if (factionNameHeader && factionData.factionName) {
-                     factionNameHeader.textContent = `${factionData.factionName} Units`;
+                    factionNameHeader.textContent = factionData.spearheadName
+                        ? `${factionData.factionName} — ${factionData.spearheadName}`
+                        : `${factionData.factionName} Units`;
                 }
                 
                 // *** NEW: Apply Enhancement Effects to Units ***

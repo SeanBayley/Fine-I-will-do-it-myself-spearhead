@@ -2,39 +2,93 @@
   "factions": [
     {
       "name": "Stormcast Eternals",
-      "dataFile": "data/stormcast_eternals.json"
+      "factionId": "stormcast-eternals",
+      "spearheads": [
+        {
+          "name": "Vigilant Brotherhood",
+          "dataFile": "data/stormcast_eternals.json"
+        }
+      ]
     },
     {
       "name": "Skaven",
-      "dataFile": "data/skaven.json"
+      "factionId": "skaven",
+      "spearheads": [
+        {
+          "name": "Gnawfeast Clawpack",
+          "dataFile": "data/skaven.json"
+        }
+      ]
     },
     {
       "name": "Seraphon",
-      "dataFile": "data/seraphon.json"
+      "factionId": "seraphon",
+      "spearheads": [
+        {
+          "name": "Seraphon Spearhead",
+          "dataFile": "data/seraphon.json"
+        }
+      ]
     },
     {
       "name": "Ossiarch Bonereapers",
-      "dataFile": "data/ossiarch_bonereapers.json"
+      "factionId": "ossiarch-bonereapers",
+      "spearheads": [
+        {
+          "name": "Ossiarch Bonereapers Spearhead",
+          "dataFile": "data/ossiarch_bonereapers.json"
+        }
+      ]
     },
     {
       "name": "Sylvaneth",
-      "dataFile": "data/sylvaneth.json"
+      "factionId": "sylvaneth",
+      "spearheads": [
+        {
+          "name": "Bitterbark Copse",
+          "dataFile": "data/sylvaneth.json"
+        }
+      ]
     },
     {
       "name": "Daughters of Khaine",
-      "dataFile": "data/daughters_of_khaine.json"
+      "factionId": "daughters-of-khaine",
+      "spearheads": [
+        {
+          "name": "Khainite Shadow Coven",
+          "dataFile": "data/daughters_of_khaine.json"
+        }
+      ]
     },
     {
       "name": "Cities of Sigmar",
-      "dataFile": "data/cities_of_sigmar.json"
+      "factionId": "cities-of-sigmar",
+      "spearheads": [
+        {
+          "name": "Castelite Company",
+          "dataFile": "data/cities_of_sigmar.json"
+        }
+      ]
     },
     {
       "name": "Helsmiths of Hashut",
-      "dataFile": "data/helsmiths_of_hashut.json"
+      "factionId": "helsmiths-of-hashut",
+      "spearheads": [
+        {
+          "name": "Helforge Host",
+          "dataFile": "data/helsmiths_of_hashut.json"
+        }
+      ]
     },
     {
       "name": "Idoneth Deepkin",
-      "dataFile": "data/idoneth_deepkin.json"
+      "factionId": "idoneth-deepkin",
+      "spearheads": [
+        {
+          "name": "Akhelian Tide Guard",
+          "dataFile": "data/idoneth_deepkin.json"
+        }
+      ]
     }
   ]
 }

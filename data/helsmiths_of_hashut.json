@@ -52,7 +52,9 @@
         "type": "enemy_unit",
         "range": "unlimited",
         "targeting_criteria": {
-          "keywords": ["INFANTRY"],
+          "keywords": [
+            "INFANTRY"
+          ],
           "max_targets": 1
         }
       },
@@ -62,7 +64,9 @@
           "stat": "charge",
           "modifier": "-1 dice (min 1)",
           "duration": "until_start_of_next_hero_phase",
-          "active_phases": ["all"],
+          "active_phases": [
+            "all"
+          ],
           "description": "Target’s charge rolls use 1 fewer dice (minimum 1)"
         }
       ],
@@ -167,7 +171,12 @@
           "description": "Those sworn to serve beneath a Despot must offer them conquest and tribute or suffer the consequences… Effect: While this unit has any daemonic power points, friendly units with 0 daemonic power points count as having 1 daemonic power point while they are wholly within 6\" of and visible to this unit. For each daemonic power point this unit has, add 3\" to the range of this ability."
         }
       ],
-      "keywords": ["CHAOS", "HELSMITHS OF HASHUT", "HERO", "INFANTRY"]
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "HERO",
+        "INFANTRY"
+      ]
     },
     {
       "name": "Infernal Cohort with Hashutite Spears",
@@ -216,7 +225,12 @@
           "description": "Spitting contempt from between their tusks, these duardin refuse to show the slightest shred of weakness. Effect: Apply the effect below that corresponds with the number of daemonic power points (DPP) this unit has: 1 — This unit has WARD (6+). 2 — This unit has WARD (5+). 3 — This unit has WARD (5+) and you ignore the first damage point allocated to this unit in each phase."
         }
       ],
-      "keywords": ["CHAOS", "HELSMITHS OF HASHUT", "INFANTRY", "REINFORCEMENTS"]
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "INFANTRY",
+        "REINFORCEMENTS"
+      ]
     },
     {
       "name": "Dominator Engine with Immolation Cannons",
@@ -264,7 +278,12 @@
           "description": "When empowered with a surplus of daemonic energy, Dominator Engines are made faster and deadlier still. Effect: For each daemonic power point this unit has: Add 1\" to its Move characteristic. Add 1 to the Attacks characteristic of its weapons."
         }
       ],
-      "keywords": ["CHAOS", "HELSMITHS OF HASHUT", "WAR MACHINE", "REINFORCEMENTS"]
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "WAR MACHINE",
+        "REINFORCEMENTS"
+      ]
     },
     {
       "name": "Tormentor Bombard",
@@ -327,7 +346,13 @@
           }
         }
       ],
-      "keywords": ["CHAOS", "HELSMITHS OF HASHUT", "WAR MACHINE"]
+      "keywords": [
+        "CHAOS",
+        "HELSMITHS OF HASHUT",
+        "WAR MACHINE"
+      ]
     }
-  ]
+  ],
+  "spearheadName": "Helforge Host",
+  "spearheadId": "helforge-host"
 }
