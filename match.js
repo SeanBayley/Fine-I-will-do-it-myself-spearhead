@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const twistModal = document.getElementById('match-twist-modal');
     const closeTwistBtn = document.getElementById('match-close-twist-btn');
     const startMatchHint = document.getElementById('start-match-hint');
+    const endRoundTwistModal = document.getElementById('match-end-round-twist-modal');
+    const confirmEndRoundTwistBtn = document.getElementById('match-confirm-end-round-twist-btn');
 
     let battleTactics = [];
     let openTacticContext = null; // { sideId, cardNumber }
@@ -56,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let twistsData = null; // full twists.json payload
     let activeTwistDeck = null; // { id, name, twists: [] }
     let pendingTwistPoints = 0; // scoring-modal draft for current side
+    let endRoundTwistDraft = { A: 0, B: 0 };
 
     const RULESET_FILES = {
         'fire-and-jade': 'data/battle_tactics.json',
@@ -138,10 +141,42 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number.isFinite(max) && max > 0 ? max : 0;
     }
 
+    function getTwistScoringTiming(twist = match.currentTwist) {
+        return twist?.scoringTiming === 'end_of_battle_round'
+            ? 'end_of_battle_round'
+            : 'end_of_turn';
+    }
+
+    function twistScoresAtEndOfTurn() {
+        return (
+            usesTwists() &&
+            match.currentTwist &&
+            getCurrentTwistMaxPoints() > 0 &&
+            getTwistScoringTiming() === 'end_of_turn'
+        );
+    }
+
+    function twistScoresAtEndOfBattleRound() {
+        return (
+            usesTwists() &&
+            match.currentTwist &&
+            getCurrentTwistMaxPoints() > 0 &&
+            getTwistScoringTiming() === 'end_of_battle_round'
+        );
+    }
+
     function persistTwistDeckSelection(deckId) {
         try {
             const raw = sessionStorage.getItem(MATCH_SETUP_KEY);
-            const data = raw ? JSON.parse(raw) : {};
+            if (!raw) {
+                console.warn('Skipping twist deck persist — no match setup in sessionStorage');
+                return;
+            }
+            const data = JSON.parse(raw);
+            if (!data?.sideA?.faction || !data?.sideB?.faction || !data?.ruleset) {
+                console.warn('Skipping twist deck persist — incomplete match setup');
+                return;
+            }
             data.twistDeck = deckId || null;
             sessionStorage.setItem(MATCH_SETUP_KEY, JSON.stringify(data));
             console.log('Persisted twist deck selection', deckId);
@@ -375,17 +410,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function calcSideTotals(side) {
         let primary = 0;
         let twist = 0;
-        Object.values(side.scores.rounds).forEach((round) => {
+        let tactics = 0;
+        const rounds = Object.values(side.scores.rounds || {});
+        rounds.forEach((round) => {
             primary += round.primary || 0;
             twist += round.twist || 0;
+            tactics += round.tactics || 0;
         });
-        // Prefer stored round tactics (required for custom ruleset checkbox scoring)
-        const storedTactics = Object.values(side.scores.rounds).reduce(
-            (sum, round) => sum + (round.tactics || 0),
-            0
-        );
-        let tactics = storedTactics;
-        if (!isCustomRuleset() && storedTactics === 0) {
+        // Only fall back to scoredCards when no round scores exist yet
+        if (!rounds.length && !isCustomRuleset()) {
             tactics = side.scoredCards.length;
         }
 
@@ -557,15 +590,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupTwistScoringControls() {
         const section = document.getElementById('match-twist-scoring-section');
-        const maxPts = getCurrentTwistMaxPoints();
         if (!section) return;
 
-        if (!usesTwists() || !match.currentTwist || maxPts <= 0) {
+        // End-of-battle-round twists are scored after both turns, not here
+        if (!twistScoresAtEndOfTurn()) {
             section.style.display = 'none';
             pendingTwistPoints = 0;
             return;
         }
 
+        const maxPts = getCurrentTwistMaxPoints();
         section.style.display = 'block';
         const nameEl = document.getElementById('match-twist-scoring-name');
         const maxEl = document.getElementById('match-twist-points-max');
@@ -575,6 +609,75 @@ document.addEventListener('DOMContentLoaded', () => {
         const side = match.sides[match.activeSide];
         const existing = side?.scores?.rounds?.[match.currentRound]?.twist;
         setPendingTwistPoints(typeof existing === 'number' ? existing : 0);
+    }
+
+    function applyTwistPointsToRound(side, twistPoints) {
+        if (!side.scores.rounds[match.currentRound]) {
+            side.scores.rounds[match.currentRound] = {
+                primary: 0,
+                tactics: 0,
+                twist: 0,
+                total: 0
+            };
+        }
+        const round = side.scores.rounds[match.currentRound];
+        round.twist = Math.max(0, Number(twistPoints) || 0);
+        round.total = (round.primary || 0) + (round.tactics || 0) + (round.twist || 0);
+    }
+
+    function needsEndRoundTwistScoring() {
+        return twistScoresAtEndOfBattleRound();
+    }
+
+    function showEndRoundTwistModal() {
+        if (!endRoundTwistModal || !match.currentTwist) {
+            finishEndOfRoundFlow();
+            return;
+        }
+        const maxPts = getCurrentTwistMaxPoints();
+        document.getElementById('match-end-round-twist-title').textContent =
+            `End of Round ${match.currentRound} — Twist Scoring`;
+        document.getElementById('match-end-round-twist-name').textContent =
+            `${match.currentTwist.name} (up to ${maxPts} VP each)`;
+
+        endRoundTwistDraft = { A: 0, B: 0 };
+        ['A', 'B'].forEach((id) => {
+            const side = match.sides[id];
+            document.getElementById(`end-round-twist-label-${id}`).textContent = side.displayName;
+            document.getElementById(`end-round-twist-max-${id}`).textContent = String(maxPts);
+            const existing = side.scores.rounds[match.currentRound]?.twist;
+            endRoundTwistDraft[id] = typeof existing === 'number' ? existing : 0;
+            document.getElementById(`end-round-twist-points-${id}`).value = String(
+                endRoundTwistDraft[id]
+            );
+        });
+
+        endRoundTwistModal.style.display = 'flex';
+        console.log('End-of-round twist scoring opened', match.currentTwist.name);
+    }
+
+    function confirmEndRoundTwistScoring() {
+        ['A', 'B'].forEach((id) => {
+            applyTwistPointsToRound(match.sides[id], endRoundTwistDraft[id]);
+        });
+        if (endRoundTwistModal) endRoundTwistModal.style.display = 'none';
+        updateScoreDisplays();
+        console.log('End-of-round twist scoring confirmed', endRoundTwistDraft);
+        finishEndOfRoundFlow();
+    }
+
+    function finishEndOfRoundFlow() {
+        // After round 4, skip keep/discard — those choices never apply
+        if (match.currentRound >= 4) {
+            endMatch('All 4 rounds have been completed.');
+            return;
+        }
+        if (usesBattleTacticCards()) {
+            showCardManagementModal();
+            return;
+        }
+        console.log('Custom ruleset — skipping end-of-round card management');
+        advanceAfterBothTurns();
     }
 
     function getCustomTacticScoreFromModal() {
@@ -595,10 +698,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (usesBattleTacticCards()) {
-            drawCardsForRound();
-        }
-        // Twist is drawn when the round actually starts (after first-player pick)
+        // Cards + twist are drawn together when the round actually starts
+        // (after first-player selection), so turn-order picks stay clean.
         renderCurrentTwistSlot();
         showTurnOrderSelection();
     }
@@ -677,6 +778,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (customTacticsEl) customTacticsEl.style.display = 'none';
             tacticsScoringEl.style.display = '';
             tacticsScoringEl.innerHTML = '';
+            // INTENTIONAL (not a bug): only Pending cards can be scored.
+            // Using a card's command sets status to Used, which removes it from
+            // scoring — that is by design (command OR score, not both).
+            // Do not "fix" this by treating Used as scoreable.
             const pending = (side.cardsByRound[match.currentRound] || []).filter(
                 (n) => getCardStatus(side, n) === 'Pending'
             );
@@ -735,7 +840,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tacticScore = isCustomRuleset()
             ? getCustomTacticScoreFromModal()
             : (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
-        const twistScore = getCurrentTwistMaxPoints() > 0 ? pendingTwistPoints : 0;
+        const twistScore = twistScoresAtEndOfTurn() ? pendingTwistPoints : 0;
         const roundTotal = primary + tacticScore + twistScore;
 
         let gameTotal = 0;
@@ -753,6 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
             twistScoreEl.textContent = twistScore;
             const twistRow = twistScoreEl.closest('.score-row');
             if (twistRow) {
+                // Show twist row whenever twists are in play (even if this card is 0 / end-of-round)
                 twistRow.style.display = usesTwists() ? '' : 'none';
             }
         }
@@ -770,7 +876,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const tacticScore = isCustomRuleset()
             ? getCustomTacticScoreFromModal()
             : (side.scores.rounds[match.currentRound] || { tactics: 0 }).tactics;
-        const twistScore = getCurrentTwistMaxPoints() > 0 ? pendingTwistPoints : 0;
+        // Preserve any end-of-battle-round twist points already stored; only overwrite for end-of-turn twists
+        const previousTwist = side.scores.rounds[match.currentRound]?.twist || 0;
+        const twistScore = twistScoresAtEndOfTurn() ? pendingTwistPoints : previousTwist;
         const roundTotal = primary + tacticScore + twistScore;
         side.scores.rounds[match.currentRound] = {
             primary,
@@ -858,13 +966,14 @@ document.addEventListener('DOMContentLoaded', () => {
             abilities.resetAbilityUsage(match.sides[endingSideId], 'per_turn');
         }
 
+        updateScoreDisplays();
+
         if (match.roundTurnsCompleted >= 2) {
             abilities.onPhaseOrTurnChange(match.sides);
-            if (usesBattleTacticCards()) {
-                showCardManagementModal();
+            if (needsEndRoundTwistScoring()) {
+                showEndRoundTwistModal();
             } else {
-                console.log('Custom ruleset — skipping end-of-round card management');
-                advanceAfterBothTurns();
+                finishEndOfRoundFlow();
             }
             return;
         }
@@ -873,7 +982,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function nextPhase() {
-        if (scoringModal.style.display === 'flex' || cardModal.style.display === 'flex') {
+        if (
+            scoringModal.style.display === 'flex' ||
+            cardModal.style.display === 'flex' ||
+            (endRoundTwistModal && endRoundTwistModal.style.display === 'flex') ||
+            (twistModal && twistModal.style.display === 'flex') ||
+            (tacticModal && tacticModal.style.display === 'flex')
+        ) {
             console.warn('Cannot advance phase while a required modal is open');
             return;
         }
@@ -1027,13 +1142,13 @@ document.addEventListener('DOMContentLoaded', () => {
         match.currentPhase = 0;
         turnOrderPanel.style.display = 'none';
         inProgressPanel.style.display = 'flex';
+        match.isActive = true;
 
-        if (!match.isActive) {
-            match.isActive = true;
+        // Draw battle tactics + shared twist together at round start (every round)
+        const cardsAlreadyDrawn = Boolean(match.sides.A?.cardsByRound?.[match.currentRound]);
+        if (usesBattleTacticCards() && !cardsAlreadyDrawn) {
             drawCardsForRound();
         }
-
-        // Draw (or reuse) this battle round's shared twist once the round starts
         drawTwistForRound();
 
         updateSharedDisplay();
@@ -1059,6 +1174,8 @@ document.addEventListener('DOMContentLoaded', () => {
         scoringModal.style.display = 'none';
         cardModal.style.display = 'none';
         tacticModal.style.display = 'none';
+        if (twistModal) twistModal.style.display = 'none';
+        if (endRoundTwistModal) endRoundTwistModal.style.display = 'none';
         gameOverModal.style.display = 'flex';
         console.log('Match over', { a, b });
     }
@@ -1127,10 +1244,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function loadTwistsData() {
-        const res = await fetch('data/twists.json');
-        if (!res.ok) throw new Error('Failed to load twists.json');
-        twistsData = await res.json();
-        console.log('Loaded twists data for rulesets', Object.keys(twistsData.rulesets || {}));
+        if (isCustomRuleset()) {
+            twistsData = { rulesets: {} };
+            console.log('Custom ruleset — skipping twists.json load');
+            return;
+        }
+        try {
+            const res = await fetch('data/twists.json');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            twistsData = await res.json();
+            console.log('Loaded twists data for rulesets', Object.keys(twistsData.rulesets || {}));
+        } catch (err) {
+            console.error('Failed to load twists.json', err);
+            twistsData = { rulesets: {} };
+            throw new Error('Failed to load twists.json');
+        }
     }
 
     function selectTwistDeck(deckId) {
@@ -1297,6 +1425,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const endRoundTwistViewBtn = document.getElementById('match-end-round-twist-view-btn');
+    if (endRoundTwistViewBtn) {
+        endRoundTwistViewBtn.addEventListener('click', () => {
+            if (match.currentTwist) openTwistModal(match.currentTwist);
+        });
+    }
+
+    if (confirmEndRoundTwistBtn) {
+        confirmEndRoundTwistBtn.addEventListener('click', confirmEndRoundTwistScoring);
+    }
+
+    document.querySelectorAll('#match-end-round-twist-modal .twist-points-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const sideId = btn.dataset.side;
+            const dir = parseInt(btn.dataset.dir, 10) || 0;
+            const max = getCurrentTwistMaxPoints();
+            const next = Math.max(0, Math.min(max, (endRoundTwistDraft[sideId] || 0) + dir));
+            endRoundTwistDraft[sideId] = next;
+            const input = document.getElementById(`end-round-twist-points-${sideId}`);
+            if (input) input.value = String(next);
+        });
+    });
+
     const twistMinusBtn = document.getElementById('match-twist-points-minus');
     const twistPlusBtn = document.getElementById('match-twist-points-plus');
     if (twistMinusBtn) {
@@ -1317,6 +1468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const side = match.sides[openTacticContext.sideId];
         if (openTacticContext.sideId !== match.activeSide) return;
         if (getCardStatus(side, openTacticContext.cardNumber) !== 'Pending') return;
+        // INTENTIONAL: Used removes the card from end-of-turn scoring (command OR score).
         setCardStatus(side, openTacticContext.cardNumber, 'Used');
         useCommandBtn.textContent = 'Command Used';
         useCommandBtn.disabled = true;

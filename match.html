@@ -160,7 +160,7 @@
                         <div>Ability: <span id="side-ability-A">—</span></div>
                         <div>Enhancement: <span id="side-enhancement-A">—</span></div>
                         <div class="side-score-breakdown">
-                            Primary <span id="side-primary-A">0</span> · Tactics <span id="side-tactics-A">0</span> · Twist <span id="side-twist-A">0</span>
+                            Primary <span id="side-primary-A">0</span> · Tactics <span id="side-tactics-A">0</span><span class="twist-score-part"> · Twist <span id="side-twist-A">0</span></span>
                         </div>
                     </div>
                     <div id="side-units-A" class="match-side-units"></div>
@@ -175,7 +175,7 @@
                         <div>Ability: <span id="side-ability-B">—</span></div>
                         <div>Enhancement: <span id="side-enhancement-B">—</span></div>
                         <div class="side-score-breakdown">
-                            Primary <span id="side-primary-B">0</span> · Tactics <span id="side-tactics-B">0</span> · Twist <span id="side-twist-B">0</span>
+                            Primary <span id="side-primary-B">0</span> · Tactics <span id="side-tactics-B">0</span><span class="twist-score-part"> · Twist <span id="side-twist-B">0</span></span>
                         </div>
                     </div>
                     <div id="side-units-B" class="match-side-units"></div>
@@ -343,6 +343,40 @@
             </div>
             <div class="scoring-buttons">
                 <button id="match-confirm-scoring-btn" class="confirm-scoring-btn">Confirm Scoring</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- End of battle round: twist scoring for both sides -->
+    <div id="match-end-round-twist-modal" class="modal" style="display: none;">
+        <div class="modal-content scoring-modal-content">
+            <h3 id="match-end-round-twist-title">End of Round — Twist Scoring</h3>
+            <p id="match-end-round-twist-name" class="twist-scoring-hint"></p>
+            <div class="scoring-buttons" style="margin-bottom: 0.75rem;">
+                <button type="button" id="match-end-round-twist-view-btn" class="twist-view-btn">View Twist</button>
+            </div>
+            <div class="match-end-round-twist-grid">
+                <div class="end-round-twist-side" data-side="A">
+                    <h4 id="end-round-twist-label-A">Side A</h4>
+                    <div class="twist-points-controls">
+                        <button type="button" class="twist-points-btn" data-side="A" data-dir="-1" aria-label="Decrease Side A twist points">−</button>
+                        <input type="number" id="end-round-twist-points-A" class="twist-points-input" min="0" value="0" readonly>
+                        <button type="button" class="twist-points-btn" data-side="A" data-dir="1" aria-label="Increase Side A twist points">+</button>
+                        <span class="twist-points-max">/ <span id="end-round-twist-max-A">0</span></span>
+                    </div>
+                </div>
+                <div class="end-round-twist-side" data-side="B">
+                    <h4 id="end-round-twist-label-B">Side B</h4>
+                    <div class="twist-points-controls">
+                        <button type="button" class="twist-points-btn" data-side="B" data-dir="-1" aria-label="Decrease Side B twist points">−</button>
+                        <input type="number" id="end-round-twist-points-B" class="twist-points-input" min="0" value="0" readonly>
+                        <button type="button" class="twist-points-btn" data-side="B" data-dir="1" aria-label="Increase Side B twist points">+</button>
+                        <span class="twist-points-max">/ <span id="end-round-twist-max-B">0</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="scoring-buttons">
+                <button id="match-confirm-end-round-twist-btn" class="confirm-scoring-btn" type="button">Confirm Twist Scoring</button>
             </div>
         </div>
     </div>

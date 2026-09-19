@@ -455,8 +455,33 @@
     display: none;
 }
 
-.match-board.ruleset-custom #match-twist-row {
-    display: none !important;
+.match-board.ruleset-custom .side-score-breakdown .twist-score-part {
+    display: none;
+}
+
+.match-end-round-twist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 0.75rem 0 1rem;
+}
+
+.end-round-twist-side {
+    padding: 0.85rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.end-round-twist-side h4 {
+    margin: 0 0 0.65rem;
+    color: #f8fafc;
+}
+
+@media (max-width: 720px) {
+    .match-end-round-twist-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .custom-tactics-scoring {
