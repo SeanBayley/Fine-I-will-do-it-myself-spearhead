@@ -78,7 +78,52 @@
       "type": "Artefact of Power",
       "timing": "Your Hero Phase",
       "frequency": "N/A",
-      "description": "Your general channels an invigorating bloom of magic. Declare: Pick a visible friendly unit wholly within 18\" of your general to be the target, then make a casting roll of 2D6. Effect: On a 5+, Heal (D6) the target."
+      "description": "Your general channels an invigorating bloom of magic. Declare: Pick a visible friendly unit wholly within 18\" of your general to be the target, then make a casting roll of 2D6. Effect: On a 5+, Heal (D6) the target.",
+      "targeting": {
+        "type": "friendly_unit",
+        "range": "18\"",
+        "targeting_criteria": {
+          "keywords": [],
+          "max_targets": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Branchwych"
+          },
+          "ability": {
+            "name": "REGROWTH",
+            "description": "Your general channels an invigorating bloom of magic. Declare: Pick a visible friendly unit wholly within 18\" of your general to be the target, then make a casting roll of 2D6. Effect: On a 5+, Heal (D6) the target.",
+            "timing": "Your Hero Phase",
+            "frequency": "N/A",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "friendly_unit",
+              "range": "18\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            },
+            "effects": [
+              {
+                "type": "heal",
+                "amount": "D6",
+                "condition": "casting_5+",
+                "description": "On a 5+, Heal (D6) the target"
+              }
+            ]
+          }
+        },
+        {
+          "type": "heal",
+          "amount": "D6",
+          "condition": "casting_5+",
+          "description": "On a 5+, Heal (D6) the target"
+        }
+      ]
     },
     {
       "name": "GNARLED WARRIOR",
@@ -117,6 +162,40 @@
       },
       "effects": [
         {
+          "type": "addAbility",
+          "target": {
+            "unit": "Branchwych"
+          },
+          "ability": {
+            "name": "TREESONG",
+            "description": "Your general implores the spirits of the wyldwoods to guide the blades of their allies. Declare: Pick a visible friendly unit wholly within 12\" of your general to be the target, then make a casting roll of 2D6. Effect: On a 7+, add 1 to the Rend characteristic of the target unit's melee weapons until the start of your next turn.",
+            "timing": "Your Hero Phase",
+            "frequency": "N/A",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "friendly_unit",
+              "range": "12\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            },
+            "effects": [
+              {
+                "type": "modify_stat",
+                "stat": "rend",
+                "modifier": "+1",
+                "duration": "until_start_of_next_hero_phase",
+                "active_phases": [
+                  "all"
+                ],
+                "symbol": "🗡️",
+                "description": "+1 Rend to melee weapons until the start of your next turn"
+              }
+            ]
+          }
+        },
+        {
           "type": "modify_stat",
           "stat": "rend",
           "modifier": "+1",
@@ -134,7 +213,22 @@
       "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "Once Per Battle",
-      "description": "Should its bearer ever fall, the seed will grant them new life. Effect: If your general would be destroyed, before removing them from play, roll a dice. On a 3+, your general is not destroyed and any remaining damage points inflicted on them have no effect. Then, Heal (1) your general. This unit cannot use this ability again for the rest of the battle."
+      "description": "Should its bearer ever fall, the seed will grant them new life. Effect: If your general would be destroyed, before removing them from play, roll a dice. On a 3+, your general is not destroyed and any remaining damage points inflicted on them have no effect. Then, Heal (1) your general. This unit cannot use this ability again for the rest of the battle.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Branchwych"
+          },
+          "ability": {
+            "name": "SEED OF REBIRTH",
+            "description": "If your general would be destroyed, before removing them from play, roll a dice. On a 3+, your general is not destroyed and any remaining damage points inflicted on them have no effect. Then, Heal (1) your general. This unit cannot use this ability again for the rest of the battle.",
+            "timing": "Passive",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted"
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [
