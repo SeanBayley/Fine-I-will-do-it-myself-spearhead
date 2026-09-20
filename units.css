@@ -2783,8 +2783,26 @@ details.phase-section > summary {
 }
 
 .table-scroll-wrapper table {
-    min-width: 420px;
+    min-width: 380px;
     margin-bottom: 0;
+}
+
+/* On phones, allow tables to shrink more */
+@media (max-width: 480px) {
+    .table-scroll-wrapper table {
+        min-width: 320px;
+    }
+    
+    /* Smaller font for weapon tables on phones */
+    table.weapons-table th,
+    table.weapons-table td {
+        padding: 0.3em;
+        font-size: 0.8em;
+    }
+    
+    table.weapons-table th {
+        font-size: 0.7em;
+    }
 }
 
 /* --- Tablet: stack page layout at 900px --- */

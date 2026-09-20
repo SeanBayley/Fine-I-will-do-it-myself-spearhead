@@ -2126,6 +2126,32 @@ button,
     .match-side {
         padding: 0.75rem;
         min-height: 40vh;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Constrain unit cards to viewport */
+    .match-side-units {
+        max-width: 100%;
+    }
+
+    .match-side-units .unit-card {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Weapon tables in match: smaller on phones */
+    .match-side-units table.weapons-table {
+        font-size: 0.78em;
+    }
+
+    .match-side-units table.weapons-table th,
+    .match-side-units table.weapons-table td {
+        padding: 0.25em 0.3em;
+    }
+
+    .match-side-units .table-scroll-wrapper {
+        max-width: 100%;
     }
 
     .match-side-header {
