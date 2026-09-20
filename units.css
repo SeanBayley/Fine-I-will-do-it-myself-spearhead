@@ -2758,6 +2758,22 @@ details.phase-section > summary:hover {
    Desktop layout (≥ 1024px) is completely unchanged.
    ========================================================================== */
 
+/* Prevent 300ms tap delay on interactive elements */
+button,
+.unit-card,
+.back-button,
+.ability-activate-btn,
+.phase-ability-use-btn,
+.tactic-action-btn,
+.effect-badge,
+.effect-symbol,
+.library-card-item,
+.current-card-item,
+details.weapon-section > summary,
+details.phase-section > summary {
+    touch-action: manipulation;
+}
+
 /* --- Table scroll wrappers (applied in units.js) --- */
 .table-scroll-wrapper {
     overflow-x: auto;
@@ -2977,5 +2993,31 @@ details.phase-section > summary:hover {
     .effect-badge {
         width: 28px;
         height: 28px;
+    }
+
+    /* Tactic action buttons: proper touch targets */
+    .keep-btn,
+    .score-btn,
+    .bin-btn {
+        min-height: 44px;
+        padding: 10px 16px;
+    }
+
+    /* View all cards button: full width */
+    .view-all-cards-btn {
+        min-height: 48px;
+    }
+
+    /* Turn buttons in modals */
+    .turn-btn {
+        min-height: 48px;
+        padding: 0.85rem 1.5rem;
+    }
+
+    /* Collapsible section summaries: easier to tap */
+    details.weapon-section > summary,
+    details.phase-section > summary {
+        min-height: 44px;
+        padding: 0.6rem 0.85rem;
     }
 }

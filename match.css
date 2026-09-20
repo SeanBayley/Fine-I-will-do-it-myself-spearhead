@@ -1785,7 +1785,30 @@ body.versus-open {
     }
 }
 
-/* Laptop-focused: keep dual columns; no mobile reflow required for v1 */
+/* ==========================================================================
+   MOBILE RESPONSIVE STYLES — match.css
+   Breakpoints: 1100px (laptop), 768px (tablet), 600px (phablet), 480px (phone)
+   ========================================================================== */
+
+/* Prevent 300ms tap delay on interactive elements */
+button,
+.turn-order-btn,
+.twist-deck-option,
+.ruleset-option,
+.match-tactic-slot,
+.match-twist-slot,
+.mode-link-btn,
+.versus-continue-btn,
+.objective-checkbox,
+.tactic-action-btn,
+.phase-ability-use-btn,
+.ability-activate-btn,
+.effect-badge,
+.effect-symbol {
+    touch-action: manipulation;
+}
+
+/* --- Laptop: stack match columns at 1100px --- */
 @media (max-width: 1100px) {
     .match-columns,
     .match-cards-row {
@@ -1794,5 +1817,713 @@ body.versus-open {
 
     .match-card-manage-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* --- Tablet: 768px breakpoint --- */
+@media (max-width: 768px) {
+    /* Match shared bar: stack vertically */
+    .match-in-progress {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .match-clock {
+        min-width: unset;
+        text-align: center;
+    }
+
+    .match-shared-scores {
+        justify-content: center;
+    }
+
+    .match-shared-actions {
+        justify-content: center;
+    }
+
+    /* Turn order selection: stack buttons */
+    .turn-order-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .turn-order-btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* Seize choice buttons: stack */
+    .seize-choice-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Match side panels: reduce padding */
+    .match-side {
+        padding: 0.85rem;
+        min-height: 50vh;
+    }
+
+    /* Pre-battle steps: tighten */
+    .pre-battle-steps {
+        padding: 0.85rem 1rem;
+    }
+
+    .pre-battle-list {
+        font-size: 0.92rem;
+    }
+
+    /* Twist deck options: stack on tablet */
+    .twist-deck-options {
+        grid-template-columns: 1fr;
+    }
+
+    /* Modals: ensure full width on tablet */
+    .tactic-modal-content,
+    .scoring-modal-content,
+    .twist-modal-content {
+        max-width: 95vw;
+        width: 95vw;
+    }
+}
+
+/* --- Phablet/Small tablet: 600px breakpoint --- */
+@media (max-width: 600px) {
+    /* Match shared bar: tighter spacing */
+    .match-shared-bar {
+        margin: 0.75rem 0.75rem 0.5rem;
+        padding: 0.85rem 1rem;
+    }
+
+    /* Score pills: smaller */
+    .match-score-pill {
+        min-width: 100px;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .match-score-pill .pill-label {
+        font-size: 0.72rem;
+    }
+
+    .match-score-pill strong,
+    .match-score-pill .pill-score-row {
+        font-size: 1.25rem;
+    }
+
+    /* Tactic card slots: 2 columns instead of 3 */
+    .match-tactic-slots {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .match-tactic-slot {
+        min-height: 5rem;
+        padding: 0.65rem 0.6rem;
+    }
+
+    .match-tactic-slot .card-name {
+        font-size: 0.85rem;
+    }
+
+    .match-tactic-slot .card-number {
+        font-size: 0.72rem;
+    }
+
+    /* Match columns padding */
+    .match-columns {
+        padding: 0.25rem 0.75rem 1.5rem;
+        gap: 0.75rem;
+    }
+
+    /* Match cards row padding */
+    .match-cards-row {
+        padding: 0.25rem 0.75rem 0.75rem;
+        gap: 0.75rem;
+    }
+
+    .match-cards-lane {
+        padding: 0.75rem 0.85rem;
+    }
+
+    .match-cards-lane-label {
+        font-size: 0.78rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Unified phases section */
+    .match-unified-phases {
+        margin: 0 0.75rem 0.75rem;
+        padding: 0.85rem 1rem;
+    }
+
+    .match-unified-phases-header h2 {
+        font-size: 1.1rem;
+    }
+
+    /* Match twist row */
+    .match-twist-row {
+        margin: 0.25rem 0.75rem;
+    }
+
+    .match-twist-slot {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Side panel header */
+    .match-side-header h2 {
+        font-size: 1.15rem;
+    }
+
+    .side-badge {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.9rem;
+    }
+
+    /* Side meta: smaller text */
+    .match-side-meta {
+        font-size: 0.82rem;
+    }
+
+    /* Ruleset options: single column */
+    .ruleset-options {
+        grid-template-columns: 1fr;
+    }
+
+    /* Setup step indicator: wrap if needed */
+    .setup-step-indicator {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .setup-step {
+        font-size: 0.82rem;
+        padding: 0.35rem 0.75rem;
+    }
+}
+
+/* --- Phone: 480px and below --- */
+@media (max-width: 480px) {
+    /* Header: compact */
+    .match-page header {
+        padding: 0.65rem 0.85rem;
+    }
+
+    .match-page .header-logo h1 {
+        font-size: 1rem;
+    }
+
+    .match-page .header-logo .material-symbols-outlined {
+        font-size: 1.5rem;
+    }
+
+    /* Mode link buttons in header: smaller */
+    .mode-link-btn {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .mode-link-btn--secondary {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.75rem;
+    }
+
+    /* Match shared bar: even tighter */
+    .match-shared-bar {
+        margin: 0.5rem 0.5rem 0.35rem;
+        padding: 0.75rem 0.85rem;
+    }
+
+    /* Turn indicator and round/phase info */
+    .turn-indicator {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .round-phase-info {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* Score pills: even smaller */
+    .match-score-pill {
+        min-width: 85px;
+        padding: 0.45rem 0.6rem;
+    }
+
+    .match-score-pill .pill-label {
+        font-size: 0.68rem;
+    }
+
+    .match-score-pill strong,
+    .match-score-pill .pill-score-row {
+        font-size: 1.1rem;
+    }
+
+    .underdog-icon {
+        font-size: 0.95rem;
+    }
+
+    /* Shared actions: stack buttons */
+    .match-shared-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .match-shared-actions .next-phase-btn,
+    .match-shared-actions .end-game-btn {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Tactic card slots: single column on phones */
+    .match-tactic-slots {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+    }
+
+    .match-tactic-slot {
+        min-height: 4rem;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.55rem 0.75rem;
+    }
+
+    .match-tactic-slot .card-number {
+        font-size: 0.75rem;
+        min-width: 2rem;
+    }
+
+    .match-tactic-slot .card-name {
+        font-size: 0.88rem;
+        text-align: left;
+    }
+
+    /* Match columns padding */
+    .match-columns {
+        padding: 0.15rem 0.5rem 1.25rem;
+        gap: 0.6rem;
+    }
+
+    /* Match cards row */
+    .match-cards-row {
+        padding: 0.15rem 0.5rem 0.6rem;
+        gap: 0.6rem;
+    }
+
+    .match-cards-lane {
+        padding: 0.65rem 0.75rem;
+    }
+
+    /* Side panels */
+    .match-side {
+        padding: 0.75rem;
+        min-height: 40vh;
+    }
+
+    .match-side-header {
+        margin-bottom: 0.6rem;
+        padding-bottom: 0.45rem;
+    }
+
+    .match-side-header h2 {
+        font-size: 1.05rem;
+    }
+
+    .match-side-meta {
+        font-size: 0.78rem;
+        margin-bottom: 0.65rem;
+    }
+
+    /* Pre-battle steps: smaller on phones */
+    .pre-battle-steps {
+        padding: 0.75rem 0.85rem;
+    }
+
+    .pre-battle-steps h3 {
+        font-size: 1rem;
+    }
+
+    .pre-battle-list {
+        font-size: 0.85rem;
+        gap: 0.5rem;
+        padding-left: 1rem;
+    }
+
+    /* Twist row */
+    .match-twist-row {
+        margin: 0.15rem 0.5rem;
+    }
+
+    .match-twist-lane-label {
+        font-size: 0.75rem;
+    }
+
+    .match-twist-slot {
+        min-height: 72px;
+        padding: 0.6rem 0.85rem;
+    }
+
+    .twist-slot-name {
+        font-size: 0.95rem;
+    }
+
+    .twist-slot-meta {
+        font-size: 0.78rem;
+    }
+
+    /* Unified phases section */
+    .match-unified-phases {
+        margin: 0 0.5rem 0.6rem;
+        padding: 0.75rem 0.85rem;
+    }
+
+    .match-unified-phases-header h2 {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .match-unified-phases-hint {
+        font-size: 0.82rem;
+    }
+
+    /* Phase sections */
+    .match-unified-phases .phase-section {
+        margin-bottom: 0.3rem;
+    }
+
+    .match-unified-phases .phase-section > summary {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.88rem;
+    }
+
+    /* Turn order selection */
+    .turn-order-selection {
+        padding: 1.25rem 1rem;
+    }
+
+    .turn-order-prompt h3 {
+        font-size: 1.2rem;
+    }
+
+    .turn-order-prompt p {
+        font-size: 0.95rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .turn-order-btn {
+        padding: 0.85rem 1.25rem;
+        font-size: 1rem;
+        max-width: 100%;
+        min-width: unset;
+    }
+
+    /* Seize panels */
+    .seize-panel-text {
+        font-size: 0.92rem;
+    }
+
+    .seize-kept-cards {
+        gap: 0.35rem;
+    }
+
+    .seize-kept-card {
+        padding: 0.45rem 0.6rem;
+        font-size: 0.82rem;
+    }
+
+    /* Start game button */
+    .start-game-btn {
+        width: 100%;
+        padding: 0.85rem 1.25rem;
+        font-size: 1rem;
+    }
+
+    /* Match setup banner */
+    .match-setup-banner {
+        padding: 0 0.75rem;
+    }
+
+    .match-setup-banner h2 {
+        font-size: 1.35rem;
+    }
+
+    /* Ruleset selection */
+    .ruleset-selection-section {
+        padding: 0 0.75rem 1.5rem;
+    }
+
+    .ruleset-intro {
+        font-size: 0.88rem;
+    }
+
+    .ruleset-option-body {
+        padding: 0.9rem 1rem;
+    }
+
+    .ruleset-option-title {
+        font-size: 1.05rem;
+    }
+
+    .ruleset-option-desc {
+        font-size: 0.85rem;
+    }
+
+    /* Modals: full width on phones */
+    .modal-content {
+        max-width: 95vw !important;
+        width: 95vw !important;
+        padding: 1rem !important;
+        max-height: 92vh !important;
+    }
+
+    .tactic-modal-content {
+        max-width: 95vw;
+        padding: 1rem;
+    }
+
+    .scoring-modal-content {
+        max-width: 95vw;
+        width: 95vw;
+        padding: 1rem;
+    }
+
+    /* Twist modal */
+    .twist-modal-content {
+        max-width: 95vw;
+        padding: 1rem;
+    }
+
+    .twist-modal-rules ul {
+        padding-left: 0.9rem;
+        font-size: 0.88rem;
+    }
+
+    /* Twist scoring controls */
+    .twist-points-controls {
+        gap: 0.35rem;
+    }
+
+    .twist-points-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .twist-points-input {
+        width: 3rem;
+        font-size: 1rem;
+    }
+
+    /* Card management modal */
+    .match-card-modal-content {
+        max-width: 95vw !important;
+        min-width: 0 !important;
+    }
+
+    .match-card-manage-grid {
+        gap: 0.85rem;
+    }
+
+    /* Scoring section */
+    .scoring-section {
+        padding: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .scoring-section h4 {
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .objective-checkbox {
+        font-size: 0.88rem;
+        padding-left: 30px;
+    }
+
+    .checkmark {
+        width: 18px;
+        height: 18px;
+    }
+
+    .score-summary {
+        padding: 0.85rem;
+    }
+
+    .score-row {
+        font-size: 0.88rem;
+        padding: 0.5rem 0;
+    }
+
+    .score-row.total {
+        font-size: 0.95rem;
+    }
+
+    .score-row.game-total {
+        font-size: 1.05rem;
+    }
+
+    /* Confirm buttons: larger tap target */
+    .confirm-scoring-btn,
+    .confirm-card-drawing-btn {
+        padding: 0.85rem 1.5rem;
+        font-size: 1rem;
+        min-height: 48px;
+    }
+
+    /* Tactic buttons */
+    .tactic-buttons {
+        flex-direction: column;
+        gap: 0.65rem;
+    }
+
+    .use-command-btn,
+    .close-tactic-btn {
+        flex: unset;
+        width: 100%;
+        min-height: 44px;
+    }
+
+    /* End of round twist grid */
+    .match-end-round-twist-grid {
+        gap: 0.75rem;
+    }
+
+    .end-round-twist-side {
+        padding: 0.75rem;
+    }
+
+    .end-round-twist-side h4 {
+        font-size: 0.95rem;
+    }
+
+    /* Missing setup screen */
+    .match-missing-setup {
+        padding: 2.5rem 1rem;
+    }
+
+    .match-missing-setup h2 {
+        font-size: 1.35rem;
+    }
+
+    /* Game over modal */
+    .match-final-scores {
+        font-size: 1rem;
+    }
+
+    .new-game-btn,
+    .close-game-btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+        min-height: 44px;
+    }
+}
+
+/* --- Very small phones: 360px and below --- */
+@media (max-width: 360px) {
+    /* Even more compact for very small screens */
+    .match-score-pill {
+        min-width: 75px;
+        padding: 0.4rem 0.5rem;
+    }
+
+    .match-score-pill strong,
+    .match-score-pill .pill-score-row {
+        font-size: 1rem;
+    }
+
+    .match-side-header h2 {
+        font-size: 0.95rem;
+    }
+
+    .match-tactic-slot .card-name {
+        font-size: 0.82rem;
+    }
+
+    .mode-link-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.72rem;
+    }
+
+    .mode-link-btn--secondary {
+        padding: 0.35rem 0.55rem;
+        font-size: 0.7rem;
+    }
+}
+
+/* --- Versus screen phone adjustments --- */
+@media (max-width: 600px) {
+    .versus-screen {
+        padding: 0.85rem 0.85rem 1.25rem;
+    }
+
+    .versus-panel {
+        min-height: 180px;
+    }
+
+    .versus-art-frame {
+        padding: 1.5rem 1rem 3.5rem;
+    }
+
+    .versus-panel--left .versus-art-frame,
+    .versus-panel--right .versus-art-frame {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .versus-meta {
+        padding: 0.75rem 1rem;
+    }
+
+    .versus-faction-name {
+        font-size: clamp(1.1rem, 4vw, 1.5rem);
+    }
+
+    .versus-side-tag {
+        font-size: 0.65rem;
+    }
+
+    .versus-letter {
+        font-size: clamp(3rem, 10vw, 5rem);
+    }
+
+    .versus-continue-btn {
+        padding: 0.75rem 2rem;
+        font-size: 0.95rem;
+    }
+
+    .versus-actions {
+        padding-top: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .versus-panel {
+        min-height: 150px;
+    }
+
+    .versus-art-placeholder {
+        padding: 1rem;
+        max-width: 85%;
+    }
+
+    .versus-art-hint {
+        font-size: 0.75rem;
+    }
+
+    .versus-art-path {
+        font-size: 0.65rem;
+    }
+
+    .versus-faction-name {
+        font-size: clamp(1rem, 3.5vw, 1.3rem);
     }
 }
