@@ -432,7 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
             shooting: [],
             charge: [],
             combat: [],
-            'taking-damage': [],
             end: []
         };
 
@@ -451,9 +450,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             combat: [
                 { name: "Fight", description: "Starting with the active player, players alternate picking eligible units to fight." }
-            ],    
-            'taking-damage': [
-                { name: "Remember Ward Saves", description: "" }
             ],
             end: [
                 { name: "Score Objectives", description: "Check conditions for scoring objectives." }
@@ -880,8 +876,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTurn: 'player', // 'player' or 'enemy'
         startingPlayer: null,
         currentPhase: 0, // Index of current phase
-        phases: ['hero', 'movement', 'shooting', 'charge', 'combat', 'taking-damage', 'end'],
-        phaseNames: ['Hero Phase', 'Movement Phase', 'Shooting Phase', 'Charge Phase', 'Combat Phase', 'Taking Damage', 'End of Turn'],
+        phases: ['hero', 'movement', 'shooting', 'charge', 'combat', 'end'],
+        phaseNames: ['Hero Phase', 'Movement Phase', 'Shooting Phase', 'Charge Phase', 'Combat Phase', 'End of Turn'],
         roundTurnsCompleted: 0, // Track how many turns have been completed in current round
         // Card system
         allCards: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
