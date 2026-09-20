@@ -2808,7 +2808,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cardElement.dataset.cardNumber = cardNumber;
             
             cardElement.innerHTML = `
-                <div class="tactic-card-info">
+                <div class="tactic-card-info" role="button" tabindex="0" title="View card details">
                     <div class="tactic-card-name">${tactic.name}</div>
                     <div class="tactic-card-requirement">${tactic.requirement}</div>
                 </div>
@@ -2818,7 +2818,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
-            // Add event listeners for action buttons
+            // Click the card body to inspect full details (Keep/Discard stay on the buttons)
+            const infoEl = cardElement.querySelector('.tactic-card-info');
+            const openDetails = () => {
+                cardDrawingModal.style.display = 'none';
+                showTacticDetails(cardNumber, cardDrawingModal);
+                // Keep/discard flow — don't allow using the command from this peek
+                useCommandBtn.disabled = true;
+                useCommandBtn.textContent = 'Close to Keep or Discard';
+            };
+            infoEl.addEventListener('click', openDetails);
+            infoEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openDetails();
+                }
+            });
+
             const keepBtn = cardElement.querySelector('.keep-btn');
             const discardBtn = cardElement.querySelector('.bin-btn');
             
