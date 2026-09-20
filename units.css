@@ -1318,6 +1318,14 @@ details.phase-section > summary:hover {
     align-items: center;
 }
 
+/* Twist / tactic detail overlays must sit above scoring & card-management modals */
+#match-twist-modal,
+#match-tactic-modal,
+#tactic-modal,
+.modal.modal-stack-top {
+    z-index: 1200;
+}
+
 .modal-content {
     background-color: #34495e;
     color: white;

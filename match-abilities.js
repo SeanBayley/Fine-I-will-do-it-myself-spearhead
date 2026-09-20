@@ -1080,7 +1080,7 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
 
         let weaponsHtml = '';
         if (unit.rangedWeapons?.length) {
-            weaponsHtml += '<details class="weapon-section"><summary><h4 class="card-section-header">Ranged Weapons</h4></summary>';
+            weaponsHtml += '<details class="weapon-section" open><summary><h4 class="card-section-header">Ranged Weapons</h4></summary>';
             weaponsHtml += '<div class="table-scroll-wrapper"><table class="weapons-table ranged-weapons-table"><thead><tr><th>Name</th><th>Range</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
             unit.rangedWeapons.forEach((w) => {
                 weaponsHtml += `<tr><td>${escapeHtml(w.name)}</td><td>${escapeHtml(w.range)}</td><td>${escapeHtml(w.attacks)}</td><td>${escapeHtml(w.hit)}</td><td>${escapeHtml(w.wound)}</td><td>${escapeHtml(w.rend)}</td><td>${escapeHtml(w.damage)}</td><td>${weaponAbilitiesCell(w)}</td></tr>`;
@@ -1088,7 +1088,7 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
             weaponsHtml += '</tbody></table></div></details>';
         }
         if (unit.meleeWeapons?.length) {
-            weaponsHtml += '<details class="weapon-section"><summary><h4 class="card-section-header">Melee Weapons</h4></summary>';
+            weaponsHtml += '<details class="weapon-section" open><summary><h4 class="card-section-header">Melee Weapons</h4></summary>';
             weaponsHtml += '<div class="table-scroll-wrapper"><table class="weapons-table melee-weapons-table"><thead><tr><th>Name</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
             unit.meleeWeapons.forEach((w) => {
                 weaponsHtml += `<tr><td>${escapeHtml(w.name)}</td><td>${escapeHtml(w.attacks)}</td><td>${escapeHtml(w.hit)}</td><td>${escapeHtml(w.wound)}</td><td>${escapeHtml(w.rend)}</td><td>${escapeHtml(w.damage)}</td><td>${weaponAbilitiesCell(w)}</td></tr>`;
