@@ -348,23 +348,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (selectedEnhancement) {
                         console.log(`Applying enhancement: ${selectedEnhancementNameForUnitMod}`);
-                        
-                        // Handle new targeting-based enhancements (don't apply automatically)
+
+                        // Structural card effects (addAbility, weapon mods, etc.) always apply to units.
+                        // Runtime targeting effects still fire from phase / card Use buttons.
+                        const STRUCTURAL_EFFECT_TYPES = new Set([
+                            'addAbility',
+                            'addWeaponAbility',
+                            'modifyWeaponStat',
+                            'modifyAbility',
+                            'modifyKeyword'
+                        ]);
+                        const effectLists = [];
+                        if (selectedEnhancement.legacy_effects?.length) {
+                            effectLists.push(selectedEnhancement.legacy_effects);
+                        }
+                        if (selectedEnhancement.effects?.length) {
+                            effectLists.push(selectedEnhancement.effects);
+                        }
+                        effectLists.forEach((list) => {
+                            list.forEach((effect) => {
+                                if (STRUCTURAL_EFFECT_TYPES.has(effect.type) && effect.target?.unit) {
+                                    applyEnhancementEffect(effect, factionData.units);
+                                }
+                            });
+                        });
                         if (selectedEnhancement.targeting && selectedEnhancement.effects) {
-                            console.log('Enhancement has targeting - will be available in phase rules');
-                            // Don't apply automatically, let the targeting system handle it
-                        }
-                        // Handle legacy enhancement effects
-                        else if (selectedEnhancement.legacy_effects) {
-                            selectedEnhancement.legacy_effects.forEach(effect => {
-                                applyEnhancementEffect(effect, factionData.units);
-                            });
-                        }
-                        // Handle old structure for backward compatibility
-                        else if (selectedEnhancement.effects && selectedEnhancement.effects[0]?.target?.unit) {
-                            selectedEnhancement.effects.forEach(effect => {
-                                applyEnhancementEffect(effect, factionData.units);
-                            });
+                            console.log('Enhancement has targeting - also available in phase rules');
                         }
                     }
                 }
@@ -576,6 +585,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Unit-level abilities
                 if (unit.abilities) {
                     unit.abilities.forEach(ability => {
+                        // Skip abilities granted by the selected enhancement — already listed as Enhancement
+                        if (selectedEnhancementName && ability.name === selectedEnhancementName) {
+                            return;
+                        }
                         const phaseKey = getPhaseKey(ability.timing);
                         if (phaseKey) {
                             phaseAbilities[phaseKey].push({ 

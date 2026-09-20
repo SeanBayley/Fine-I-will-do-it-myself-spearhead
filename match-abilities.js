@@ -629,6 +629,10 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
 
         (factionData.units || []).forEach((unit) => {
             (unit.abilities || []).forEach((ability) => {
+                // Skip abilities granted by the selected enhancement — already listed as Enhancement
+                if (selectedEnhancementName && ability.name === selectedEnhancementName) {
+                    return;
+                }
                 pushItem(getPhaseKey(ability.timing), {
                     name: ability.name,
                     description: ability.description,
