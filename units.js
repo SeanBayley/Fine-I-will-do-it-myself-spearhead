@@ -469,8 +469,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (lowerTiming.includes('shooting phase')) return 'shooting';
             if (lowerTiming.includes('charge phase')) return 'charge';
             // Include start/during/end of combat phase and 'any combat phase'
-            if (lowerTiming.includes('combat phase')) return 'combat'; 
-            if (lowerTiming.includes('end of turn')) return 'end';
+            if (lowerTiming.includes('combat phase')) return 'combat';
+            // "End of Turn", "Any End of Turn", and "End of Any Turn" (Sylvaneth, CoS, Idoneth, etc.)
+            if (lowerTiming.includes('end of turn') || lowerTiming.includes('end of any turn')) return 'end';
             // Ignore 'passive', 'n/a', etc.
             return null;
         }
