@@ -406,6 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const active = match.sides[match.activeSide];
         currentTurnEl.textContent = `${active.displayName}'s Turn`;
         currentRoundEl.textContent = match.currentRound;
+        const scorebarRound = document.getElementById('match-scorebar-round');
+        if (scorebarRound) scorebarRound.textContent = match.currentRound;
         currentPhaseEl.textContent = PHASE_NAMES[match.currentPhase] || '—';
         updateActiveSideHighlight();
         applyActiveArmyChrome();
@@ -672,11 +674,14 @@ document.addEventListener('DOMContentLoaded', () => {
             Number(twist.maxPoints) || 0
         );
         twistModal.style.display = 'flex';
+        twistModal.classList.add('modal-stack-top');
         console.log('Opened twist modal', twist.id || twist.name);
     }
 
     function closeTwistModal() {
-        if (twistModal) twistModal.style.display = 'none';
+        if (!twistModal) return;
+        twistModal.style.display = 'none';
+        twistModal.classList.remove('modal-stack-top');
     }
 
     function drawTwistForRound() {
@@ -876,19 +881,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('match-command-declare').textContent = tactic.command?.declare || '—';
         document.getElementById('match-command-effect').textContent = tactic.command?.effect || '—';
 
-        const isActiveSide = sideId === match.activeSide;
         const isPending = status === 'Pending';
         const inCurrentRound = side.currentRoundCards.includes(cardNumber);
         // Peeking from keep/discard — details only, no command use mid-management
         if (fromModal === cardModal) {
             useCommandBtn.disabled = true;
             useCommandBtn.textContent = 'Close to Keep or Discard';
+        } else if (fromModal === scoringModal) {
+            // Peek from scoring — details only; score or command from the board/scoring actions
+            useCommandBtn.disabled = true;
+            useCommandBtn.textContent = 'Close to Score';
         } else {
-            useCommandBtn.disabled = !(match.isActive && isActiveSide && isPending && inCurrentRound);
+            // Commands can be used on either side's turn (pass-and-play)
+            useCommandBtn.disabled = !(match.isActive && isPending && inCurrentRound);
             useCommandBtn.textContent = status === 'Used' ? 'Command Used' : 'Use Command';
         }
 
         tacticModal.style.display = 'flex';
+        tacticModal.classList.add('modal-stack-top');
     }
 
     function showScoringModal() {
@@ -948,7 +958,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.className = 'tactic-scoring-card';
                 card.dataset.cardNumber = cardNumber;
                 card.innerHTML = `
-                    <div class="tactic-card-info">
+                    <div class="tactic-card-info" role="button" tabindex="0" title="View card details">
                         <div class="tactic-card-name">${escapeHtml(tactic.name)}</div>
                         <div class="tactic-card-requirement">${escapeHtml(tactic.requirement || '')}</div>
                     </div>
@@ -956,6 +966,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="tactic-action-btn score-btn" type="button">Score</button>
                     </div>
                 `;
+                const infoEl = card.querySelector('.tactic-card-info');
+                const openDetails = () => openTacticModal(side.id, cardNumber, scoringModal);
+                infoEl.addEventListener('click', openDetails);
+                infoEl.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openDetails();
+                    }
+                });
                 card.querySelector('.score-btn').addEventListener('click', () => {
                     setCardStatus(side, cardNumber, 'Scored');
                     if (!side.scores.rounds[match.currentRound]) {
@@ -1185,7 +1204,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return [...new Set(candidates.filter(Boolean))];
     }
 
-    function applyVersusPanelTheme(sideId, side) {
+    function preloadImage(url) {
+        return new Promise((resolve) => {
+            if (!url) {
+                resolve({ url, ok: false });
+                return;
+            }
+            const img = new Image();
+            img.onload = () => resolve({ url, ok: true });
+            img.onerror = () => resolve({ url, ok: false });
+            img.src = url;
+        });
+    }
+
+    /** Resolve the first versus art URL that actually loads (or null). */
+    async function resolveVersusArtUrl(side) {
+        const candidates = getVersusArtCandidates(side);
+        for (const url of candidates) {
+            const result = await preloadImage(url);
+            if (result.ok) return url;
+        }
+        return null;
+    }
+
+    function applyVersusPanelTheme(sideId, side, preloadedUrl = null) {
         const panel = document.getElementById(`versus-panel-${sideId}`);
         const nameEl = document.getElementById(`versus-name-${sideId}`);
         const pathHint = document.getElementById(`versus-art-path-${sideId}`);
@@ -1201,7 +1243,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (nameEl) nameEl.textContent = side.displayName || `Side ${sideId}`;
 
-        const candidates = getVersusArtCandidates(side);
         // Always show the conventional drop path so art uploads are obvious
         if (pathHint) pathHint.textContent = `images/${folder || 'faction'}/versus.png`;
 
@@ -1216,18 +1257,55 @@ document.addEventListener('DOMContentLoaded', () => {
             placeholder.style.display = '';
         }
 
-        if (!candidates.length || !img) return;
+        if (!img) return;
 
-        // Try candidates in order until one loads
-        let attempt = 0;
-        const tryNext = () => {
-            if (attempt >= candidates.length) {
+        // Prefer a URL already verified by preload; otherwise fall back to candidate walk
+        const applyUrl = (url) => {
+            if (!url) {
+                console.log(`Versus art missing for Side ${sideId}`);
+                return;
+            }
+            img.onload = () => {
+                img.hidden = false;
+                if (placeholder) {
+                    placeholder.hidden = true;
+                    placeholder.style.display = 'none';
+                }
+                panel.classList.add('has-versus-art');
+                console.log(`Versus art loaded for Side ${sideId}:`, url);
+            };
+            img.onerror = () => {
                 img.hidden = true;
                 panel.classList.remove('has-versus-art');
                 if (placeholder) {
                     placeholder.hidden = false;
                     placeholder.style.display = '';
                 }
+            };
+            img.src = url;
+            // Cached preloads often fire synchronously; ensure visible if already complete
+            if (img.complete && img.naturalWidth > 0) {
+                img.hidden = false;
+                if (placeholder) {
+                    placeholder.hidden = true;
+                    placeholder.style.display = 'none';
+                }
+                panel.classList.add('has-versus-art');
+            }
+        };
+
+        if (preloadedUrl) {
+            applyUrl(preloadedUrl);
+            return;
+        }
+
+        const candidates = getVersusArtCandidates(side);
+        if (!candidates.length) return;
+
+        let attempt = 0;
+        const tryNext = () => {
+            if (attempt >= candidates.length) {
+                applyUrl(null);
                 console.log(`Versus art missing for Side ${sideId}; tried`, candidates);
                 return;
             }
@@ -1247,29 +1325,59 @@ document.addEventListener('DOMContentLoaded', () => {
         tryNext();
     }
 
-    function showVersusScreen() {
+    async function showVersusScreen() {
         if (!versusScreen) {
             showTurnOrderSelection();
             return;
         }
 
-        applyVersusPanelTheme('A', match.sides.A);
-        applyVersusPanelTheme('B', match.sides.B);
+        // Keep the splash hidden until art is ready so the clash doesn't fire on empty panels
+        if (startMatchBtn) {
+            startMatchBtn.disabled = true;
+            startMatchBtn.textContent = 'Loading…';
+        }
+        if (versusContinueBtn) {
+            versusContinueBtn.disabled = true;
+        }
 
-        // Restart crash / VS animations every time the splash opens
+        let urlA = null;
+        let urlB = null;
+        try {
+            [urlA, urlB] = await Promise.all([
+                resolveVersusArtUrl(match.sides.A),
+                resolveVersusArtUrl(match.sides.B)
+            ]);
+        } catch (err) {
+            console.warn('Versus art preload failed', err);
+        }
+
+        applyVersusPanelTheme('A', match.sides.A, urlA);
+        applyVersusPanelTheme('B', match.sides.B, urlB);
+
         versusScreen.classList.remove('is-animating');
         versusScreen.style.display = 'flex';
         versusScreen.classList.add('is-visible');
         versusScreen.setAttribute('aria-hidden', 'false');
         document.body.classList.add('versus-open');
-        // Force reflow so removing/adding is-animating retriggers keyframes
+        // Force reflow so adding is-animating retriggers keyframes after art is in place
         void versusScreen.offsetWidth;
         versusScreen.classList.add('is-animating');
+
+        if (versusContinueBtn) {
+            versusContinueBtn.disabled = false;
+            versusContinueBtn.textContent = 'Continue';
+        }
+        if (startMatchBtn) {
+            startMatchBtn.textContent = 'Start Match';
+            updateStartMatchGate();
+        }
 
         versusShownThisMatch = true;
         console.log('Versus screen shown', {
             A: match.sides.A?.displayName,
-            B: match.sides.B?.displayName
+            B: match.sides.B?.displayName,
+            artA: urlA,
+            artB: urlB
         });
     }
 
@@ -1643,6 +1751,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeTacticModal() {
         tacticModal.style.display = 'none';
+        tacticModal.classList.remove('modal-stack-top');
         openTacticContext = null;
         if (previousModal) {
             previousModal.style.display = 'flex';
@@ -1704,7 +1813,6 @@ document.addEventListener('DOMContentLoaded', () => {
     useCommandBtn.addEventListener('click', () => {
         if (!openTacticContext) return;
         const side = match.sides[openTacticContext.sideId];
-        if (openTacticContext.sideId !== match.activeSide) return;
         if (getCardStatus(side, openTacticContext.cardNumber) !== 'Pending') return;
         // INTENTIONAL: Used removes the card from end-of-turn scoring (command OR score).
         setCardStatus(side, openTacticContext.cardNumber, 'Used');

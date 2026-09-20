@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Ranged Weapons Table (MODIFIED for Abilities and Collapsible)
         if (unit.rangedWeapons && unit.rangedWeapons.length > 0) {
-            cardHTML += '<details class="weapon-section">'; // Wrap in details
+            cardHTML += '<details class="weapon-section" open>'; // Expanded by default
             cardHTML += '<summary><h4 class="card-section-header">Ranged Weapons</h4></summary>'; // Use h4 as summary
             // ADDED Abilities Header — wrapped in scroll container for mobile
             cardHTML += '<div class="table-scroll-wrapper"><table class="weapons-table ranged-weapons-table"><thead><tr><th>Name</th><th>Range</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Melee Weapons Table (MODIFIED for Collapsible)
         if (unit.meleeWeapons && unit.meleeWeapons.length > 0) {
-            cardHTML += '<details class="weapon-section">'; // Wrap in details
+            cardHTML += '<details class="weapon-section" open>'; // Expanded by default
             cardHTML += '<summary><h4 class="card-section-header">Melee Weapons</h4></summary>'; // Use h4 as summary
             // CORRECTED THEAD: Removed Range header — wrapped in scroll container for mobile
             cardHTML += '<div class="table-scroll-wrapper"><table class="weapons-table melee-weapons-table"><thead><tr><th>Name</th><th>Attacks</th><th>Hit</th><th>Wound</th><th>Rend</th><th>Damage</th><th>Abilities</th></tr></thead><tbody>';
@@ -2558,6 +2558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         tacticModal.style.display = 'flex';
+        tacticModal.classList.add('modal-stack-top');
     }
     
     function toggleCardView() {
@@ -2615,7 +2616,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tacticCard.dataset.cardNumber = cardNumber;
             
             tacticCard.innerHTML = `
-                <div class="tactic-card-info">
+                <div class="tactic-card-info" role="button" tabindex="0" title="View card details">
                     <div class="tactic-card-name">${tactic.name}</div>
                     <div class="tactic-card-requirement">${tactic.requirement}</div>
                 </div>
@@ -2624,6 +2625,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
+            const infoEl = tacticCard.querySelector('.tactic-card-info');
+            const openDetails = () => {
+                scoringModal.style.display = 'none';
+                showTacticDetails(cardNumber, scoringModal);
+                useCommandBtn.disabled = true;
+                useCommandBtn.textContent = 'Close to Score';
+            };
+            infoEl.addEventListener('click', openDetails);
+            infoEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openDetails();
+                }
+            });
+
             // Add event listener for score button
             const scoreBtn = tacticCard.querySelector('.tactic-action-btn');
             scoreBtn.addEventListener('click', () => handleTacticAction(cardNumber, 'score', tacticCard));
@@ -3263,6 +3279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     closeTacticBtn.addEventListener('click', () => {
         tacticModal.style.display = 'none';
+        tacticModal.classList.remove('modal-stack-top');
         // Restore previous modal if it exists
         if (previousModal) {
             previousModal.style.display = 'flex';
@@ -3337,6 +3354,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (event.target === tacticModal) {
             tacticModal.style.display = 'none';
+            tacticModal.classList.remove('modal-stack-top');
             // Restore previous modal if it exists
             if (previousModal) {
                 previousModal.style.display = 'flex';
