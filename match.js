@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let battleTactics = [];
     let openTacticContext = null; // { sideId, cardNumber }
+    let previousModal = null; // restore after peeking tactic details (e.g. card management)
     let abilities = null;
     let versusShownThisMatch = false;
     let twistsData = null; // full twists.json payload
@@ -847,10 +848,15 @@ document.addEventListener('DOMContentLoaded', () => {
         showTurnOrderSelection();
     }
 
-    function openTacticModal(sideId, cardNumber) {
+    function openTacticModal(sideId, cardNumber, fromModal = null) {
         const side = match.sides[sideId];
         const tactic = battleTactics.find((t) => t.cardNumber === cardNumber);
         if (!tactic) return;
+
+        if (fromModal) {
+            previousModal = fromModal;
+            fromModal.style.display = 'none';
+        }
 
         openTacticContext = { sideId, cardNumber };
         const status = getCardStatus(side, cardNumber);
@@ -873,8 +879,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const isActiveSide = sideId === match.activeSide;
         const isPending = status === 'Pending';
         const inCurrentRound = side.currentRoundCards.includes(cardNumber);
-        useCommandBtn.disabled = !(match.isActive && isActiveSide && isPending && inCurrentRound);
-        useCommandBtn.textContent = status === 'Used' ? 'Command Used' : 'Use Command';
+        // Peeking from keep/discard — details only, no command use mid-management
+        if (fromModal === cardModal) {
+            useCommandBtn.disabled = true;
+            useCommandBtn.textContent = 'Close to Keep or Discard';
+        } else {
+            useCommandBtn.disabled = !(match.isActive && isActiveSide && isPending && inCurrentRound);
+            useCommandBtn.textContent = status === 'Used' ? 'Command Used' : 'Use Command';
+        }
 
         tacticModal.style.display = 'flex';
     }
@@ -1057,14 +1069,24 @@ document.addEventListener('DOMContentLoaded', () => {
             el.className = 'tactic-scoring-card';
             el.dataset.cardNumber = cardNumber;
             el.innerHTML = `
-                <div class="tactic-card-info">
+                <div class="tactic-card-info" role="button" tabindex="0" title="View card details">
                     <div class="tactic-card-name">${escapeHtml(tactic.name)}</div>
+                    <div class="tactic-card-requirement">${escapeHtml(tactic.requirement || '')}</div>
                 </div>
                 <div class="tactic-card-actions">
                     <button class="tactic-action-btn keep-btn" type="button" data-action="keep">Keep</button>
                     <button class="tactic-action-btn bin-btn" type="button" data-action="discard">Discard</button>
                 </div>
             `;
+            const infoEl = el.querySelector('.tactic-card-info');
+            const openDetails = () => openTacticModal(sideId, cardNumber, cardModal);
+            infoEl.addEventListener('click', openDetails);
+            infoEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openDetails();
+                }
+            });
             el.querySelectorAll('.tactic-action-btn').forEach((btn) => {
                 btn.addEventListener('click', () => {
                     const action = btn.dataset.action;
@@ -1619,10 +1641,16 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmScoringBtn.addEventListener('click', confirmScoring);
     confirmCardsBtn.addEventListener('click', confirmCardManagement);
 
-    closeTacticBtn.addEventListener('click', () => {
+    function closeTacticModal() {
         tacticModal.style.display = 'none';
         openTacticContext = null;
-    });
+        if (previousModal) {
+            previousModal.style.display = 'flex';
+            previousModal = null;
+        }
+    }
+
+    closeTacticBtn.addEventListener('click', closeTacticModal);
 
     if (closeTwistBtn) {
         closeTwistBtn.addEventListener('click', closeTwistModal);
@@ -1696,8 +1724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Do not dismiss scoring/card modals on backdrop (same fix as solo)
     window.addEventListener('click', (event) => {
         if (event.target === tacticModal) {
-            tacticModal.style.display = 'none';
-            openTacticContext = null;
+            closeTacticModal();
         }
         if (event.target === twistModal) {
             closeTwistModal();

@@ -2349,6 +2349,21 @@ details.phase-section > summary:hover {
 
 .tactic-card-info {
     flex: 1;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 4px 6px;
+    margin: -4px -6px;
+    transition: background 0.2s ease;
+}
+
+.tactic-card-info:hover,
+.tactic-card-info:focus-visible {
+    background: rgba(255, 255, 255, 0.06);
+    outline: none;
+}
+
+.tactic-card-info:focus-visible {
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.45);
 }
 
 .tactic-card-name {
