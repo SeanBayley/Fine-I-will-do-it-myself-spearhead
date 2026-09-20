@@ -3,14 +3,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const MATCH_SETUP_KEY = 'spearheadMatchSetup';
-    const PHASES = ['hero', 'movement', 'shooting', 'charge', 'combat', 'taking-damage', 'end'];
+    const PHASES = ['hero', 'movement', 'shooting', 'charge', 'combat', 'end'];
     const PHASE_NAMES = [
         'Hero Phase',
         'Movement Phase',
         'Shooting Phase',
         'Charge Phase',
         'Combat Phase',
-        'Taking Damage',
         'End of Turn'
     ];
 

@@ -53,7 +53,6 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
                 'Shooting Phase',
                 'Charge Phase',
                 'Combat Phase',
-                'Taking Damage',
                 'End of Turn'
             ]
         };
@@ -537,7 +536,6 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
             shooting: [],
             charge: [],
             combat: [],
-            'taking-damage': [],
             end: []
         };
         const factionData = side.factionData;
@@ -691,7 +689,6 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
                     description: 'Starting with the active player, players alternate picking eligible units to fight.'
                 }
             ],
-            'taking-damage': [{ name: 'Remember Ward Saves', description: '' }],
             end: [{ name: 'Score Objectives', description: 'Check conditions for scoring objectives.' }]
         };
 
@@ -701,7 +698,6 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
             shooting: [],
             charge: [],
             combat: [],
-            'taking-damage': [],
             end: []
         };
 
@@ -820,7 +816,7 @@ window.createMatchAbilityToolkit = function createMatchAbilityToolkit(options) {
         const match = getMatch();
         const phaseColumn = document.getElementById('match-unified-phases');
         if (!phaseColumn) return;
-        const phases = match.phases || ['hero', 'movement', 'shooting', 'charge', 'combat', 'taking-damage', 'end'];
+        const phases = match.phases || ['hero', 'movement', 'shooting', 'charge', 'combat', 'end'];
         phaseColumn.querySelectorAll('.phase-section').forEach((section) => {
             const isCurrent = match.isActive && section.dataset.phase === phases[match.currentPhase];
             section.classList.toggle('active', isCurrent);
