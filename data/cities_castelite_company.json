@@ -72,7 +72,22 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_battle"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Cavalier-Marshal"
+          },
+          "ability": {
+            "name": "FLASK OF LETHISIAN DARKWATER",
+            "description": "Sourced from the lakewaters of the city of Lethis, when this potion is carefully sipped, its black liquid soothes the body and soul. Effect: Heal (D6) your general.",
+            "timing": "Start of Any Turn",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted"
+          }
+        }
+      ]
     },
     {
       "name": "BRAZIER OF HOLY FLAME",
@@ -90,6 +105,19 @@
       },
       "effects": [
         {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Cavalier-Marshal"
+          },
+          "ability": {
+            "name": "BRAZIER OF HOLY FLAME",
+            "description": "The torch borne by this champion symbolises the light of civilisation being carried forth into the darkness of the wilds, a sacred act that emboldens those who march alongside them. Declare: Pick a friendly Freeguild Steelhelms unit within your general’s combat range. Effect: You can return up to D3 slain models to that unit.",
+            "timing": "End of Any Turn",
+            "frequency": "N/A",
+            "type": "Enhancement Granted"
+          }
+        },
+        {
           "type": "instant_effect",
           "duration": "instant",
           "description": "Return up to D3 slain models to a Freeguild Steelhelms unit in combat range"
@@ -103,6 +131,16 @@
       "frequency": "N/A",
       "description": "Wielded in countless battles, the edge of this blade is as keen as the day it was forged. Effect: Add 1 to the Rend characteristic of your general’s Master-forged Longsword.",
       "effects": [
+        {
+          "type": "modifyWeaponStat",
+          "target": {
+            "unit": "Freeguild Cavalier-Marshal",
+            "weapon": "Master-forged Longsword"
+          },
+          "stat": "rend",
+          "operation": "add",
+          "value": 1
+        },
         {
           "type": "addAbility",
           "target": {
@@ -122,7 +160,22 @@
       "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
-      "description": "The glinting facets of this tiny fragment of Mallus offer fleeting glimpses of the future. Effect: Each phase, you can re-roll 1 hit roll, or 1 wound roll, or 1 save roll made for your general."
+      "description": "The glinting facets of this tiny fragment of Mallus offer fleeting glimpses of the future. Effect: Each phase, you can re-roll 1 hit roll, or 1 wound roll, or 1 save roll made for your general.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Cavalier-Marshal"
+          },
+          "ability": {
+            "name": "GLIMMERING",
+            "description": "Each phase, you can re-roll 1 hit roll, or 1 wound roll, or 1 save roll made for your general.",
+            "timing": "Passive",
+            "frequency": "N/A",
+            "type": "Enhancement Granted"
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [

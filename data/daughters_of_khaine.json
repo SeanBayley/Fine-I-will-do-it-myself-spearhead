@@ -97,6 +97,19 @@
       "description": "The shadow of the Avatar of Khaine peels away and attacks the foe, every strike cleaving through both body and soul. Effect: Add 1 to the Rend characteristic of your general’s melee weapons for the rest of the turn.",
       "effects": [
         {
+          "type": "addAbility",
+          "target": {
+            "unit": "Slaughter Queen on Cauldron of Blood"
+          },
+          "ability": {
+            "name": "SHADOW AVATAR",
+            "description": "The shadow of the Avatar of Khaine peels away and attacks the foe, every strike cleaving through both body and soul. Effect: Add 1 to the Rend characteristic of your general’s melee weapons for the rest of the turn.",
+            "timing": "Your Combat Phase",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted"
+          }
+        },
+        {
           "type": "modify_stat",
           "stat": "rend",
           "modifier": "+1",
@@ -128,6 +141,27 @@
       },
       "effects": [
         {
+          "type": "addAbility",
+          "target": {
+            "unit": "Slaughter Queen on Cauldron of Blood"
+          },
+          "ability": {
+            "name": "BOILING BLOOD",
+            "description": "A torrent of scalding blood is vomited forth by the Avatar of Khaine, reducing even polished sigmarite to molten slag. Declare: Pick a visible enemy unit within 12\" of your general to be the target. Effect: Roll a dice. If the roll equals or exceeds the target’s Save characteristic, halve the target’s Move characteristic until the start of your next turn.",
+            "timing": "Your Shooting Phase",
+            "frequency": "N/A",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "enemy_unit",
+              "range": "12\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            }
+          }
+        },
+        {
           "type": "modify_stat",
           "stat": "move",
           "modifier": "halved",
@@ -155,6 +189,27 @@
       },
       "effects": [
         {
+          "type": "addAbility",
+          "target": {
+            "unit": "Slaughter Queen on Cauldron of Blood"
+          },
+          "ability": {
+            "name": "FRENZIED EXHORTATIONS",
+            "description": "The Slaughter Queen atop the Cauldron of Blood howls a bloody liturgy that empowers nearby cultists. Declare: Pick a visible friendly unit wholly within 12\" of your general to be the target. Effect: Roll a dice. On a 3+, add 1 to ward rolls for the target for the rest of the turn.",
+            "timing": "Your Hero Phase",
+            "frequency": "N/A",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "friendly_unit",
+              "range": "12\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            }
+          }
+        },
+        {
           "type": "modify_stat",
           "stat": "ward",
           "modifier": "+1 to ward rolls",
@@ -181,6 +236,27 @@
         }
       },
       "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Slaughter Queen on Cauldron of Blood"
+          },
+          "ability": {
+            "name": "BLADED IMPACT",
+            "description": "The bladed carriage of a Cauldron of Blood can plough its way through enemy ranks with ease. Declare: If your general charged this phase, pick an enemy unit within 1\" of them to be the target. Effect: Roll a D3. On a 2+, inflict an amount of mortal damage on the target equal to the roll.",
+            "timing": "Any Charge Phase",
+            "frequency": "N/A",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "enemy_unit",
+              "range": "1\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            }
+          }
+        },
         {
           "type": "instant_effect",
           "duration": "instant",
