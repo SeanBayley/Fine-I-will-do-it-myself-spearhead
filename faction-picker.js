@@ -5,6 +5,10 @@
 (function (global) {
     'use strict';
 
+    // Modal state
+    let currentModalCallback = null;
+    let currentModalFaction = null;
+
     function normalizeFactionEntry(raw) {
         if (!raw || typeof raw !== 'object') return null;
 
@@ -75,7 +79,148 @@
     }
 
     /**
-     * Build a faction card with an inline spearhead <select>.
+     * Open the spearhead selection modal
+     */
+    function openSpearheadModal(faction, onSpearheadChosen) {
+        const modal = document.getElementById('spearhead-modal');
+        const titleEl = document.getElementById('spearhead-modal-title');
+        const optionsEl = document.getElementById('spearhead-options');
+        
+        if (!modal || !optionsEl) {
+            console.warn('Spearhead modal elements not found, falling back to first spearhead');
+            if (faction.spearheads.length > 0 && typeof onSpearheadChosen === 'function') {
+                const first = faction.spearheads[0];
+                onSpearheadChosen(first.dataFile, { faction, spearhead: first });
+            }
+            return;
+        }
+
+        currentModalCallback = onSpearheadChosen;
+        currentModalFaction = faction;
+
+        // Set faction theme colors on modal
+        const content = modal.querySelector('.spearhead-modal-content');
+        if (content) {
+            content.className = 'spearhead-modal-content';
+            content.classList.add(`theme-${faction.factionId}`);
+            // Apply faction CSS variables
+            const themeClass = `theme-${faction.factionId}`;
+            const factionCard = document.querySelector(`.faction-card.${themeClass}`);
+            if (factionCard) {
+                const styles = getComputedStyle(factionCard);
+                const primaryColor = styles.getPropertyValue('--primary-color').trim();
+                const primaryRgb = styles.getPropertyValue('--primary-color-rgb').trim();
+                if (primaryColor) content.style.setProperty('--primary-color', primaryColor);
+                if (primaryRgb) content.style.setProperty('--primary-color-rgb', primaryRgb);
+            }
+        }
+
+        // Update title
+        if (titleEl) {
+            titleEl.textContent = faction.name;
+        }
+
+        // Clear and populate options
+        optionsEl.innerHTML = '';
+        faction.spearheads.forEach((spearhead) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'spearhead-option';
+            btn.textContent = spearhead.name;
+            btn.dataset.dataFile = spearhead.dataFile;
+            btn.addEventListener('click', () => {
+                selectSpearheadFromModal(spearhead.dataFile);
+            });
+            optionsEl.appendChild(btn);
+        });
+
+        // Show modal
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+
+        // Focus first option for accessibility
+        const firstOption = optionsEl.querySelector('.spearhead-option');
+        if (firstOption) {
+            setTimeout(() => firstOption.focus(), 100);
+        }
+
+        console.log('Spearhead modal opened for', faction.name);
+    }
+
+    /**
+     * Close the spearhead modal
+     */
+    function closeSpearheadModal() {
+        const modal = document.getElementById('spearhead-modal');
+        if (modal) {
+            modal.classList.remove('is-open');
+        }
+        document.body.style.overflow = '';
+        currentModalCallback = null;
+        currentModalFaction = null;
+    }
+
+    /**
+     * Handle spearhead selection from modal
+     */
+    function selectSpearheadFromModal(dataFile) {
+        if (!currentModalFaction || !currentModalCallback) {
+            closeSpearheadModal();
+            return;
+        }
+
+        const spearhead = currentModalFaction.spearheads.find((s) => s.dataFile === dataFile);
+        const faction = currentModalFaction;
+        const callback = currentModalCallback;
+
+        closeSpearheadModal();
+
+        if (spearhead && typeof callback === 'function') {
+            console.log('Spearhead chosen from modal:', faction.factionId, dataFile);
+            callback(dataFile, { faction, spearhead });
+        }
+    }
+
+    /**
+     * Initialize modal event listeners (call once on page load)
+     */
+    function initSpearheadModal() {
+        const modal = document.getElementById('spearhead-modal');
+        const closeBtn = document.getElementById('spearhead-modal-close');
+
+        if (!modal) return;
+
+        // Close on X button
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeSpearheadModal);
+        }
+
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeSpearheadModal();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+                closeSpearheadModal();
+            }
+        });
+    }
+
+    // Initialize modal on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSpearheadModal);
+    } else {
+        initSpearheadModal();
+    }
+
+    /**
+     * Build a faction card.
+     * Single spearhead: auto-selects on click.
+     * Multiple spearheads: opens themed modal for selection.
      * @param {object} faction normalized faction
      * @param {object} opts
      * @param {(dataFile: string, meta: {faction, spearhead}) => void} opts.onSpearheadChosen
@@ -94,134 +239,55 @@
         card.className = `faction-card theme-${faction.factionId}`;
         card.dataset.factionId = faction.factionId;
         card.textContent = faction.name;
-        card.setAttribute('aria-expanded', 'false');
-        card.setAttribute('aria-haspopup', 'listbox');
 
-        const picker = document.createElement('div');
-        picker.className = 'spearhead-picker';
-        picker.hidden = true;
-
-        const label = document.createElement('label');
-        label.className = 'spearhead-picker-label';
-        const labelId = `spearhead-label-${faction.factionId}`;
-        label.id = labelId;
-        label.textContent = 'Spearhead';
-
-        const select = document.createElement('select');
-        select.className = 'spearhead-select';
-        select.setAttribute('aria-labelledby', labelId);
-        select.dataset.factionId = faction.factionId;
-
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent =
-            faction.spearheads.length > 1 ? 'Choose a Spearhead…' : 'Select Spearhead';
-        placeholder.disabled = true;
-        placeholder.selected = true;
-        select.appendChild(placeholder);
-
-        faction.spearheads.forEach((spearhead) => {
-            const option = document.createElement('option');
-            option.value = spearhead.dataFile;
-            option.textContent = spearhead.name;
-            select.appendChild(option);
-        });
-
-        // Stop select interactions from re-toggling the card
-        picker.addEventListener('click', (event) => event.stopPropagation());
-        select.addEventListener('click', (event) => event.stopPropagation());
-        select.addEventListener('mousedown', (event) => event.stopPropagation());
-
-        select.addEventListener('change', () => {
-            const dataFile = select.value;
-            if (!dataFile) return;
-            const spearhead = faction.spearheads.find((s) => s.dataFile === dataFile);
-            console.log('Spearhead chosen', faction.factionId, dataFile);
-            if (typeof onSpearheadChosen === 'function') {
-                onSpearheadChosen(dataFile, { faction, spearhead });
-            }
-        });
-
-        picker.appendChild(label);
-        picker.appendChild(select);
-        wrap.appendChild(card);
-        wrap.appendChild(picker);
-
-        function openPicker() {
-            wrap.classList.add('is-open');
-            card.setAttribute('aria-expanded', 'true');
-            picker.hidden = false;
+        // For multi-spearhead factions, indicate there's a choice
+        if (faction.spearheads.length > 1) {
+            card.setAttribute('aria-haspopup', 'dialog');
         }
 
-        function closePicker() {
-            wrap.classList.remove('is-open');
-            card.setAttribute('aria-expanded', 'false');
-            // Keep picker visible if this wrap is the selected faction
-            if (!wrap.classList.contains('is-selected')) {
-                picker.hidden = true;
-            }
+        wrap.appendChild(card);
+
+        // Track current selection
+        let currentDataFile = selectedDataFile;
+
+        function markSelected(dataFile) {
+            currentDataFile = dataFile;
+            const owns = faction.spearheads.some((s) => s.dataFile === dataFile);
+            wrap.classList.toggle('is-selected', owns);
+            card.classList.toggle('selected', owns);
         }
 
         card.addEventListener('click', () => {
-            const alreadyOpen = wrap.classList.contains('is-open');
-            // Caller usually closes others; open this one
-            openPicker();
-
-            // Single spearhead: auto-select and load on first open/click
+            // Single spearhead: auto-select
             if (faction.spearheads.length === 1) {
                 const only = faction.spearheads[0];
-                if (select.value !== only.dataFile) {
-                    select.value = only.dataFile;
-                    select.dispatchEvent(new Event('change', { bubbles: true }));
-                } else if (typeof onSpearheadChosen === 'function') {
-                    // Re-click same faction / same spearhead — still load
+                console.log('Single spearhead auto-selected:', faction.factionId, only.dataFile);
+                if (typeof onSpearheadChosen === 'function') {
                     onSpearheadChosen(only.dataFile, { faction, spearhead: only });
                 }
                 return;
             }
 
-            // Multi: if already chosen, re-fire; otherwise wait for dropdown
-            if (select.value) {
-                const spearhead = faction.spearheads.find((s) => s.dataFile === select.value);
+            // Multiple spearheads: open modal
+            openSpearheadModal(faction, (dataFile, meta) => {
+                markSelected(dataFile);
                 if (typeof onSpearheadChosen === 'function') {
-                    onSpearheadChosen(select.value, { faction, spearhead });
+                    onSpearheadChosen(dataFile, meta);
                 }
-            } else if (!alreadyOpen) {
-                console.log('Faction opened; awaiting spearhead choice', faction.factionId);
-            }
+            });
         });
 
-        // Restore prior selection into the select
+        // Restore prior selection
         if (selectedDataFile) {
-            const match = faction.spearheads.find((s) => s.dataFile === selectedDataFile);
-            if (match) {
-                select.value = match.dataFile;
-                openPicker();
-                wrap.classList.add('is-selected');
-                card.classList.add('selected');
-                picker.hidden = false;
-            }
+            markSelected(selectedDataFile);
         }
 
         return {
             wrap,
             card,
-            select,
-            picker,
             faction,
-            openPicker,
-            closePicker,
             setSelected(dataFile) {
-                const owns = faction.spearheads.some((s) => s.dataFile === dataFile);
-                wrap.classList.toggle('is-selected', owns);
-                card.classList.toggle('selected', owns);
-                if (owns) {
-                    select.value = dataFile;
-                    openPicker();
-                    picker.hidden = false;
-                } else {
-                    closePicker();
-                }
+                markSelected(dataFile);
             }
         };
     }
@@ -255,6 +321,8 @@
         findFactionForDataFile,
         findSpearhead,
         createFactionCard,
-        populateFactionGrid
+        populateFactionGrid,
+        openSpearheadModal,
+        closeSpearheadModal
     };
 })(window);

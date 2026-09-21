@@ -320,11 +320,75 @@ document.addEventListener('DOMContentLoaded', () => {
             const unit = factionData.units.find((u) => u.name === effect.target.unit);
             if (!unit) return;
 
-            if (effect.type === 'addAbility' && effect.ability) {
-                unit.abilities = unit.abilities || [];
-                if (!unit.abilities.some((a) => a.name === effect.ability.name)) {
-                    unit.abilities.push(effect.ability);
-                }
+            switch (effect.type) {
+                case 'addAbility':
+                    if (effect.ability) {
+                        unit.abilities = unit.abilities || [];
+                        if (!unit.abilities.some((a) => a.name === effect.ability.name)) {
+                            unit.abilities.push(effect.ability);
+                            console.log(`[Match] Applied ability '${effect.ability.name}' to ${unit.name}`);
+                        }
+                    }
+                    break;
+
+                case 'addWeaponAbility':
+                    const weapon = unit.meleeWeapons?.find(w => w.name === effect.target.weapon) ||
+                                   unit.rangedWeapons?.find(w => w.name === effect.target.weapon);
+                    if (weapon && effect.ability) {
+                        weapon.abilities = weapon.abilities || [];
+                        if (!weapon.abilities.some(ab => ab.name === effect.ability.name)) {
+                            weapon.abilities.push(effect.ability);
+                            console.log(`[Match] Applied weapon ability '${effect.ability.name}' to ${unit.name}'s ${weapon.name}`);
+                        }
+                    } else if (!weapon) {
+                        console.warn(`[Match] Weapon '${effect.target.weapon}' not found on ${unit.name}`);
+                    }
+                    break;
+
+                case 'modifyWeaponStat':
+                    const targetWeapon = unit.meleeWeapons?.find(w => w.name === effect.target.weapon) ||
+                                         unit.rangedWeapons?.find(w => w.name === effect.target.weapon);
+                    if (targetWeapon) {
+                        if (effect.operation === 'add') {
+                            const currentValue = parseInt(targetWeapon[effect.stat]);
+                            if (!isNaN(currentValue)) {
+                                targetWeapon[effect.stat] = currentValue + effect.value;
+                            } else {
+                                targetWeapon[effect.stat] = effect.value;
+                            }
+                        } else {
+                            targetWeapon[effect.stat] = effect.value;
+                        }
+                        console.log(`[Match] Modified ${unit.name}'s ${targetWeapon.name} ${effect.stat} to ${targetWeapon[effect.stat]}`);
+                    } else {
+                        console.warn(`[Match] Weapon '${effect.target.weapon}' not found on ${unit.name}`);
+                    }
+                    break;
+
+                case 'modifyAbility':
+                    const targetAbility = unit.abilities?.find(ab => ab.name === effect.target.ability);
+                    if (targetAbility) {
+                        Object.assign(targetAbility, effect.modifications);
+                        console.log(`[Match] Modified ability '${effect.target.ability}' on ${unit.name}`);
+                    } else {
+                        console.warn(`[Match] Ability '${effect.target.ability}' not found on ${unit.name}`);
+                    }
+                    break;
+
+                case 'modifyKeyword':
+                    if (unit.keywords) {
+                        const keywordIndex = unit.keywords.indexOf(effect.oldKeyword);
+                        if (keywordIndex !== -1) {
+                            unit.keywords[keywordIndex] = effect.newKeyword;
+                            console.log(`[Match] Modified keyword '${effect.oldKeyword}' to '${effect.newKeyword}' on ${unit.name}`);
+                        } else {
+                            console.warn(`[Match] Keyword '${effect.oldKeyword}' not found on ${unit.name}`);
+                        }
+                    }
+                    break;
+
+                default:
+                    console.log(`[Match] Unknown effect type: ${effect.type}`);
             }
         });
     }
