@@ -78,14 +78,36 @@
       "description": "This faithful commander strikes with a ferocity born of utter conviction. Effect: Add 1 to the Attacks characteristic and the Rend characteristic of your general’s Master-forged Weapon.",
       "effects": [
         {
-          "type": "addWeaponAbility",
+          "type": "modifyWeaponStat",
           "target": {
             "unit": "Freeguild Marshal and Relic Envoy",
             "weapon": "Master-forged Weapon"
           },
+          "stat": "attacks",
+          "operation": "add",
+          "value": 1
+        },
+        {
+          "type": "modifyWeaponStat",
+          "target": {
+            "unit": "Freeguild Marshal and Relic Envoy",
+            "weapon": "Master-forged Weapon"
+          },
+          "stat": "rend",
+          "operation": "add",
+          "value": 1
+        },
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Marshal and Relic Envoy"
+          },
           "ability": {
             "name": "DEVOUT COMMANDER",
-            "description": "Add 1 to the Attacks characteristic and the Rend characteristic of this weapon."
+            "description": "Add 1 to the Attacks characteristic and the Rend characteristic of your general’s Master-forged Weapon.",
+            "timing": "Passive",
+            "frequency": "N/A",
+            "type": "Enhancement Granted"
           }
         }
       ]
@@ -107,7 +129,34 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_battle"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Marshal and Relic Envoy"
+          },
+          "ability": {
+            "name": "STAND FAST, COMRADES",
+            "description": "The general calls upon their soldiers to hold the line, no matter the cost and no matter the foe. Declare: Pick a visible friendly non-HERO unit wholly within 12\" of your general to be the target. Effect: The target has WARD (4+) until the start of the next battle round.",
+            "timing": "Your Hero Phase",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "friendly_unit",
+              "range": "12\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            },
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_battle"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "STEP TO IT!",
@@ -118,7 +167,26 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_turn"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Marshal and Relic Envoy"
+          },
+          "ability": {
+            "name": "STEP TO IT!",
+            "description": "The Marshal tells their men to heft their weapons and get moving! Effect: Do not make a run roll as part of that RUN ability. Instead, add 6\" to that non-HERO unit’s Move characteristic to determine the distance each model in that unit can move as part of that RUN ability.",
+            "timing": "Reaction: You declared a RUN ability for a non-HERO unit wholly within 12\" of your general",
+            "frequency": "Once Per Turn",
+            "type": "Enhancement Granted",
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_turn"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "ARDENT DEMAND",
@@ -133,7 +201,30 @@
           "keywords": [],
           "max_targets": 1
         }
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Freeguild Marshal and Relic Envoy"
+          },
+          "ability": {
+            "name": "ARDENT DEMAND",
+            "description": "With a bellowed order, the Marshal ignites the passion and fury of the Freeguilders, and they lay into the enemy furiously. Declare: Pick a visible friendly non-HERO unit wholly within 12\" of your general to be the target. Effect: Add 1 to hit rolls for the target’s combat attacks for the rest of the turn.",
+            "timing": "Any Combat Phase",
+            "frequency": "N/A",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "friendly_unit",
+              "range": "12\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            }
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [

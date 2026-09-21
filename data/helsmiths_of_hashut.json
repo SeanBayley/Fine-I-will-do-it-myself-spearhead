@@ -86,14 +86,48 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_battle"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "War Despot"
+          },
+          "ability": {
+            "name": "SCROLL OF PETRIFICATION",
+            "description": "Though they cannot control the stone-flesh curse, the Zharrdron still believe it can be harnessed. This scroll is the result of such a belief. One who reads from it can transform themselves into stone for a fleeting moment. Effect: For the rest of the turn, your general has WARD (2+) but cannot use abilities or be picked to be the target of friendly abilities.",
+            "timing": "Any Hero Phase",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted",
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_battle"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "TALISMAN OF OBSIDIAN",
       "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
-      "description": "Bartered in exchange for years of gruelling service, this talisman renders its wearer impervious to all but the most grievous of wounds. Effect: Ignore the first damage point allocated to your general in each phase."
+      "description": "Bartered in exchange for years of gruelling service, this talisman renders its wearer impervious to all but the most grievous of wounds. Effect: Ignore the first damage point allocated to your general in each phase.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "War Despot"
+          },
+          "ability": {
+            "name": "TALISMAN OF OBSIDIAN",
+            "description": "Bartered in exchange for years of gruelling service, this talisman renders its wearer impervious to all but the most grievous of wounds. Effect: Ignore the first damage point allocated to your general in each phase.",
+            "timing": "Passive",
+            "frequency": "N/A",
+            "type": "Enhancement Granted"
+          }
+        }
+      ]
     },
     {
       "name": "CHALICE OF DARKNESS",
@@ -112,7 +146,34 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_battle"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "War Despot"
+          },
+          "ability": {
+            "name": "CHALICE OF DARKNESS",
+            "description": "Dread power spills from this vessel of ebon-black stone. Declare: Pick a visible enemy unit within 12\" of your general to be the target. Effect: Inflict D3 mortal damage on the target.",
+            "timing": "Your Shooting Phase",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "enemy_unit",
+              "range": "12\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            },
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_battle"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "AMULET OF BURNING HATE",
@@ -123,7 +184,26 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_battle"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "War Despot"
+          },
+          "ability": {
+            "name": "AMULET OF BURNING HATE",
+            "description": "A sacred relic of the Drazghar order, this amulet is said to contain the merest flicker of Hashut’s depthless spite. Effect: For the rest of the turn, your general’s attacks score critical hits on unmodified hit rolls of 5+.",
+            "timing": "Any Combat Phase",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted",
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_battle"
+            }
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [

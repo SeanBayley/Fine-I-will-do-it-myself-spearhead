@@ -78,7 +78,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 (currentStep === 'B' && (step === 'ruleset' || step === 'A'));
             el.classList.toggle('active', isActive);
             el.classList.toggle('done', isDone && !isActive);
+            // Completed earlier steps are clickable so you can go back and reselect
+            el.classList.toggle('is-clickable', isDone && !isActive);
+            el.setAttribute('role', isDone && !isActive ? 'button' : 'presentation');
+            el.tabIndex = isDone && !isActive ? 0 : -1;
         });
+    }
+
+    /** Navigate back to an earlier setup step (e.g. Side A while on Side B). */
+    function goToSetupStep(targetStep) {
+        const order = ['ruleset', 'A', 'B'];
+        const currentIdx = order.indexOf(currentStep);
+        const targetIdx = order.indexOf(targetStep);
+        if (targetIdx < 0 || targetIdx >= currentIdx) return;
+
+        if (targetStep === 'ruleset') {
+            currentStep = 'ruleset';
+            updateStepChrome();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('Returned to ruleset step');
+            return;
+        }
+
+        if (targetStep === 'A') {
+            // Invalidating Side B until Side A is confirmed again
+            matchSetup.sideB = null;
+            saveMatchSetup();
+            currentStep = 'A';
+            updateStepChrome();
+            if (matchSetup.sideA?.faction) {
+                restoreCommittedSide(matchSetup.sideA);
+            } else {
+                loadAndDisplayFaction(null);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('Returned to Side A for reselection');
+        }
+    }
+
+    /** Reload a previously committed side so ability/enhancement can be changed. */
+    function restoreCommittedSide(side) {
+        loadAndDisplayFaction(side.faction, {
+            ability: side.ability,
+            enhancement: side.enhancement
+        });
+    }
+
+    function selectRadioByValue(container, name, value) {
+        if (!value) return;
+        const input = container.querySelector(`input[name="${name}"][value="${CSS.escape(value)}"]`);
+        if (input) {
+            input.checked = true;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
     }
 
     function applyReveal(target, selector, baseDelay = 0, stepMs = 60) {
@@ -270,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyReveal(selectionArea, '.rule-box', 0, 80);
     }
 
-    function loadAndDisplayFaction(selectedDataFile) {
+    function loadAndDisplayFaction(selectedDataFile, preselect = null) {
         document.body.className = '';
         pendingSelection = { faction: selectedDataFile || null, ability: null, enhancement: null };
 
@@ -315,6 +367,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayComposition(factionData.spearheadComposition, compositionContainer);
                 displayRegimentAbilitySelection(factionData.regimentAbilities, regimentAbilityContainer);
                 displayEnhancementSelection(factionData.enhancements, enhancementSelectionContainer);
+                if (preselect) {
+                    selectRadioByValue(regimentAbilityContainer, 'regiment-ability-selection', preselect.ability);
+                    selectRadioByValue(enhancementSelectionContainer, 'enhancement-selection', preselect.enhancement);
+                }
                 checkSelectionsComplete();
             })
             .catch((error) => {
@@ -425,6 +481,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         commitCurrentSide();
+    });
+
+    stepIndicator.querySelectorAll('.setup-step').forEach((el) => {
+        const activate = () => {
+            if (!el.classList.contains('is-clickable')) return;
+            goToSetupStep(el.dataset.step);
+        };
+        el.addEventListener('click', activate);
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                activate();
+            }
+        });
     });
 
     // Restore previously chosen ruleset radio if returning mid-setup
