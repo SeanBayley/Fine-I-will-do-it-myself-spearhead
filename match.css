@@ -36,6 +36,16 @@
     font-size: 0.9rem;
 }
 
+.setup-step.done,
+.setup-step[data-step].is-clickable {
+    cursor: pointer;
+}
+
+.setup-step.done:hover,
+.setup-step.is-clickable:hover {
+    filter: brightness(1.12);
+}
+
 .setup-step.active {
     color: #fff;
     border-color: var(--primary-400, #60a5fa);

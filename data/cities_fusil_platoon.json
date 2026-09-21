@@ -76,7 +76,26 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_battle"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Fusil-Major on Ogor Warhulk"
+          },
+          "ability": {
+            "name": "ADEPT TACTICIAN",
+            "description": "Assembling reinforcements into ad-hoc regiments is the hallmark of a seasoned, if a somewhat desperate, general. Declare: Pick 2 friendly Freeguild Fusiliers units that have been destroyed and have not already been replaced. Effect: Set up a single replacement Freeguild Fusiliers unit with 10 models more than 6\" from all enemy units.",
+            "timing": "Your Movement Phase",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted",
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_battle"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "BRACE!",
@@ -120,7 +139,38 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_turn"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Fusil-Major on Ogor Warhulk"
+          },
+          "ability": {
+            "name": "SHIELD BASH",
+            "description": "With a bellow, the Ogor Warhulk drives their shield forward, forcing the enemy back. Declare: Pick an enemy INFANTRY, WAR MACHINE or CAVALRY unit in combat with your general to be the target. Effect: Roll a dice. On a 3+, the target must immediately use the ‘Retreat’ ability as if it were the enemy movement phase.",
+            "timing": "Your Movement Phase",
+            "frequency": "Once Per Turn",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "enemy_unit",
+              "range": "combat",
+              "targeting_criteria": {
+                "keywords": [
+                  "INFANTRY",
+                  "WAR MACHINE",
+                  "CAVALRY"
+                ],
+                "max_targets": 1
+              }
+            },
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_turn"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "POINT-BLANK VOLLEY",
@@ -139,7 +189,34 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_turn"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Fusil-Major on Ogor Warhulk"
+          },
+          "ability": {
+            "name": "POINT-BLANK VOLLEY",
+            "description": "A deadly round of shots are fired off at close range. Declare: Pick an enemy unit in combat with your general to be the target. Effect: Roll a D3. On a 2+, inflict an amount of mortal damage on the target equal to the roll.",
+            "timing": "Enemy Combat Phase",
+            "frequency": "Once Per Turn",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "enemy_unit",
+              "range": "combat",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            },
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_turn"
+            }
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [

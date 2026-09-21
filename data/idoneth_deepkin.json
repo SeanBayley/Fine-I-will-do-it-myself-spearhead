@@ -93,14 +93,56 @@
       "usage": {
         "max_uses": 1,
         "reset_period": "per_battle"
-      }
+      },
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Akhelian King"
+          },
+          "ability": {
+            "name": "DUTIFUL SOULS",
+            "description": "The Tide Guard will fight to protect their King even when gravely wounded. Declare: Pick a friendly unit wholly within 12\" of your general to be the target. Effect: You can return 1 slain model to the target unit. If the target is an Infantry unit, you can return D3 slain models to it instead.",
+            "timing": "Your Hero Phase",
+            "frequency": "Once Per Battle",
+            "type": "Enhancement Granted",
+            "targeting": {
+              "type": "friendly_unit",
+              "range": "12\"",
+              "targeting_criteria": {
+                "keywords": [],
+                "max_targets": 1
+              }
+            },
+            "usage": {
+              "max_uses": 1,
+              "reset_period": "per_battle"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "SHIMMERING AMULET",
       "type": "Artefact of Power",
       "timing": "Passive",
       "frequency": "N/A",
-      "description": "This void-pearl amulet conceals its wearer behind a shimmering cloak of refracted magic. Effect: Your general has Ward (5+)."
+      "description": "This void-pearl amulet conceals its wearer behind a shimmering cloak of refracted magic. Effect: Your general has Ward (5+).",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Akhelian King"
+          },
+          "ability": {
+            "name": "SHIMMERING AMULET",
+            "description": "This void-pearl amulet conceals its wearer behind a shimmering cloak of refracted magic. Effect: Your general has Ward (5+).",
+            "timing": "Passive",
+            "frequency": "N/A",
+            "type": "Enhancement Granted"
+          }
+        }
+      ]
     },
     {
       "name": "VOLTAIC CHARGE",
@@ -120,6 +162,32 @@
             "weapon": "Akhelian Royal Weapons"
           }
         }
+      ],
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Akhelian King"
+          },
+          "ability": {
+            "name": "VOLTAIC CHARGE",
+            "description": "This general’s weapons crackle with electric power, ready to be discharged. Effect: Your general’s Akhelian Royal Weapons have Charge (+1 Damage).",
+            "timing": "Passive",
+            "frequency": "N/A",
+            "type": "Enhancement Granted"
+          }
+        },
+        {
+          "type": "addWeaponAbility",
+          "target": {
+            "unit": "Akhelian King",
+            "weapon": "Akhelian Royal Weapons"
+          },
+          "ability": {
+            "name": "Charge (+1 Damage)",
+            "description": "Add 1 to the Damage characteristic of this weapon if this unit charged in the same turn."
+          }
+        }
       ]
     },
     {
@@ -127,7 +195,22 @@
       "type": "Artefact of Power",
       "timing": "End of Any Turn",
       "frequency": "N/A",
-      "description": "This warrior is said to siphon the spirits of fallen foes to sustain them in battle. Effect: If your general is in combat, Heal (D3) your general."
+      "description": "This warrior is said to siphon the spirits of fallen foes to sustain them in battle. Effect: If your general is in combat, Heal (D3) your general.",
+      "effects": [
+        {
+          "type": "addAbility",
+          "target": {
+            "unit": "Akhelian King"
+          },
+          "ability": {
+            "name": "SOUL STEALER",
+            "description": "This warrior is said to siphon the spirits of fallen foes to sustain them in battle. Effect: If your general is in combat, Heal (D3) your general.",
+            "timing": "End of Any Turn",
+            "frequency": "N/A",
+            "type": "Enhancement Granted"
+          }
+        }
+      ]
     }
   ],
   "spearheadComposition": [
