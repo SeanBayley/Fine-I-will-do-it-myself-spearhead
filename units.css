@@ -338,6 +338,26 @@ table.weapons-table td {
     color: var(--primary-color); /* Style the Timing label */
 }
 
+/* Touch-friendly tooltip: allow interaction and show visual indicator */
+.js-tooltip.touch-active {
+    pointer-events: auto; /* Allow scrolling/interaction on touch */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--primary-color);
+}
+
+/* Tap-to-close hint for touch users */
+.js-tooltip.touch-active::after {
+    content: "Tap elsewhere to close";
+    display: block;
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.75em;
+    color: var(--text-color);
+    opacity: 0.6;
+    font-style: italic;
+}
+
 .keywords-list {
     font-style: italic;
     color: #aaa;
