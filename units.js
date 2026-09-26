@@ -770,20 +770,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- NEW: JavaScript Tooltip Logic --- 
-    let tooltipElement = null; // To hold the tooltip div
+    // --- JavaScript Tooltip Logic with Touch Support --- 
+    let tooltipElement = null;
+    let isTouchDevice = false;
+    let currentTooltipTarget = null;
 
-    function showTooltip(event) {
-        const span = event.target;
+    function showTooltip(event, targetSpan) {
+        const span = targetSpan || event.target.closest('[data-description]') || event.target;
         const description = span.dataset.description;
         const timing = span.dataset.timing;
-        const frequency = span.dataset.frequency; // Get frequency
+        const frequency = span.dataset.frequency;
 
-        if (!description) {
-            console.log('Tooltip: No description found for', span);
+        if (!description && !timing) {
             return; // Don't show empty tooltip
         }
-        console.log('Tooltip Data:', { description, timing, frequency }); // Log retrieved data
 
         // Create tooltip element if it doesn't exist
         if (!tooltipElement) {
@@ -792,68 +792,124 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(tooltipElement);
         }
 
-        // Construct content with potential line break
+        // Construct content
         let tooltipHTML = '';
         if (timing && timing.toLowerCase() !== 'passive' && timing !== 'N/A') {
-            tooltipHTML += `<strong>Timing:</strong> ${timing}<br>`; // Use <br>
+            tooltipHTML += `<strong>Timing:</strong> ${timing}<br>`;
         }
-        // Add Frequency if available and not N/A
         if (frequency && frequency !== 'N/A') {
-            tooltipHTML += `<strong>Frequency:</strong> ${frequency}<br>`; // Use <br>
+            tooltipHTML += `<strong>Frequency:</strong> ${frequency}<br>`;
         }
-        tooltipHTML += description; // Already escaped when setting data attribute
+        tooltipHTML += description || '';
 
         tooltipElement.innerHTML = tooltipHTML;
         tooltipElement.style.display = 'block';
-        console.log('Tooltip HTML:', tooltipHTML); // Log the generated HTML
-        console.log('Tooltip Element:', tooltipElement); // Log the element itself
+        
+        currentTooltipTarget = span;
 
-        // Position the tooltip (simple example: above the cursor)
-        // More sophisticated positioning might be needed depending on context
-        const scrollX = window.scrollX || window.pageXOffset;
-        const scrollY = window.scrollY || window.pageYOffset;
-        let top = event.clientY + scrollY - tooltipElement.offsetHeight - 10; // 10px offset above cursor
-        let left = event.clientX + scrollX - (tooltipElement.offsetWidth / 2); // Center above cursor
+        if (isTouchDevice) {
+            // On touch devices: position tooltip below the element, centered
+            const rect = span.getBoundingClientRect();
+            const tooltipRect = tooltipElement.getBoundingClientRect();
+            
+            // Position below the element
+            let top = rect.bottom + window.scrollY + 8;
+            let left = rect.left + window.scrollX + (rect.width / 2) - (tooltipRect.width / 2);
+            
+            // Keep within viewport horizontally
+            const viewportWidth = window.innerWidth;
+            if (left < 10) left = 10;
+            if (left + tooltipRect.width > viewportWidth - 10) {
+                left = viewportWidth - tooltipRect.width - 10;
+            }
+            
+            // If tooltip would go off bottom, show above instead
+            if (top + tooltipRect.height > window.innerHeight + window.scrollY - 10) {
+                top = rect.top + window.scrollY - tooltipRect.height - 8;
+            }
+            
+            tooltipElement.style.left = `${left}px`;
+            tooltipElement.style.top = `${top}px`;
+            tooltipElement.classList.add('touch-active');
+        } else {
+            // Desktop: position above cursor
+            tooltipElement.classList.remove('touch-active');
+            const scrollX = window.scrollX || window.pageXOffset;
+            const scrollY = window.scrollY || window.pageYOffset;
+            let top = event.clientY + scrollY - tooltipElement.offsetHeight - 10;
+            let left = event.clientX + scrollX - (tooltipElement.offsetWidth / 2);
 
-        // Basic boundary check (prevent going off left/top)
-        if (top < scrollY) top = scrollY + 5;
-        if (left < scrollX) left = scrollX + 5;
-        // Add check for right edge if needed
+            if (top < scrollY) top = scrollY + 5;
+            if (left < scrollX) left = scrollX + 5;
+            
+            // Check right edge
+            const viewportWidth = window.innerWidth;
+            if (left + tooltipElement.offsetWidth > viewportWidth + scrollX - 10) {
+                left = viewportWidth + scrollX - tooltipElement.offsetWidth - 10;
+            }
 
-        tooltipElement.style.top = `${top}px`;
-        tooltipElement.style.left = `${left}px`;
+            tooltipElement.style.top = `${top}px`;
+            tooltipElement.style.left = `${left}px`;
+        }
     }
 
     function hideTooltip() {
-        // Add a small delay to prevent immediate hiding if tooltip overlaps span
-        setTimeout(() => {
-             if (tooltipElement) {
-                tooltipElement.style.display = 'none';
-            }
-        }, 50); // 50ms delay, adjust if needed
+        if (tooltipElement) {
+            tooltipElement.style.display = 'none';
+            tooltipElement.classList.remove('touch-active');
+        }
+        currentTooltipTarget = null;
     }
 
-    // Use event delegation on a parent container for efficiency
-    // We need to wait until cards are potentially rendered, so maybe delegate on body or #units-content
-    // Or re-run this setup after fetching/rendering data. Let's re-run after.
+    function handleTooltipTouch(event) {
+        const span = event.target.closest('[data-description]');
+        
+        if (span) {
+            // Tapped on an ability - toggle tooltip
+            event.preventDefault();
+            event.stopPropagation();
+            
+            if (currentTooltipTarget === span && tooltipElement?.style.display === 'block') {
+                // Tapping same element - hide tooltip
+                hideTooltip();
+            } else {
+                // Show tooltip for this element
+                hideTooltip();
+                showTooltip(event, span);
+            }
+        } else if (tooltipElement?.style.display === 'block') {
+            // Tapped elsewhere - hide tooltip (unless tapped on tooltip itself)
+            if (!event.target.closest('.js-tooltip')) {
+                hideTooltip();
+            }
+        }
+    }
 
     function setupTooltips() {
-         // Remove previous listeners if any (to avoid duplicates on re-fetch)
+        // Remove previous listeners if any
         document.querySelectorAll('.ability-name').forEach(span => {
             span.removeEventListener('mouseover', showTooltip);
             span.removeEventListener('mouseout', hideTooltip);
-            span.removeEventListener('mousemove', (e) => {
-                 // Optional: Update position on mouse move if tooltip stays open long 
-                 // For simplicity, we position on mouseover only for now
-            });
         });
 
-        // Add new listeners
+        // Add new listeners for desktop hover
         document.querySelectorAll('.ability-name').forEach(span => {
             span.addEventListener('mouseover', showTooltip);
             span.addEventListener('mouseout', hideTooltip);
-            // span.addEventListener('mousemove', moveTooltip); // If needed
         });
+        
+        // Touch support: detect touch device and handle touches
+        if (!document._tooltipTouchSetup) {
+            document._tooltipTouchSetup = true;
+            
+            // Detect touch device
+            document.addEventListener('touchstart', () => {
+                isTouchDevice = true;
+            }, { once: true, passive: true });
+            
+            // Handle touch on abilities
+            document.addEventListener('touchend', handleTooltipTouch, { passive: false });
+        }
     }
 
     // --- NEW: Back Button Navigation --- 
