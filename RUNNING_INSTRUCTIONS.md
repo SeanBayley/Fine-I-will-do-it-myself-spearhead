@@ -4,6 +4,12 @@
 
 This is a **client-side web application** that runs entirely in your browser, but **MUST be served from a web server** due to browser security restrictions.
 
+### Runtime note (Node.js / PHP)
+
+- **PHP is not used** by this project (no `.php` files, Composer, or PHP server). Do not install PHP for this app.
+- **Node.js is optional** and only needed if you choose the Node static-file server below. There is no Node server-side app or `npm` dependency tree beyond an optional local static server.
+- If you use Node, run **Node.js ≥ 22.23.4** (LTS). That release includes the [21 Oct 2026 Node.js security patches](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) (including CVE-2026-111497 and related fixes). `.nvmrc` pins `22.23.4`.
+
 ### ⚠️ **IMPORTANT: Cannot Open Directly**
 **DO NOT** double-click `index.html` - this will cause "Error loading factions" because browsers block loading JSON files from local files due to CORS security.
 
@@ -27,19 +33,16 @@ python -m SimpleHTTPServer 8000
 ```
 Then open: `http://localhost:8000`
 
-### **Method 3: Node.js Server (If you have Node.js)**
+### **Method 3: Node.js Server (If you have Node.js ≥ 22.23.4)**
 ```bash
-# Install a simple server globally
-npm install -g http-server
+# Confirm a patched Node LTS (must be >= 22.23.4)
+node -v
 
 # Navigate to project folder
 cd "C:\Users\seanb\Coding projects\Spearhead"
 
-# Start server
-http-server
-
-# Or with specific port
-http-server -p 8080
+# Serve static files (uses pinned serve via npx; no global install required)
+npm run serve
 ```
 Then open: `http://localhost:8080`
 

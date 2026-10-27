@@ -1,0 +1,12 @@
+{
+  "name": "spearhead-rules",
+  "private": true,
+  "description": "Static Age of Sigmar Spearhead rules helper (browser-only; no server-side runtime).",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "serve": "npx --yes serve@14.2.6 -l 8080",
+    "serve:python": "python3 -m http.server 8080"
+  }
+}
